@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DiscMath</string>
+    <string name="theory">Theory</string>
+    <string name="exercises">Exercises</string>
+    <string name="statistics">Statistics</string>
+    <string name="problem">Problem</string>
+</resources>

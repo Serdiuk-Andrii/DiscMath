@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "49490521118",
+    "project_id": "discmath-90e13",
+    "storage_bucket": "discmath-90e13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49490521118:android:3f87aaadffe065e6cd520f",
+        "android_client_info": {
+          "package_name": "com.example.discmath"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49490521118-3e73jt9nkb7ucho3c6bnsdblcih9h0ej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyD5lqeiZ5rVafNtEe8954n8T60uNsR3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "49490521118-3e73jt9nkb7ucho3c6bnsdblcih9h0ej.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
