@@ -22,4 +22,9 @@
         android:name="com.example.discmath.ui.notifications.NotificationsFragment"
         android:label="@string/statistics"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/learning_fragment"
+        android:name="com.example.discmath.ui.home.LearningFragment"
+        android:label="fragment_learning"
+        tools:layout="@layout/fragment_learning" />
 </navigation>

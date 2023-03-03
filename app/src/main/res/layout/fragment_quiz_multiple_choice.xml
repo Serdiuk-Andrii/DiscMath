@@ -27,6 +27,7 @@
         android:layout_marginTop="48dp"
         android:elevation="10dp"
         android:fadingEdge="vertical"
+        android:scaleType="centerInside"
         android:src="@drawable/common_google_signin_btn_icon_dark_normal_background"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,13 +74,13 @@
         app:layout_constraintTop_toBottomOf="@+id/answer2" />
 
     <Button
-        android:id="@+id/loadButton"
+        android:id="@+id/skipButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="60dp"
-        android:background="#000000"
-        android:text="Load"
+        android:background="#2196F3"
+        android:text="@string/skip"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

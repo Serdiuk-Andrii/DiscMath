@@ -3,6 +3,7 @@ package com.example.discmath.ui.dashboard
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -41,26 +42,33 @@ class QuizMultipleChoiceFragment : Fragment() {
             ViewModelProvider(this)[DashboardViewModel::class.java]
         _binding = FragmentQuizMultipleChoiceBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val clickListener = OnClickListener {
+            loadNextProblem()
+            Toast.makeText(context, "Correct!", Toast.LENGTH_SHORT).show()
+        }
         db.collection("images").get(Source.DEFAULT).addOnSuccessListener { querySnapshot ->
             problemsImagesData.addAll(querySnapshot.documents.map
             { documentSnapshot ->  Quiz(documentSnapshot.get("url") as String,
                                     documentSnapshot.get("answers") as ArrayList<*>,
-                (documentSnapshot.get("correct") as Long).toInt()) })
-            binding.loadButton.setOnClickListener {
-                if (problemsImagesData.isNotEmpty()) {
-                    val quiz: Quiz = problemsImagesData.removeFirst()
-                    val loader: RequestManager = Glide.with(this)
-                    quiz.loadProblemInto(binding.problem, loader, storageRef, true)
-                    quiz.loadAnswerInto(0, binding.answer1, loader, storageRef, true)
-                    quiz.loadAnswerInto(1, binding.answer2, loader, storageRef, true)
-                    quiz.loadAnswerInto(2, binding.answer3, loader, storageRef, true)
-                    quiz.loadAnswerInto(3, binding.answer4, loader, storageRef, true)
-                } else {
-                    Toast.makeText(context, "There are no images left", Toast.LENGTH_SHORT).show()
-                }
-            }
+                (documentSnapshot.get("correct") as Long).toInt(), clickListener)})
+            loadNextProblem()
         }
+        binding.skipButton.setOnClickListener { loadNextProblem() }
         return root
+    }
+
+    private fun loadNextProblem() {
+        if (problemsImagesData.isNotEmpty()) {
+            val quiz: Quiz = problemsImagesData.removeFirst()
+            val loader: RequestManager = Glide.with(this)
+            quiz.loadProblemInto(binding.problem, loader, storageRef, true)
+            quiz.loadAnswerInto(0, binding.answer1, loader, storageRef, true)
+            quiz.loadAnswerInto(1, binding.answer2, loader, storageRef, true)
+            quiz.loadAnswerInto(2, binding.answer3, loader, storageRef, true)
+            quiz.loadAnswerInto(3, binding.answer4, loader, storageRef, true)
+        } else {
+            Toast.makeText(context, "There are no images left", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

@@ -2,6 +2,7 @@ package com.example.discmath.ui.entity
 
 import android.app.Dialog
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
@@ -18,8 +19,7 @@ fun loadImageIntoViewFrom(url: String, imageView: ImageView, loader: RequestMana
 }
 
 data class Quiz(val problemUrl: String, val solutionsUrl: ArrayList<*>,
-           val correctAnswer: Int) {
-
+           val correctAnswer: Int, val clickListener: OnClickListener?) {
 
     fun loadProblemInto(imageView: ImageView, loader: RequestManager,
                         storageReference: StorageReference) {
@@ -36,19 +36,19 @@ data class Quiz(val problemUrl: String, val solutionsUrl: ArrayList<*>,
 
     fun loadAnswerInto(answerIndex: Int, imageView: ImageView, loader: RequestManager,
                        storageReference: StorageReference ) {
+        imageView.alpha = 1F
         val solutionData = solutionsUrl[answerIndex]
         if (solutionData !is Map<*, *>) {
             throw Exception("Incorrect quiz data format")
         }
         val url: String = solutionData["url"] as String
-        val explanation: String = (solutionData["explanation"] as String?)?.substring(1)
+        val explanation: String = (solutionData["explanation"] as String?)
             ?.dropLast(1) ?: "obvious"
 
         val dialog = BottomSheetDialog(imageView.context)
         if (answerIndex == correctAnswer) {
-            imageView.setOnClickListener {
-                Toast.makeText(imageView.context, "Correct!\nExplanation: $explanation",
-                    Toast.LENGTH_SHORT).show()
+            if (clickListener != null) {
+                imageView.setOnClickListener(clickListener)
             }
         } else {
             imageView.setOnClickListener {
@@ -56,6 +56,8 @@ data class Quiz(val problemUrl: String, val solutionsUrl: ArrayList<*>,
                 val explanationTextView = dialog.findViewById<TextView>(R.id.explanation_text)
                 explanationTextView?.text = explanation
                 dialog.show()
+                imageView.isClickable = false
+                imageView.alpha = 0.5F
             }
         }
         loadImageIntoViewFrom(url, imageView, loader, storageReference)

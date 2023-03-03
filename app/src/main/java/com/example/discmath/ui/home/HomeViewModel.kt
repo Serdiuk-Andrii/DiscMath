@@ -6,8 +6,16 @@ import androidx.lifecycle.ViewModel
 
 class HomeViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    val items = MutableLiveData<List<LearningItem>>().apply {
+        value = mutableListOf()
     }
-    val text: LiveData<String> = _text
+
+    val currentLearningItem: MutableLiveData<LearningItem> by lazy {
+        MutableLiveData<LearningItem>()
+    }
+
+    fun updateCurrentLearningItem(learningItem: LearningItem) {
+        currentLearningItem.value = learningItem
+    }
+
 }

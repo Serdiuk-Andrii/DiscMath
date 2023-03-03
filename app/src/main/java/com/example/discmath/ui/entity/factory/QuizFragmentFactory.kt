@@ -1,4 +1,7 @@
 package com.example.discmath.ui.entity.factory
 
-class QuizFragmentFactory {
+import com.example.discmath.ui.entity.Quiz
+
+fun getQuizFragmentFromQuiz(quiz: Quiz) {
+
 }
