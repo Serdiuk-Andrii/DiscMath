@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="skip">Skip</string>
+    <string name="videoOptionTitle">Подивитися в записі</string>
+    <string name="pdfTypeTitle">Переглянути в PDF</string>
 </resources>

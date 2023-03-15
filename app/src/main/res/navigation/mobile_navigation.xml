@@ -23,8 +23,18 @@
         android:label="@string/statistics"
         tools:layout="@layout/fragment_notifications" />
     <fragment
-        android:id="@+id/learning_fragment"
-        android:name="com.example.discmath.ui.home.LearningFragment"
-        android:label="fragment_learning"
-        tools:layout="@layout/fragment_learning" />
+        android:id="@+id/video_learning_fragment"
+        android:name="com.example.discmath.ui.home.VideoLearningFragment"
+        android:label="fragment_learning_video"
+        tools:layout="@layout/fragment_learning_video" />
+    <fragment
+        android:id="@+id/chooseLearningTypeFragment"
+        android:name="com.example.discmath.ui.home.ChooseLearningTypeFragment"
+        android:label="fragment_choose_learning_type"
+        tools:layout="@layout/fragment_choose_learning_type" />
+    <fragment
+        android:id="@+id/pdfLearningFragment"
+        android:name="com.example.discmath.ui.home.PdfLearningFragment"
+        android:label="fragment_pdf_learning"
+        tools:layout="@layout/fragment_learning_pdf" />
 </navigation>

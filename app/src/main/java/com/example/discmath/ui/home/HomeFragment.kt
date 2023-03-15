@@ -14,6 +14,10 @@ import com.example.discmath.databinding.FragmentHomeBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
+const val NAME_KEY = "name"
+const val URL_VIDEO_KEY = "urlVideo"
+const val URL_PDF_KEY = "urlPdf"
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -40,10 +44,8 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         if (viewModel.items.value.isNullOrEmpty()) {
-            Toast.makeText(context, "Downloading", Toast.LENGTH_SHORT).show()
-            val adapter: LearningItemAdapter = LearningItemAdapter(arrayOf()) {
+            val adapter = LearningItemAdapter(arrayOf()) {
                 navigateToLearningItem(it)
-                Toast.makeText(context, it.name, Toast.LENGTH_SHORT).show()
             }
             learningItems.adapter = adapter
 
@@ -74,18 +76,34 @@ class HomeFragment : Fragment() {
         val navHostFragment =
             activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment_activity_main)
         val navController = navHostFragment!!.findNavController()
-        navController.navigate(R.id.learning_fragment, Bundle().apply {
-            putString("name", learningItem.name)
-            putString("url", learningItem.urlVideo)
-        })
+        if (learningItem.urlVideo.isEmpty() && learningItem.urlPdf.isEmpty()) {
+            Toast.makeText(context, "Both urls are absent!", Toast.LENGTH_SHORT).show()
+        } else if (learningItem.urlPdf.isEmpty()) {
+            navController.navigate(R.id.video_learning_fragment, Bundle().apply {
+                putString(NAME_KEY, learningItem.name)
+                putString(URL_VIDEO_KEY, learningItem.urlVideo)
+            })
+        } else if (learningItem.urlVideo.isEmpty()) {
+            // Navigate to pdf
+            navController.navigate(R.id.pdfLearningFragment, Bundle().apply {
+                putString(NAME_KEY, learningItem.name)
+                putString(URL_VIDEO_KEY, learningItem.urlPdf)
+            })
+        } else {
+            // Show the transition fragment
+            navController.navigate(R.id.chooseLearningTypeFragment, Bundle().apply {
+                putString(NAME_KEY, learningItem.name)
+                putString(URL_VIDEO_KEY, learningItem.urlVideo)
+                putString(URL_PDF_KEY, learningItem.urlPdf)
+            })
+        }
     }
 
     override fun onResume() {
         Toast.makeText(context, "Resuming", Toast.LENGTH_SHORT).show()
-        val adapter: LearningItemAdapter = LearningItemAdapter(viewModel.items.value!!.toTypedArray()
+        val adapter = LearningItemAdapter(viewModel.items.value!!.toTypedArray()
         ) {
             navigateToLearningItem(it)
-            Toast.makeText(context, it.name, Toast.LENGTH_SHORT).show()
         }
         val learningItems: RecyclerView = binding.learningItemsRecyclerView
         learningItems.adapter = adapter

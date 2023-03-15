@@ -1,46 +1,29 @@
 package com.example.discmath.ui.home
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import com.example.discmath.databinding.FragmentLearningBinding
+import com.example.discmath.databinding.FragmentLearningVideoBinding
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.ui.DefaultPlayerUiController
-
-
-private const val ARG_PARAM1 = "name"
-private const val ARG_PARAM2 = "url"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [LearningFragment.newInstance] factory method to
+ * Use the [VideoLearningFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LearningFragment : Fragment() {
+class VideoLearningFragment : Fragment() {
 
-    private var _binding: FragmentLearningBinding? = null
+    private var _binding: FragmentLearningVideoBinding? = null
 
     private lateinit var name: String
     private lateinit var url: String
@@ -56,8 +39,8 @@ class LearningFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            name = it.getString(ARG_PARAM1) ?: "undefined"
-            url = it.getString(ARG_PARAM2) ?: "undefined"
+            name = it.getString(NAME_KEY)!!
+            url = it.getString(URL_VIDEO_KEY)!!
         }
     }
 
@@ -67,12 +50,11 @@ class LearningFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLearningBinding.inflate(inflater, container, false)
+        _binding = FragmentLearningVideoBinding.inflate(inflater, container, false)
         nameTextView = binding.name
         urlTextView = binding.url
         //webView = binding.lectureVideo
         val root: View = binding.root
-        binding.lectureVideo
         nameTextView.text = name
         urlTextView.text = url
         videoView = binding.lectureVideo
@@ -205,15 +187,4 @@ class LearningFragment : Fragment() {
         return root
     }
 
-    /*companion object {
-
-        @JvmStatic
-        fun newInstance(name: String, url: String) =
-            LearningFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, name)
-                    putString(ARG_PARAM2, url)
-                }
-            }
-    }*/
 }
