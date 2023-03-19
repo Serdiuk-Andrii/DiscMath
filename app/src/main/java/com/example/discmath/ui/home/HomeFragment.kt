@@ -87,7 +87,7 @@ class HomeFragment : Fragment() {
             // Navigate to pdf
             navController.navigate(R.id.pdfLearningFragment, Bundle().apply {
                 putString(NAME_KEY, learningItem.name)
-                putString(URL_VIDEO_KEY, learningItem.urlPdf)
+                putString(URL_PDF_KEY, learningItem.urlPdf)
             })
         } else {
             // Show the transition fragment
