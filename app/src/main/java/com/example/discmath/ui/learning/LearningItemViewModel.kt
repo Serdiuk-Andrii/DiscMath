@@ -1,10 +1,10 @@
-package com.example.discmath.ui.home
+package com.example.discmath.ui.learning
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.discmath.ui.entity.LearningItem
 
-class HomeViewModel : ViewModel() {
+class LearningItemViewModel : ViewModel() {
 
     val items = MutableLiveData<List<LearningItem>>().apply {
         value = mutableListOf()

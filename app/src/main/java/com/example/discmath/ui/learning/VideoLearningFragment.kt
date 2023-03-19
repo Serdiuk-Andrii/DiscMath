@@ -1,4 +1,4 @@
-package com.example.discmath.ui.home
+package com.example.discmath.ui.learning
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException

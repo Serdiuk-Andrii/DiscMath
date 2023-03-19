@@ -1,4 +1,4 @@
-package com.example.discmath.ui.home
+package com.example.discmath.ui.entity
 
 enum class LearningItemType(val typeName: String) {
 

@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_sections">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.discmath.ui.home.HomeFragment"
+        android:id="@+id/navigation_sections"
+        android:name="com.example.discmath.ui.learning.SectionsLearningFragment"
         android:label="@string/theory"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_learning_sections" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -24,17 +24,22 @@
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/video_learning_fragment"
-        android:name="com.example.discmath.ui.home.VideoLearningFragment"
+        android:name="com.example.discmath.ui.learning.VideoLearningFragment"
         android:label="fragment_learning_video"
         tools:layout="@layout/fragment_learning_video" />
     <fragment
         android:id="@+id/chooseLearningTypeFragment"
-        android:name="com.example.discmath.ui.home.ChooseLearningTypeFragment"
+        android:name="com.example.discmath.ui.learning.ChooseLearningTypeFragment"
         android:label="fragment_choose_learning_type"
         tools:layout="@layout/fragment_choose_learning_type" />
     <fragment
         android:id="@+id/pdfLearningFragment"
-        android:name="com.example.discmath.ui.home.PdfLearningFragment"
+        android:name="com.example.discmath.ui.learning.PdfLearningFragment"
         android:label="fragment_pdf_learning"
         tools:layout="@layout/fragment_learning_pdf" />
+    <fragment
+        android:id="@+id/specificLearningSectionFragment"
+        android:name="com.example.discmath.ui.learning.SpecificLearningSectionFragment"
+        android:label="fragment_specific_learning_section"
+        tools:layout="@layout/fragment_specific_learning_section" />
 </navigation>

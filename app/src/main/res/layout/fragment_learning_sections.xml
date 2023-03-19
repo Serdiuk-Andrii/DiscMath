@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.learning.SectionsLearningFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/learning_items_recycler_view"
+        android:id="@+id/learning_sections_recycler_view"
         app:layoutManager="LinearLayoutManager"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
-package com.example.discmath.ui.home
+package com.example.discmath.ui.learning.adapters
 
-import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
+import com.example.discmath.ui.entity.LearningItem
 
 class LearningItemAdapter(private val dataSet: Array<LearningItem>,
                           private val itemClickedCallback:  ((LearningItem) -> Unit)):
