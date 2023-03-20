@@ -58,6 +58,7 @@ class SpecificLearningSectionFragment : Fragment() {
         val adapter = LearningItemAdapter(arrayOf()) {
             navigateToLearningItem(it)
         }
+        //activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility = View.GONE
         recyclerView.adapter = adapter
         db.collection(collectionPath).get().addOnSuccessListener { querySnapshot ->
             val learningItems: List<LearningItem> =
