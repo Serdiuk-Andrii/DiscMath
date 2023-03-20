@@ -1,49 +1,35 @@
-package com.example.discmath.ui.entity
+package com.example.discmath.ui.entity.quizzes
 
-import android.app.Dialog
 import android.view.View
-import android.view.View.OnClickListener
-import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.RequestManager
 import com.example.discmath.R
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.StorageReference
 
-fun loadImageIntoViewFrom(url: String, imageView: ImageView, loader: RequestManager,
-                          storageReference: StorageReference) {
-    loader.load(storageReference.child(url)).into(imageView)
-}
+const val FADED_ANSWER_ALPHA = 0.5F
+const val SOLUTION_URL_KEY = "url"
+const val SOLUTION_EXPLANATION_KEY = "explanation"
 
-data class Quiz(val problemUrl: String, val solutionsUrl: ArrayList<*>,
-           val correctAnswer: Int, val clickListener: OnClickListener?) {
+const val DEFAULT_EXPLANATION = "obvious"
 
-    fun loadProblemInto(imageView: ImageView, loader: RequestManager,
-                        storageReference: StorageReference) {
-        loadImageIntoViewFrom(problemUrl, imageView, loader, storageReference)
-    }
+open class FourChoicesQuiz(
+    override val problemUrl: String, open val solutionsUrl: ArrayList<*>,
+    open val correctAnswer: Int, override val clickListener: View.OnClickListener?):
+    Quiz(problemUrl, clickListener) {
 
-    fun loadProblemInto(imageView: ImageView, loader: RequestManager,
-                        storageReference: StorageReference, makeVisible: Boolean) {
-        loadProblemInto(imageView, loader, storageReference)
-        if (makeVisible) {
-            imageView.visibility = View.VISIBLE
-        }
-    }
-
-    fun loadAnswerInto(answerIndex: Int, imageView: ImageView, loader: RequestManager,
-                       storageReference: StorageReference ) {
+    private fun loadAnswerInto(answerIndex: Int, imageView: ImageView, loader: RequestManager,
+                               storageReference: StorageReference
+    ) {
         imageView.alpha = 1F
         val solutionData = solutionsUrl[answerIndex]
         if (solutionData !is Map<*, *>) {
             throw Exception("Incorrect quiz data format")
         }
-        val url: String = solutionData["url"] as String
-        val explanation: String = (solutionData["explanation"] as String?)
-            ?.dropLast(1) ?: "obvious"
+        val url: String = solutionData[SOLUTION_URL_KEY] as String
+        val explanation: String = (solutionData[SOLUTION_EXPLANATION_KEY] as String?)
+            ?.dropLast(1) ?: DEFAULT_EXPLANATION
 
         val dialog = BottomSheetDialog(imageView.context)
         if (answerIndex == correctAnswer) {
@@ -57,7 +43,7 @@ data class Quiz(val problemUrl: String, val solutionsUrl: ArrayList<*>,
                 explanationTextView?.text = explanation
                 dialog.show()
                 imageView.isClickable = false
-                imageView.alpha = 0.5F
+                imageView.alpha = FADED_ANSWER_ALPHA
             }
         }
         loadImageIntoViewFrom(url, imageView, loader, storageReference)
@@ -72,4 +58,3 @@ data class Quiz(val problemUrl: String, val solutionsUrl: ArrayList<*>,
     }
 
 }
-

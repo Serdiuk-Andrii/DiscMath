@@ -12,8 +12,8 @@
         tools:layout="@layout/fragment_learning_sections" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.discmath.ui.dashboard.QuizMultipleChoiceFragment"
+        android:id="@+id/navigation_quiz_multiple_choice"
+        android:name="com.example.discmath.ui.quiz_fragment.QuizMultipleChoiceFragment"
         android:label="@string/exercises"
         tools:layout="@layout/fragment_quiz_multiple_choice" />
 
@@ -42,4 +42,9 @@
         android:name="com.example.discmath.ui.learning.SpecificLearningSectionFragment"
         android:label="fragment_specific_learning_section"
         tools:layout="@layout/fragment_specific_learning_section" />
+    <fragment
+        android:id="@+id/startQuizzesFragment"
+        android:name="com.example.discmath.ui.quiz_fragment.StartQuizzesFragment"
+        android:label="fragment_start_quizzes"
+        tools:layout="@layout/fragment_start_quizzes" />
 </navigation>

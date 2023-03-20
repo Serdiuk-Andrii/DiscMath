@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningSectionsBinding
-import com.example.discmath.ui.entity.LearningSection
+import com.example.discmath.ui.entity.learning_section.LearningSection
 import com.example.discmath.ui.learning.adapters.LearningSectionAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

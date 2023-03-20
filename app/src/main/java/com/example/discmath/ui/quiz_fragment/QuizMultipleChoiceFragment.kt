@@ -1,4 +1,4 @@
-package com.example.discmath.ui.dashboard
+package com.example.discmath.ui.quiz_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.discmath.databinding.FragmentQuizMultipleChoiceBinding
-import com.example.discmath.ui.entity.Quiz
+import com.example.discmath.ui.entity.quizzes.FourChoicesQuiz
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -26,7 +26,7 @@ class QuizMultipleChoiceFragment : Fragment() {
     private var storageRef: StorageReference = FirebaseStorage.getInstance().reference
     private var db = Firebase.firestore
 
-    private var problemsImagesData: MutableList<Quiz> = mutableListOf()
+    private var problemsImagesData: MutableList<FourChoicesQuiz> = mutableListOf()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -38,8 +38,8 @@ class QuizMultipleChoiceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val dashboardViewModel =
-            ViewModelProvider(this)[DashboardViewModel::class.java]
+        val quizzesViewModel =
+            ViewModelProvider(this)[QuizzesViewModel::class.java]
         _binding = FragmentQuizMultipleChoiceBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val clickListener = OnClickListener {
@@ -48,9 +48,10 @@ class QuizMultipleChoiceFragment : Fragment() {
         }
         db.collection("images").get(Source.DEFAULT).addOnSuccessListener { querySnapshot ->
             problemsImagesData.addAll(querySnapshot.documents.map
-            { documentSnapshot ->  Quiz(documentSnapshot.get("url") as String,
+            { documentSnapshot ->  FourChoicesQuiz(documentSnapshot.get("url") as String,
                                     documentSnapshot.get("answers") as ArrayList<*>,
-                (documentSnapshot.get("correct") as Long).toInt(), clickListener)})
+                (documentSnapshot.get("correct") as Long).toInt(), clickListener)
+            })
             loadNextProblem()
         }
         binding.skipButton.setOnClickListener { loadNextProblem() }
@@ -59,7 +60,7 @@ class QuizMultipleChoiceFragment : Fragment() {
 
     private fun loadNextProblem() {
         if (problemsImagesData.isNotEmpty()) {
-            val quiz: Quiz = problemsImagesData.removeFirst()
+            val quiz: FourChoicesQuiz = problemsImagesData.removeFirst()
             val loader: RequestManager = Glide.with(this)
             quiz.loadProblemInto(binding.problem, loader, storageRef, true)
             quiz.loadAnswerInto(0, binding.answer1, loader, storageRef, true)
