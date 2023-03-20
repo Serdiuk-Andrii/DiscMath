@@ -1,7 +1,4 @@
-package com.example.discmath.ui.home
-
-
-
+package com.example.discmath.ui.entity
 
 
 data class LearningItem(val type: LearningItemType, val name: String,

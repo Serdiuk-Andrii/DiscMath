@@ -1,14 +1,16 @@
-package com.example.discmath.ui.home
+package com.example.discmath.ui.learning
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningPdfBinding
 import com.example.discmath.util.Downloader
 import com.example.discmath.util.FileDownloadManager
 import com.github.barteksc.pdfviewer.PDFView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class PdfLearningFragment : Fragment() {
 
@@ -37,6 +39,7 @@ class PdfLearningFragment : Fragment() {
         _binding = FragmentLearningPdfBinding.inflate(inflater, container, false)
         val root: View = binding.root
         pdfView = binding.pdfView
+        activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility = View.GONE
         val downloader: Downloader = FileDownloadManager(::loadPdfIntoView)
         downloader.downloadFile(url)
         return root

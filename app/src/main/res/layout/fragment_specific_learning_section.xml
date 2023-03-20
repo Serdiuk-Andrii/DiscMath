@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.learning.LearningItemFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.learning.SpecificLearningSectionFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:id="@+id/learning_items_recycler_view"
+        app:layoutManager="LinearLayoutManager"/>
 
 </FrameLayout>
