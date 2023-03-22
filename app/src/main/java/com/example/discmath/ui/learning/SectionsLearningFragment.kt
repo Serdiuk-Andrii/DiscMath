@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningSectionsBinding
-import com.example.discmath.ui.entity.learning_section.LearningSection
+import com.example.discmath.entity.learning_section.LearningSection
 import com.example.discmath.ui.learning.adapters.LearningSectionAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -60,9 +60,7 @@ class SectionsLearningFragment : Fragment() {
     }
 
     private fun navigateToLearningSection(learningSection: LearningSection) {
-        val navHostFragment =
-            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment_activity_main)
-        val navController = navHostFragment!!.findNavController()
+        val navController = findNavController()
         navController.navigate(
             R.id.specificLearningSectionFragment,
             Bundle().apply {

@@ -16,14 +16,13 @@ import com.example.discmath.databinding.FragmentStartQuizzesBinding
 class StartQuizzesFragment : Fragment() {
 
     private var _binding: FragmentStartQuizzesBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     private lateinit var image: ImageView
     private lateinit var encouragingText: TextView
     private lateinit var startButton: Button
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +35,9 @@ class StartQuizzesFragment : Fragment() {
         encouragingText = binding.textTrainingEncouragement
         startButton = binding.buttonStartTraining
         // Navigation
-        val navHostFragment =
-            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment_activity_main)
-        val navController = navHostFragment!!.findNavController()
+        val navController = findNavController()
         startButton.setOnClickListener {
-            navController.navigate(R.id.navigation_quiz_multiple_choice)
+            navController.navigate(R.id.chooseTrainingTypeFragment)
         }
         return root
     }

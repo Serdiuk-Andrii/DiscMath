@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
-import com.example.discmath.ui.entity.learning_item.LearningItem
+import com.example.discmath.entity.learning_item.LearningItem
 
 class LearningItemAdapter(private val dataSet: Array<LearningItem>,
                           private val itemClickedCallback:  ((LearningItem) -> Unit)):

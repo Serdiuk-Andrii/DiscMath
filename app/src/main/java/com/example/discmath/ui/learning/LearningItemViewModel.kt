@@ -2,7 +2,7 @@ package com.example.discmath.ui.learning
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.discmath.ui.entity.learning_item.LearningItem
+import com.example.discmath.entity.learning_item.LearningItem
 
 class LearningItemViewModel : ViewModel() {
 

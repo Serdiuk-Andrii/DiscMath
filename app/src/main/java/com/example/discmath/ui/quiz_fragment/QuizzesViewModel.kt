@@ -1,13 +1,12 @@
 package com.example.discmath.ui.quiz_fragment
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.discmath.entity.quizzes.quiz_preferences.QuizPreference
 
 class QuizzesViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is quiz_fragment Fragment"
-    }
-    val text: LiveData<String> = _text
+    val quizPreferences: MutableLiveData<QuizPreference> = MutableLiveData(
+        QuizPreference(arrayOf(), -1)
+    )
 }

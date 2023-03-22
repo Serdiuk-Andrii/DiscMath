@@ -7,4 +7,8 @@
     <string name="video_icon_description">video icon</string>
     <string name="training_encouragement">Тренуйся!</string>
     <string name="start_training_button_text">Розпочати</string>
+    <string name="app_logo_splash_screen">App logo splash screen</string>
+    <string name="all_sections_training_type_title">All sections</string>
+    <string name="choose_sections_training_type_title">Choose sections</string>
+    <string name="choose_training_type_title">Choose training type</string>
 </resources>

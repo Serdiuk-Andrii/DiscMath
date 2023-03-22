@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.discmath.databinding.FragmentQuizMultipleChoiceBinding
-import com.example.discmath.ui.entity.quizzes.FourChoicesQuiz
+import com.example.discmath.entity.quizzes.FourChoicesQuiz
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

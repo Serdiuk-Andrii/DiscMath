@@ -1,4 +1,4 @@
-package com.example.discmath.ui.entity.quizzes
+package com.example.discmath.entity.quizzes
 
 import android.view.View
 import android.widget.ImageView

@@ -1,4 +1,4 @@
-package com.example.discmath.ui.entity.quizzes
+package com.example.discmath.entity.quizzes
 
 enum class QuizType(val typeName: String) {
 

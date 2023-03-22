@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentSpecificLearningSectionBinding
-import com.example.discmath.ui.entity.learning_item.LearningItem
+import com.example.discmath.entity.learning_item.LearningItem
 import com.example.discmath.ui.learning.adapters.LearningItemAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -43,6 +43,7 @@ class SpecificLearningSectionFragment : Fragment() {
             sectionName = it.getString(SECTION_NAME_KEY)!!
             collectionPath = it.getString(COLLECTION_PATH_KEY)!!
         }
+
     }
 
     override fun onCreateView(
@@ -58,7 +59,7 @@ class SpecificLearningSectionFragment : Fragment() {
         val adapter = LearningItemAdapter(arrayOf()) {
             navigateToLearningItem(it)
         }
-        //activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility = View.GONE
+
         recyclerView.adapter = adapter
         db.collection(collectionPath).get().addOnSuccessListener { querySnapshot ->
             val learningItems: List<LearningItem> =
@@ -82,9 +83,7 @@ class SpecificLearningSectionFragment : Fragment() {
 
     private fun navigateToLearningItem(learningItem: LearningItem) {
         //learningItemViewModel.updateCurrentLearningItem(learningItem)
-        val navHostFragment =
-            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment_activity_main)
-        val navController = navHostFragment!!.findNavController()
+        val navController = findNavController()
         if (learningItem.urlVideo.isEmpty() && learningItem.urlPdf.isEmpty()) {
             Toast.makeText(context, "Both urls are absent!", Toast.LENGTH_SHORT).show()
         } else if (learningItem.urlPdf.isEmpty()) {

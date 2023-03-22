@@ -1,6 +1,5 @@
 package com.example.discmath.ui.learning
 
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -44,7 +43,6 @@ class VideoLearningFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,7 +56,6 @@ class VideoLearningFragment : Fragment() {
         nameTextView.text = name
         urlTextView.text = url
         videoView = binding.lectureVideo
-
 
 
         // Sets custom view

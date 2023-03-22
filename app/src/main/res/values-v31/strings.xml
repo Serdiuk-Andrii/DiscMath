@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all_sections_training_type_title">All sections</string>
+    <string name="choose_sections_training_type_title">Choose sections</string>
+    <string name="choose_training_type_title">Choose training type</string>
+</resources>

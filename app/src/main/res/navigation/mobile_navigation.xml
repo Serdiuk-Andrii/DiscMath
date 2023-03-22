@@ -23,28 +23,69 @@
         android:label="@string/statistics"
         tools:layout="@layout/fragment_notifications" />
     <fragment
-        android:id="@+id/video_learning_fragment"
-        android:name="com.example.discmath.ui.learning.VideoLearningFragment"
-        android:label="fragment_learning_video"
-        tools:layout="@layout/fragment_learning_video" />
+        android:id="@+id/specificLearningSectionFragment"
+        android:name="com.example.discmath.ui.learning.SpecificLearningSectionFragment"
+        android:label="fragment_specific_learning_section"
+        tools:layout="@layout/fragment_specific_learning_section" />
+
+    <fragment
+        android:id="@+id/startQuizzesFragment"
+        android:name="com.example.discmath.ui.quiz_fragment.StartQuizzesFragment"
+        android:label="fragment_start_quizzes"
+        tools:layout="@layout/fragment_start_quizzes">
+        <action
+            android:id="@+id/action_startQuizzesFragment_to_chooseTrainingTypeFragment"
+            app:destination="@id/chooseTrainingTypeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseTrainingTypeFragment"
+        android:name="com.example.discmath.ui.quiz_fragment.choose_sections.ChooseTrainingTypeFragment"
+        android:label="fragment_choose_training_type"
+        tools:layout="@layout/fragment_choose_training_type">
+        <action
+            android:id="@+id/action_chooseTrainingTypeFragment_to_chooseTimeTypeFragment"
+            app:destination="@id/chooseTimeTypeFragment" />
+        <action
+            android:id="@+id/action_chooseTrainingTypeFragment_to_chooseMultipleSectionsFragment"
+            app:destination="@id/chooseMultipleSectionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseTimeTypeFragment"
+        android:name="com.example.discmath.ui.quiz_fragment.choose_time.ChooseTimeTypeFragment"
+        android:label="fragment_choose_time_type"
+        tools:layout="@layout/fragment_choose_time_type" />
+
     <fragment
         android:id="@+id/chooseLearningTypeFragment"
         android:name="com.example.discmath.ui.learning.ChooseLearningTypeFragment"
         android:label="fragment_choose_learning_type"
-        tools:layout="@layout/fragment_choose_learning_type" />
+        tools:layout="@layout/fragment_choose_learning_type">
+        <action
+            android:id="@+id/action_chooseLearningTypeFragment_to_pdfLearningFragment"
+            app:destination="@id/pdfLearningFragment" />
+        <action
+            android:id="@+id/action_chooseLearningTypeFragment_to_video_learning_fragment"
+            app:destination="@id/video_learning_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/video_learning_fragment"
+        android:name="com.example.discmath.ui.learning.VideoLearningFragment"
+        android:label="fragment_learning_video"
+        tools:layout="@layout/fragment_learning_video" />
     <fragment
         android:id="@+id/pdfLearningFragment"
         android:name="com.example.discmath.ui.learning.PdfLearningFragment"
         android:label="fragment_pdf_learning"
         tools:layout="@layout/fragment_learning_pdf" />
     <fragment
-        android:id="@+id/specificLearningSectionFragment"
-        android:name="com.example.discmath.ui.learning.SpecificLearningSectionFragment"
-        android:label="fragment_specific_learning_section"
-        tools:layout="@layout/fragment_specific_learning_section" />
-    <fragment
-        android:id="@+id/startQuizzesFragment"
-        android:name="com.example.discmath.ui.quiz_fragment.StartQuizzesFragment"
-        android:label="fragment_start_quizzes"
-        tools:layout="@layout/fragment_start_quizzes" />
+        android:id="@+id/chooseMultipleSectionsFragment"
+        android:name="com.example.discmath.ui.quiz_fragment.choose_sections.ChooseMultipleSectionsFragment"
+        android:label="fragment_choose_multiple_sections"
+        tools:layout="@layout/fragment_choose_multiple_sections" >
+        <action
+            android:id="@+id/action_chooseMultipleSectionsFragment_to_chooseTimeTypeFragment"
+            app:destination="@id/chooseTimeTypeFragment" />
+    </fragment>
+
+
 </navigation>
