@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentStartQuizzesBinding
 
+const val QUIZ_KEY = "quiz"
 
 class StartQuizzesFragment : Fragment() {
 

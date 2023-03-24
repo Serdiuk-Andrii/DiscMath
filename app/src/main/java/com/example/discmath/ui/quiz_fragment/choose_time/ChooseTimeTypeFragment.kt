@@ -1,11 +1,11 @@
 package com.example.discmath.ui.quiz_fragment.choose_time
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.databinding.FragmentChooseTimeTypeBinding
@@ -20,17 +20,25 @@ class ChooseTimeTypeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var quizzesViewModel: QuizzesViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val quizzesViewModel =
-            ViewModelProvider(this)[QuizzesViewModel::class.java]
+        quizzesViewModel = ViewModelProvider(requireActivity())[QuizzesViewModel::class.java]
         _binding = FragmentChooseTimeTypeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         // Recycler view
         val timeOptionsRecyclerView: RecyclerView = binding.timeOptionsRecyclerView
         timeOptionsRecyclerView.adapter = TimeOptionAdapter(timeOptions, ::itemClicked)
+        if (quizzesViewModel.sectionRestrictions.value == null) {
+            Toast.makeText(context, "No sections!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "There are " +
+                    "${quizzesViewModel.sectionRestrictions.value!!.size} sections!",
+                Toast.LENGTH_SHORT).show()
+        }
 
         // Inflate the layout for this fragment
         return root

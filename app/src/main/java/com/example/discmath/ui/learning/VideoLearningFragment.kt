@@ -15,11 +15,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
-/**
- * A simple [Fragment] subclass.
- * Use the [VideoLearningFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class VideoLearningFragment : Fragment() {
 
     private var _binding: FragmentLearningVideoBinding? = null

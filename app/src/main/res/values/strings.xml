@@ -19,4 +19,5 @@
     <string name="all_sections_training_type_title">All sections</string>
     <string name="choose_sections_training_type_title">Choose sections</string>
     <string name="choose_training_type_title">Choose training type</string>
+    <string name="choose_sections_continue_button">Next</string>
 </resources>

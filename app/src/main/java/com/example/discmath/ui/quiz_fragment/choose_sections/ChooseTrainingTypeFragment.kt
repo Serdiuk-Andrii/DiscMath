@@ -13,6 +13,7 @@ import com.example.discmath.R
 import com.example.discmath.databinding.FragmentChooseTrainingTypeBinding
 import com.example.discmath.ui.quiz_fragment.QuizzesViewModel
 
+
 class ChooseTrainingTypeFragment : Fragment() {
 
     private var _binding: FragmentChooseTrainingTypeBinding? = null
@@ -27,8 +28,6 @@ class ChooseTrainingTypeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val quizzesViewModel =
-            ViewModelProvider(this)[QuizzesViewModel::class.java]
         _binding = FragmentChooseTrainingTypeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         randomTypeCardView = binding.trainingRandomTypeOption

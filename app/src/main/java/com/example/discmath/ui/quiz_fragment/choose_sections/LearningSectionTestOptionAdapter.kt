@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.entity.learning_section.LearningSection
 
+
+const val OPACITY_ITEM_SELECTED = 0.7F
+const val OPACITY_ITEM_NOT_SELECTED = 1F
 class LearningSectionTestOptionAdapter(private val sections: Array<LearningSection>,
                                         private val itemClickedCallback:
                                             (LearningSection, Boolean) -> Unit):
@@ -19,6 +22,7 @@ class LearningSectionTestOptionAdapter(private val sections: Array<LearningSecti
 
         init {
             name = view.findViewById(R.id.section_name)
+            view.alpha = OPACITY_ITEM_SELECTED
         }
     }
 
@@ -35,9 +39,9 @@ class LearningSectionTestOptionAdapter(private val sections: Array<LearningSecti
         holder.itemView.setOnClickListener {
             holder.selected = !holder.selected
             if (holder.selected) {
-                holder.itemView.alpha = 1F
+                holder.itemView.alpha = OPACITY_ITEM_SELECTED
             } else {
-                holder.itemView.alpha = 0.5F
+                holder.itemView.alpha = OPACITY_ITEM_NOT_SELECTED
             }
             itemClickedCallback(section, holder.selected)
         }

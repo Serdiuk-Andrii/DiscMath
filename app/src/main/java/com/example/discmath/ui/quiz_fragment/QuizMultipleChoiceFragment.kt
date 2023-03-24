@@ -7,7 +7,6 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.discmath.databinding.FragmentQuizMultipleChoiceBinding
@@ -17,7 +16,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-
 
 class QuizMultipleChoiceFragment : Fragment() {
 
@@ -38,8 +36,6 @@ class QuizMultipleChoiceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val quizzesViewModel =
-            ViewModelProvider(this)[QuizzesViewModel::class.java]
         _binding = FragmentQuizMultipleChoiceBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val clickListener = OnClickListener {
