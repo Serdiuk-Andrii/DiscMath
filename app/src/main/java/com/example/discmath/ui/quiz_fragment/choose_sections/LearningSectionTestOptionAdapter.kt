@@ -3,11 +3,15 @@ package com.example.discmath.ui.quiz_fragment.choose_sections
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.entity.learning_section.LearningSection
 
+
+const val SELECTED_BY_DEFAULT = false
 
 const val OPACITY_ITEM_SELECTED = 0.7F
 const val OPACITY_ITEM_NOT_SELECTED = 1F
@@ -18,11 +22,13 @@ class LearningSectionTestOptionAdapter(private val sections: Array<LearningSecti
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView
-        var selected: Boolean = true
+        val selectedIcon: ImageView
+        var selected: Boolean = SELECTED_BY_DEFAULT
 
         init {
             name = view.findViewById(R.id.section_name)
-            view.alpha = OPACITY_ITEM_SELECTED
+            selectedIcon = view.findViewById(R.id.selected_icon)
+            view.alpha = OPACITY_ITEM_NOT_SELECTED
         }
     }
 
@@ -40,12 +46,13 @@ class LearningSectionTestOptionAdapter(private val sections: Array<LearningSecti
             holder.selected = !holder.selected
             if (holder.selected) {
                 holder.itemView.alpha = OPACITY_ITEM_SELECTED
+                holder.selectedIcon.isVisible = true
             } else {
                 holder.itemView.alpha = OPACITY_ITEM_NOT_SELECTED
+                holder.selectedIcon.isVisible = false
             }
             itemClickedCallback(section, holder.selected)
         }
-        itemClickedCallback(section, holder.selected)
     }
 
     override fun getItemCount(): Int = sections.size
