@@ -2,7 +2,7 @@ package com.example.discmath.entity.quizzes
 
 enum class QuizType(val typeName: String) {
 
-    SELECT_CORRECT_CHOICE("select_choice");
+    MULTIPLE_CHOICE("multiple_choice"), YES_NO("true_false");
 
     companion object {
         fun getQuizTypeFromString(string: String): QuizType {

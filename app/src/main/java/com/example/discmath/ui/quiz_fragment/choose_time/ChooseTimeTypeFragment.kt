@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentChooseTimeTypeBinding
-import com.example.discmath.ui.quiz_fragment.QuizzesViewModel
+import com.example.discmath.ui.quiz_fragment.view_models.QuizPreferencesViewModel
 
 val timeOptions: Array<Int> = arrayOf(3, 5, 10)
 
@@ -22,14 +22,14 @@ class ChooseTimeTypeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var quizzesViewModel: QuizzesViewModel
+    private lateinit var quizPreferencesViewModel: QuizPreferencesViewModel
 
     private lateinit var navController: NavController
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        quizzesViewModel = ViewModelProvider(requireActivity())[QuizzesViewModel::class.java]
+        quizPreferencesViewModel = ViewModelProvider(requireActivity())[QuizPreferencesViewModel::class.java]
         _binding = FragmentChooseTimeTypeBinding.inflate(inflater, container, false)
         navController = findNavController()
         val root: View = binding.root
@@ -41,7 +41,7 @@ class ChooseTimeTypeFragment : Fragment() {
     }
 
     private fun itemClicked(value: Int) {
-        quizzesViewModel.setTime(value)
+        quizPreferencesViewModel.setTime(value)
         navController.navigate(R.id.quizPreferencesSummaryFragment)
     }
 

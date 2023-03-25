@@ -11,8 +11,12 @@ fun loadImageIntoViewFrom(url: String, imageView: ImageView, loader: RequestMana
     loader.load(storageReference.child(url)).into(imageView)
 }
 
+const val QUIZ_PROBLEM_KEY = "url"
+const val ANSWER_KEY = "correct"
+
 abstract class Quiz(
-    open val problemUrl: String, open val clickListener: OnClickListener?) {
+    open val problemUrl: String, open val correctAnswerIndex: Number,
+    open val clickListener: OnClickListener?) {
 
     private fun loadProblemInto(imageView: ImageView, loader: RequestManager,
                                 storageReference: StorageReference) {

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentSpecificLearningSectionBinding
 import com.example.discmath.entity.learning_item.LearningItem
+import com.example.discmath.entity.learning_section.*
 import com.example.discmath.ui.learning.adapters.LearningItemAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -65,10 +66,10 @@ class SpecificLearningSectionFragment : Fragment() {
             val learningItems: List<LearningItem> =
                 querySnapshot.documents.map { documentSnapshot ->
                     LearningItem(
-                        typeString = documentSnapshot.get("type") as String,
-                        name = documentSnapshot.get("name") as String,
-                        urlVideo = documentSnapshot.get("url_video") as String,
-                        urlPdf = documentSnapshot.get("url_pdf") as String
+                        typeString = documentSnapshot.get(TYPE_FIELD_KEY) as String,
+                        name = documentSnapshot.get(NAME_FIELD_KEY) as String,
+                        urlVideo = documentSnapshot.get(VIDEO_URL_FIELD_KEY) as String,
+                        urlPdf = documentSnapshot.get(PDF_URL_FIELD_KEY) as String
                     )
                 }
             recyclerView.adapter = LearningItemAdapter(

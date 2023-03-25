@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.discmath.databinding.FragmentQuizMultipleChoiceBinding
 import com.example.discmath.entity.quizzes.FourChoicesQuiz
+import com.example.discmath.entity.quizzes.QUIZ_PROBLEM_KEY
+import com.example.discmath.entity.quizzes.SOLUTIONS_KEY
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -44,8 +46,8 @@ class QuizMultipleChoiceFragment : Fragment() {
         }
         db.collection("images").get(Source.DEFAULT).addOnSuccessListener { querySnapshot ->
             problemsImagesData.addAll(querySnapshot.documents.map
-            { documentSnapshot ->  FourChoicesQuiz(documentSnapshot.get("url") as String,
-                                    documentSnapshot.get("answers") as ArrayList<*>,
+            { documentSnapshot ->  FourChoicesQuiz(documentSnapshot.get(QUIZ_PROBLEM_KEY) as String,
+                                    documentSnapshot.get(SOLUTIONS_KEY) as ArrayList<*>,
                 (documentSnapshot.get("correct") as Long).toInt(), clickListener)
             })
             loadNextProblem()

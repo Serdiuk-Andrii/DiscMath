@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentChooseMultipleSectionsBinding
 import com.example.discmath.entity.learning_section.LearningSection
-import com.example.discmath.ui.learning.SECTIONS_COLLECTION_STORAGE_PATH
-import com.example.discmath.ui.learning.SECTION_ELEMENTS_STORAGE_PATH
-import com.example.discmath.ui.quiz_fragment.QuizzesViewModel
+import com.example.discmath.entity.learning_section.SECTIONS_COLLECTION_STORAGE_PATH
+import com.example.discmath.entity.learning_section.SECTION_NAME_STORAGE_PATH
+import com.example.discmath.ui.quiz_fragment.view_models.QuizPreferencesViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -31,14 +31,14 @@ class ChooseMultipleSectionsFragment : Fragment() {
     private lateinit var chosenSections: MutableList<LearningSection>
     private lateinit var nextButton: Button
 
-    private lateinit var quizzesViewModel: QuizzesViewModel
+    private lateinit var quizPreferencesViewModel: QuizPreferencesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         chosenSections = mutableListOf()
-        quizzesViewModel = ViewModelProvider(requireActivity())[QuizzesViewModel::class.java]
+        quizPreferencesViewModel = ViewModelProvider(requireActivity())[QuizPreferencesViewModel::class.java]
         _binding = FragmentChooseMultipleSectionsBinding.inflate(inflater, container, false)
         val root:View = binding.root
         // Recycler view
@@ -50,15 +50,15 @@ class ChooseMultipleSectionsFragment : Fragment() {
                 querySnapshot ->
             val sections: List<LearningSection> = querySnapshot.documents.map {
                     documentSnapshot ->
-                LearningSection(name = documentSnapshot.get("name") as String,
-                    collectionPath = "${documentSnapshot.reference.path}/$SECTION_ELEMENTS_STORAGE_PATH"
+                LearningSection(name = documentSnapshot.get(SECTION_NAME_STORAGE_PATH) as String,
+                    collectionPath = documentSnapshot.reference.path
                 )
             }
             sectionsRecyclerView.adapter = LearningSectionTestOptionAdapter(sections.toTypedArray(),
                 ::itemClicked)
         }
         nextButton.setOnClickListener {
-            quizzesViewModel.setSectionRestrictions(chosenSections.toTypedArray())
+            quizPreferencesViewModel.setSectionRestrictions(chosenSections.toTypedArray())
             navController.navigate(R.id.chooseTimeTypeFragment)
         }
         nextButton.isEnabled = SELECTED_BY_DEFAULT

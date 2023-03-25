@@ -7,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentChooseTrainingTypeBinding
-import com.example.discmath.ui.quiz_fragment.QuizzesViewModel
 
 
 class ChooseTrainingTypeFragment : Fragment() {
@@ -39,7 +37,7 @@ class ChooseTrainingTypeFragment : Fragment() {
         chooseSectionsCardView = binding.trainingChooseSectionsOptions
         chooseSectionsCardView.setOnClickListener {
             specificSectionsTrainingSelected()
-            navController.navigate(R.id.chooseMultipleSectionsFragment)
+            navController.navigate(R.id.move_from_training_type_to_section_selection)
         }
         // Inflate the layout for this fragment
         return root

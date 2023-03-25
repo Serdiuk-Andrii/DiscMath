@@ -1,11 +1,11 @@
-package com.example.discmath.ui.quiz_fragment
+package com.example.discmath.ui.quiz_fragment.view_models
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.discmath.entity.learning_section.LearningSection
 
-class QuizzesViewModel : ViewModel() {
+class QuizPreferencesViewModel : ViewModel() {
 
     private val _sectionRestrictions = MutableLiveData<Array<LearningSection>>()
     val sectionRestrictions: LiveData<Array<LearningSection>> = _sectionRestrictions

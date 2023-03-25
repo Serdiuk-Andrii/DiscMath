@@ -11,13 +11,14 @@ import com.google.firebase.storage.StorageReference
 const val FADED_ANSWER_ALPHA = 0.5F
 const val SOLUTION_URL_KEY = "url"
 const val SOLUTION_EXPLANATION_KEY = "explanation"
+const val SOLUTIONS_KEY = "answers"
 
 const val DEFAULT_EXPLANATION = "obvious"
 
 open class FourChoicesQuiz(
     override val problemUrl: String, open val solutionsUrl: ArrayList<*>,
-    open val correctAnswer: Int, override val clickListener: View.OnClickListener?):
-    Quiz(problemUrl, clickListener) {
+    override val correctAnswerIndex: Number, override val clickListener: View.OnClickListener?):
+    Quiz(problemUrl, correctAnswerIndex, clickListener) {
 
     private fun loadAnswerInto(answerIndex: Int, imageView: ImageView, loader: RequestManager,
                                storageReference: StorageReference
@@ -32,7 +33,7 @@ open class FourChoicesQuiz(
             ?.dropLast(1) ?: DEFAULT_EXPLANATION
 
         val dialog = BottomSheetDialog(imageView.context)
-        if (answerIndex == correctAnswer) {
+        if (answerIndex == correctAnswerIndex) {
             if (clickListener != null) {
                 imageView.setOnClickListener(clickListener)
             }
