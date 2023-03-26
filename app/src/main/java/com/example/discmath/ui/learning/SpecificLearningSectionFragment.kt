@@ -10,7 +10,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentSpecificLearningSectionBinding
-import com.example.discmath.ui.entity.LearningItem
+import com.example.discmath.entity.learning_item.LearningItem
+import com.example.discmath.entity.learning_section.NAME_FIELD_KEY
+import com.example.discmath.entity.learning_section.PDF_URL_FIELD_KEY
+import com.example.discmath.entity.learning_section.TYPE_FIELD_KEY
+import com.example.discmath.entity.learning_section.VIDEO_URL_FIELD_KEY
 import com.example.discmath.ui.learning.adapters.LearningItemAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -43,6 +47,7 @@ class SpecificLearningSectionFragment : Fragment() {
             sectionName = it.getString(SECTION_NAME_KEY)!!
             collectionPath = it.getString(COLLECTION_PATH_KEY)!!
         }
+
     }
 
     override fun onCreateView(
@@ -58,16 +63,16 @@ class SpecificLearningSectionFragment : Fragment() {
         val adapter = LearningItemAdapter(arrayOf()) {
             navigateToLearningItem(it)
         }
-        //activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility = View.GONE
+
         recyclerView.adapter = adapter
         db.collection(collectionPath).get().addOnSuccessListener { querySnapshot ->
             val learningItems: List<LearningItem> =
                 querySnapshot.documents.map { documentSnapshot ->
                     LearningItem(
-                        typeString = documentSnapshot.get("type") as String,
-                        name = documentSnapshot.get("name") as String,
-                        urlVideo = documentSnapshot.get("url_video") as String,
-                        urlPdf = documentSnapshot.get("url_pdf") as String
+                        typeString = documentSnapshot.get(TYPE_FIELD_KEY) as String,
+                        name = documentSnapshot.get(NAME_FIELD_KEY) as String,
+                        urlVideo = documentSnapshot.get(VIDEO_URL_FIELD_KEY) as String,
+                        urlPdf = documentSnapshot.get(PDF_URL_FIELD_KEY) as String
                     )
                 }
             recyclerView.adapter = LearningItemAdapter(
@@ -82,9 +87,7 @@ class SpecificLearningSectionFragment : Fragment() {
 
     private fun navigateToLearningItem(learningItem: LearningItem) {
         //learningItemViewModel.updateCurrentLearningItem(learningItem)
-        val navHostFragment =
-            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment_activity_main)
-        val navController = navHostFragment!!.findNavController()
+        val navController = findNavController()
         if (learningItem.urlVideo.isEmpty() && learningItem.urlPdf.isEmpty()) {
             Toast.makeText(context, "Both urls are absent!", Toast.LENGTH_SHORT).show()
         } else if (learningItem.urlPdf.isEmpty()) {

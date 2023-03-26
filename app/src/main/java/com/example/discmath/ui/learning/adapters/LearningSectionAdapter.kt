@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
-import com.example.discmath.ui.entity.LearningSection
+import com.example.discmath.entity.learning_section.LearningSection
 
 class LearningSectionAdapter(private val dataSet: Array<LearningSection>,
                              private val itemClickedCallback:  ((LearningSection) -> Unit))

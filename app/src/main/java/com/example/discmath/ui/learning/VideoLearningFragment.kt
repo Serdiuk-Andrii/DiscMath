@@ -1,6 +1,5 @@
 package com.example.discmath.ui.learning
 
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -16,11 +15,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
-/**
- * A simple [Fragment] subclass.
- * Use the [VideoLearningFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class VideoLearningFragment : Fragment() {
 
     private var _binding: FragmentLearningVideoBinding? = null
@@ -44,7 +38,6 @@ class VideoLearningFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,7 +51,6 @@ class VideoLearningFragment : Fragment() {
         nameTextView.text = name
         urlTextView.text = url
         videoView = binding.lectureVideo
-
 
 
         // Sets custom view

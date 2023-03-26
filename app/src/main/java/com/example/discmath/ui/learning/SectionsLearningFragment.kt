@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningSectionsBinding
-import com.example.discmath.ui.entity.LearningSection
+import com.example.discmath.entity.learning_section.LearningSection
+import com.example.discmath.entity.learning_section.SECTIONS_COLLECTION_STORAGE_PATH
+import com.example.discmath.entity.learning_section.SECTION_NAME_STORAGE_PATH
 import com.example.discmath.ui.learning.adapters.LearningSectionAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,10 +18,6 @@ import com.google.firebase.ktx.Firebase
 // Keys for intents
 const val COLLECTION_PATH_KEY = "collection"
 const val SECTION_NAME_KEY = "name"
-
-// Firebase Storage
-const val SECTIONS_COLLECTION_STORAGE_PATH = "sections"
-const val SECTION_ELEMENTS_STORAGE_PATH = "items"
 
 class SectionsLearningFragment : Fragment() {
 
@@ -48,8 +46,8 @@ class SectionsLearningFragment : Fragment() {
                 querySnapshot ->
             val sections: List<LearningSection> = querySnapshot.documents.map {
                 documentSnapshot ->
-                LearningSection(name = documentSnapshot.get("name") as String,
-                    collectionPath = "${documentSnapshot.reference.path}/${SECTION_ELEMENTS_STORAGE_PATH}"
+                LearningSection(name = documentSnapshot.get(SECTION_NAME_STORAGE_PATH) as String,
+                    collectionPath = documentSnapshot.reference.path
                                 )
             }
             learningSections.adapter = LearningSectionAdapter(sections.toTypedArray()) {
@@ -60,14 +58,12 @@ class SectionsLearningFragment : Fragment() {
     }
 
     private fun navigateToLearningSection(learningSection: LearningSection) {
-        val navHostFragment =
-            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment_activity_main)
-        val navController = navHostFragment!!.findNavController()
+        val navController = findNavController()
         navController.navigate(
             R.id.specificLearningSectionFragment,
             Bundle().apply {
                 putString(SECTION_NAME_KEY, learningSection.name)
-                putString(COLLECTION_PATH_KEY, learningSection.collectionPath)
+                putString(COLLECTION_PATH_KEY, learningSection.getLearningElementsPath())
             }
         )
     }

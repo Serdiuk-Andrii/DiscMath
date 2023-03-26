@@ -1,7 +1,9 @@
 package com.example.discmath
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -15,6 +17,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val currentTime = System.currentTimeMillis()
+        installSplashScreen().setKeepOnScreenCondition(condition =
+        { System.currentTimeMillis() - currentTime >= 15000 })
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -25,11 +30,17 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment!!.findNavController()
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_sections, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
+        val bottomNavigationIds: Set<Int> = setOf(
+            R.id.navigation_sections, R.id.startQuizzesFragment, R.id.navigation_notifications
         )
+        val appBarConfiguration = AppBarConfiguration(bottomNavigationIds)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (bottomNavigationIds.contains(destination.id)) {
+                navView.visibility = View.VISIBLE
+            } else {
+                navView.visibility = View.GONE
+            }
+        }
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

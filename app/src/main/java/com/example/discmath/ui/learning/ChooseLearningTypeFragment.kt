@@ -43,10 +43,7 @@ class ChooseLearningTypeFragment : Fragment() {
         videoChoiceCard = binding.optionVideo
         pdfChoiceCard = binding.optionPdf
 
-        val navHostFragment =
-            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_fragment_activity_main)
-        val navController = navHostFragment!!.findNavController()
-
+        val navController = findNavController()
         videoChoiceCard.setOnClickListener {
             navController.navigate(R.id.video_learning_fragment, Bundle().apply {
                 putString(NAME_KEY, name)
