@@ -26,4 +26,13 @@
     <string name="quiz_summary_sections_number_text">
         Обрано %1$d тем
     </string>
+    <string name="yes_button_text">Yes</string>
+    <string name="no_button_text">No</string>
+    <string name="problem_image_description">Задача</string>
+    <string name="skip_button_text">Skip</string>
+    <string name="quiz_results_title">Результати</string>
+    <string name="quiz_results_come_back_button_text">Назад</string>
+    <string name="trophy_image_description">Trophy image</string>
+    <string name="quiz_results_summary_text">Правильні відповіді: %1$d з %2$d</string>
+    <string name="explanation_title">Пояснення</string>
 </resources>

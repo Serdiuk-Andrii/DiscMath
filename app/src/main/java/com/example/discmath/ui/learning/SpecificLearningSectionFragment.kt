@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentSpecificLearningSectionBinding
 import com.example.discmath.entity.learning_item.LearningItem
-import com.example.discmath.entity.learning_section.*
+import com.example.discmath.entity.learning_section.NAME_FIELD_KEY
+import com.example.discmath.entity.learning_section.PDF_URL_FIELD_KEY
+import com.example.discmath.entity.learning_section.TYPE_FIELD_KEY
+import com.example.discmath.entity.learning_section.VIDEO_URL_FIELD_KEY
 import com.example.discmath.ui.learning.adapters.LearningItemAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

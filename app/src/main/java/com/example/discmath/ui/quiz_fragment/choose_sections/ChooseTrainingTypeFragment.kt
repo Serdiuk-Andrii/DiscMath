@@ -1,12 +1,12 @@
 package com.example.discmath.ui.quiz_fragment.choose_sections
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentChooseTrainingTypeBinding
@@ -31,8 +31,10 @@ class ChooseTrainingTypeFragment : Fragment() {
         randomTypeCardView = binding.trainingRandomTypeOption
         val navController = findNavController()
         randomTypeCardView.setOnClickListener {
-            randomTypeTrainingSelected()
-            navController.navigate(R.id.chooseTimeTypeFragment)
+            //randomTypeTrainingSelected()
+            Toast.makeText(context, "This feature has not been implemented yet",
+                Toast.LENGTH_SHORT).show()
+            //navController.navigate(R.id.chooseTimeTypeFragment)
         }
         chooseSectionsCardView = binding.trainingChooseSectionsOptions
         chooseSectionsCardView.setOnClickListener {
@@ -45,7 +47,6 @@ class ChooseTrainingTypeFragment : Fragment() {
 
     private fun randomTypeTrainingSelected() {
         Toast.makeText(context, "Random selected", Toast.LENGTH_SHORT).show()
-
     }
 
     private fun specificSectionsTrainingSelected() {

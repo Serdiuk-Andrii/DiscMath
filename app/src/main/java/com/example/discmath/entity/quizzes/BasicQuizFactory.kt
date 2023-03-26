@@ -11,16 +11,16 @@ class BasicQuizFactory: QuizFactory {
         val quizType: QuizType = QuizType.getQuizTypeFromString(
             documentSnapshot.get(TYPE_KEY) as String)
         val problemUrl: String = documentSnapshot.get(QUIZ_PROBLEM_KEY) as String
-        val correctAnswerIndex: Number = documentSnapshot.get(ANSWER_KEY) as Number
+        val correctAnswerIndex: Int = documentSnapshot.getLong(ANSWER_KEY)!!.toInt()
         return when(quizType) {
             QuizType.MULTIPLE_CHOICE -> {
                 FourChoicesQuiz(problemUrl,
                     documentSnapshot.get(SOLUTIONS_KEY) as ArrayList<*>,
                     correctAnswerIndex
-                ) {}
+                )
             }
             QuizType.YES_NO -> {
-                YesNoQuiz(problemUrl, correctAnswerIndex) {}
+                YesNoQuiz(problemUrl, correctAnswerIndex)
             }
         }
     }

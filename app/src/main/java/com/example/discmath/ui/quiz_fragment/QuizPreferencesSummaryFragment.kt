@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentQuizPreferencesSummaryBinding
 import com.example.discmath.entity.learning_section.LearningSection
@@ -17,6 +19,8 @@ import com.example.discmath.entity.quizzes.BasicQuizFactory
 import com.example.discmath.entity.quizzes.QuizFactory
 import com.example.discmath.ui.quiz_fragment.view_models.QuizPreferencesViewModel
 import com.example.discmath.ui.quiz_fragment.view_models.QuizViewModel
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -77,16 +81,22 @@ class QuizPreferencesSummaryFragment : Fragment() {
 
     private fun downloadQuizzes() {
         val sections: Array<LearningSection>? = quizPreferencesViewModel.sectionRestrictions.value
+        quizzesViewModel.clearQuizzes()
+        val navController = findNavController()
         if (sections == null) {
             // Download all the quizzes
+            Toast.makeText(context, "This feature has not been implemented yet",
+                Toast.LENGTH_SHORT).show()
         } else {
-            // Download quizzes from the specified sections
-            sections.forEach { section ->
-                db.collection(section.getQuizzesPath()).get().addOnSuccessListener {
-                    quizzesViewModel.addQuizzes(it.documents.map {
-                            documentSnapshot -> quizFactory.getQuizFromDocumentSnapshot(documentSnapshot)
+            //TODO: Notice that this may be inefficient
+            val tasks = sections.map { section ->
+                db.collection(section.getQuizzesPath()).get()}
+            Tasks.whenAllSuccess<QuerySnapshot>(tasks).addOnSuccessListener {
+                it.forEach { snapshot ->  quizzesViewModel.addQuizzes(snapshot.documents.map {
+                        documentSnapshot -> quizFactory.getQuizFromDocumentSnapshot(documentSnapshot)
                     })
                 }
+                navController.navigate(R.id.quizFragment)
             }
         }
     }

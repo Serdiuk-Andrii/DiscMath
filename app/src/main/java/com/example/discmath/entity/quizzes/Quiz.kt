@@ -1,31 +1,31 @@
 package com.example.discmath.entity.quizzes
 
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.ImageView
 import com.bumptech.glide.RequestManager
-import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.FirebaseStorage
 
-fun loadImageIntoViewFrom(url: String, imageView: ImageView, loader: RequestManager,
-                          storageReference: StorageReference) {
-    loader.load(storageReference.child(url)).into(imageView)
+
+private var storage: FirebaseStorage = FirebaseStorage.getInstance()
+fun loadImageIntoViewFrom(url: String, imageView: ImageView, loader: RequestManager) {
+    loader.load(storage.getReferenceFromUrl(url)).into(imageView)
 }
 
 const val QUIZ_PROBLEM_KEY = "url"
 const val ANSWER_KEY = "correct"
 
 abstract class Quiz(
-    open val problemUrl: String, open val correctAnswerIndex: Number,
-    open val clickListener: OnClickListener?) {
+    open val problemUrl: String, open val correctAnswerIndex: Int,
+    val quizType: QuizType) {
 
-    private fun loadProblemInto(imageView: ImageView, loader: RequestManager,
-                                storageReference: StorageReference) {
-        loadImageIntoViewFrom(problemUrl, imageView, loader, storageReference)
+    private fun loadProblemInto(imageView: ImageView, loader: RequestManager) {
+
+        loadImageIntoViewFrom(problemUrl, imageView, loader)
     }
 
-    fun loadProblemInto(imageView: ImageView, loader: RequestManager,
-                        storageReference: StorageReference, makeVisible: Boolean) {
-        loadProblemInto(imageView, loader, storageReference)
+    fun loadProblemInto(imageView: ImageView, loader: RequestManager, makeVisible: Boolean) {
+
+        loadProblemInto(imageView, loader)
         if (makeVisible) {
             imageView.visibility = View.VISIBLE
         }

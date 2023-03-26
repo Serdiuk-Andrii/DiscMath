@@ -12,12 +12,6 @@
         tools:layout="@layout/fragment_learning_sections" />
 
     <fragment
-        android:id="@+id/navigation_quiz_multiple_choice"
-        android:name="com.example.discmath.ui.quiz_fragment.QuizMultipleChoiceFragment"
-        android:label="@string/exercises"
-        tools:layout="@layout/fragment_quiz_multiple_choice" />
-
-    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.discmath.ui.notifications.NotificationsFragment"
         android:label="@string/statistics"
@@ -96,7 +90,29 @@
         android:id="@+id/quizPreferencesSummaryFragment"
         android:name="com.example.discmath.ui.quiz_fragment.QuizPreferencesSummaryFragment"
         android:label="fragment_quiz_preferences_summary"
-        tools:layout="@layout/fragment_quiz_preferences_summary" />
+        tools:layout="@layout/fragment_quiz_preferences_summary" >
+        <action
+            android:id="@+id/action_quizPreferencesSummaryFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.example.discmath.ui.quiz_fragment.QuizFragment"
+        android:label="fragment_quiz"
+        tools:layout="@layout/fragment_quiz" >
+        <action
+            android:id="@+id/action_quizFragment_to_quizResultsFragment"
+            app:destination="@id/quizResultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quizResultsFragment"
+        android:name="com.example.discmath.ui.quiz_fragment.QuizResultsFragment"
+        android:label="fragment_quiz_results"
+        tools:layout="@layout/fragment_quiz_results" >
+        <action
+            android:id="@+id/action_quizResultsFragment_to_startQuizzesFragment"
+            app:destination="@id/startQuizzesFragment" />
+    </fragment>
 
 
 </navigation>
