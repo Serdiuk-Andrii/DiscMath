@@ -5,8 +5,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.discmath.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,9 +29,9 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val bottomNavigationIds: Set<Int> = setOf(
-            R.id.navigation_sections, R.id.startQuizzesFragment, R.id.navigation_notifications
+            R.id.navigation_sections, R.id.start_quizzes_fragment, R.id.navigation_notifications
         )
-        val appBarConfiguration = AppBarConfiguration(bottomNavigationIds)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (bottomNavigationIds.contains(destination.id)) {
                 navView.visibility = View.VISIBLE
@@ -41,8 +39,8 @@ class MainActivity : AppCompatActivity() {
                 navView.visibility = View.GONE
             }
         }
-
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        /*val appBarConfiguration = AppBarConfiguration(bottomNavigationIds)
+        setupActionBarWithNavController(navController, appBarConfiguration)*/
         navView.setupWithNavController(navController)
 
     }

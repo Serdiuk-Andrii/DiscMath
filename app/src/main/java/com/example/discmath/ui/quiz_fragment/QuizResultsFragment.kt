@@ -58,7 +58,7 @@ class QuizResultsFragment : Fragment() {
             correctAnswers, totalAnswers
         )
         quizComeBackButton.setOnClickListener {
-            navController.navigate(R.id.startQuizzesFragment)
+            navController.navigate(R.id.start_quizzes_fragment)
         }
         return root
     }

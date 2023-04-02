@@ -7,7 +7,7 @@
         android:title="@string/theory" />
 
     <item
-        android:id="@+id/startQuizzesFragment"
+        android:id="@+id/start_quizzes_fragment"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/exercises" />
 

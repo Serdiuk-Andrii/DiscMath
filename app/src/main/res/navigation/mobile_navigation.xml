@@ -23,7 +23,7 @@
         tools:layout="@layout/fragment_specific_learning_section" />
 
     <fragment
-        android:id="@+id/startQuizzesFragment"
+        android:id="@+id/start_quizzes_fragment"
         android:name="com.example.discmath.ui.quiz_fragment.StartQuizzesFragment"
         android:label="fragment_start_quizzes"
         tools:layout="@layout/fragment_start_quizzes">
@@ -111,7 +111,7 @@
         tools:layout="@layout/fragment_quiz_results" >
         <action
             android:id="@+id/action_quizResultsFragment_to_startQuizzesFragment"
-            app:destination="@id/startQuizzesFragment" />
+            app:destination="@id/start_quizzes_fragment" />
     </fragment>
 
 
