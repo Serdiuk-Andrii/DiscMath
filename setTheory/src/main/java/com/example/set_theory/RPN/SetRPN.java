@@ -3,11 +3,13 @@ package com.example.set_theory.RPN;
 import com.example.set_theory.exceptions.UniversalSetMissingException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.example.set_theory.RPN.OperatorComparator.*;
@@ -16,32 +18,28 @@ import org.jetbrains.annotations.NotNull;
 
 public class SetRPN {
 
-    // private static final Pattern operandRegularExpression = Pattern.compile("[A-Z]");
-
     private final String expression;
     private Set<Character> universalSet = null;
 
+    private final String postfixExpression;
+
+    private final List<Character> sets;
 
     private static boolean isOperand(char symbol) {
         return Character.isUpperCase(symbol);
     }
 
-    public SetRPN(final String expression) {
+    public SetRPN(@NotNull final String expression) throws UnknownOperatorException {
         this.expression = expression.replace(" ",
                 "");
+        this.sets = new ArrayList<>(2 * expression.length() / 3);
+        this.postfixExpression = convertToRPN();
     }
 
-    public SetRPN(final String expression, final Set<Character> universalSet) {
+    public SetRPN(@NotNull final String expression, @NotNull final Set<Character> universalSet)
+            throws UnknownOperatorException {
         this(expression);
         this.universalSet = universalSet;
-    }
-
-    public String getExpression() {
-        return expression;
-    }
-
-    public Set<Character> getUniversalSet() {
-        return universalSet;
     }
 
     public String convertToRPN() throws UnknownOperatorException {
@@ -51,6 +49,7 @@ public class SetRPN {
         for (char symbol: expression.toCharArray()) {
             if (isOperand(symbol)) {
                 result.append(symbol);
+                sets.add(symbol);
                 continue;
             }
             // If the stack is empty or if the symbol is an opening bracket,
@@ -93,9 +92,8 @@ public class SetRPN {
         return result.toString();
     }
 
-    public Set<Character> evaluate(Map<Character, Set<Character>> labeledSets) throws
+    public Set<Character> evaluate(@NotNull Map<Character, Set<Character>> labeledSets) throws
             UnknownOperatorException, UniversalSetMissingException {
-        String postfixExpression = convertToRPN();
         Stack<Set<Character>> stack = new Stack<>();
         for (final char symbol: postfixExpression.toCharArray()) {
             if (isOperand(symbol)) {
@@ -132,7 +130,7 @@ public class SetRPN {
                         copy.retainAll(second);
                         // Calculating the difference
                         second.addAll(first);
-                        second.retainAll(copy);
+                        second.removeAll(copy);
                         break;
                     default:
                         throw new UnknownOperatorException(symbol);
@@ -146,6 +144,20 @@ public class SetRPN {
     private Set<Character> getComplement(@NotNull Set<Character> set) {
         return universalSet.stream().filter(element -> !set.contains(element)).
                 collect(Collectors.toSet());
+    }
+
+    public List<Character> getSetNames() { return sets; }
+
+    public int getNumberOfVariables() {
+        return sets.size();
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public Set<Character> getUniversalSet() {
+        return universalSet;
     }
 
 }

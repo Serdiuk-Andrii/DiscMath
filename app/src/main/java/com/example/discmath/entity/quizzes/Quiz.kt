@@ -11,12 +11,12 @@ fun loadImageIntoViewFrom(url: String, imageView: ImageView, loader: RequestMana
     loader.load(storage.getReferenceFromUrl(url)).into(imageView)
 }
 
+// This field points to the image saved in the Firebase Storage
 const val QUIZ_PROBLEM_KEY = "url"
 const val ANSWER_KEY = "correct"
 
 abstract class Quiz(
-    open val problemUrl: String, open val correctAnswerIndex: Int,
-    val quizType: QuizType) {
+    open val problemUrl: String, open val quizType: QuizType) {
 
     private fun loadProblemInto(imageView: ImageView, loader: RequestManager) {
 

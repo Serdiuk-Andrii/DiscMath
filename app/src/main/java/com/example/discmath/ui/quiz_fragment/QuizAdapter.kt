@@ -3,15 +3,14 @@ package com.example.discmath.ui.quiz_fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.discmath.R
 import com.example.discmath.entity.quizzes.*
+import com.example.set_theory.RPN.SetRPN
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 private fun loadAnswerInto(quiz: FourChoicesQuiz, answerIndex: Int,
@@ -46,6 +45,35 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
 
     abstract class QuizViewHolder(view: View): RecyclerView.ViewHolder(view) {
         lateinit var problemImage: ImageView
+    }
+
+    class SetEquationViewHolder(view: View): QuizViewHolder(view) {
+
+        val setsRecyclerView: RecyclerView
+        val verifyButton: Button
+
+        lateinit var leftSetRPN: SetRPN
+        lateinit var rightSetRPN: SetRPN
+        init {
+            problemImage = view.findViewById(R.id.set_problem)
+            setsRecyclerView = view.findViewById(R.id.sets_recycler_view)
+            verifyButton = view.findViewById(R.id.set_verify_button)
+            verifyButton.setOnClickListener {
+                val map: MutableMap<Char, MutableSet<Char>> = HashMap()
+                setsRecyclerView.forEach {
+                    val editText: EditText = it.findViewById(R.id.edit_set_values)
+                    map[editText.hint[0]] = editText.text.toSet().toMutableSet()
+                }
+                val leftEvaluated: Set<Char> = leftSetRPN.evaluate(map)
+                val rightEvaluated: Set<Char> = rightSetRPN.evaluate(map)
+                if (leftEvaluated == rightEvaluated) {
+                    Toast.makeText(view.context, "Correct!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(view.context, "Incorrect!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
 
     class YesNoViewHolder(view: View): QuizViewHolder(view) {
@@ -105,6 +133,11 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                 val view = inflater.
                         inflate(R.layout.fragment_yes_no_quiz, parent, false)
                 YesNoViewHolder(view)
+            }
+            QuizType.SET_EQUATION.ordinal -> {
+                val view = inflater.
+                        inflate(R.layout.set_quiz, parent, false)
+                SetEquationViewHolder(view)
             }
             else -> {throw java.lang.RuntimeException()}
         }
@@ -185,6 +218,16 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                     Toast.makeText(holder.itemView.context,
                         "Incorrect!", Toast.LENGTH_SHORT).show()
                 }
+            }
+            is SetEquationViewHolder -> {
+                quiz as SetEquationQuiz
+                holder.leftSetRPN = SetRPN(quiz.leftEquation)
+                holder.rightSetRPN = SetRPN(quiz.rightEquation)
+                Toast.makeText(holder.itemView.context,
+                    "There are ${holder.leftSetRPN.numberOfVariables} sets",
+                    Toast.LENGTH_SHORT).show()
+                val adapter = SetInputAdapter(holder.leftSetRPN.setNames)
+                holder.setsRecyclerView.adapter = adapter
             }
         }
     }
