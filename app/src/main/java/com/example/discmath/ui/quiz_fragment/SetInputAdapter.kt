@@ -7,7 +7,6 @@ import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 
-
 class SetInputAdapter(private val dataset: List<Char>): RecyclerView.
             Adapter<SetInputAdapter.ViewHolder>() {
 
@@ -18,15 +17,7 @@ class SetInputAdapter(private val dataset: List<Char>): RecyclerView.
 
         init {
             textField = view.findViewById(R.id.edit_set_values)
-            /*
-            textField.addTextChangedListener(
-                beforeTextChanged = {text, start, count, after ->  },
-                afterTextChanged = {text ->  },
-                onTextChanged = {text, _, _, _ ->
-                    textField.setText(text.toString())
-                    Toast.makeText(view.context, text.toString(), Toast.LENGTH_SHORT).show() }
-            )
-            */
+            textField.addTextChangedListener(SetEditTextWatcher(textField))
         }
 
     }

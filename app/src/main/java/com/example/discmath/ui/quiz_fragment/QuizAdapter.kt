@@ -1,5 +1,6 @@
 package com.example.discmath.ui.quiz_fragment
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,10 @@ import com.example.discmath.R
 import com.example.discmath.entity.quizzes.*
 import com.example.set_theory.RPN.SetRPN
 import com.google.android.material.bottomsheet.BottomSheetDialog
+
+fun Set<Char>.getSetRepresentation(): String {
+    return if (this.isEmpty()) "∅" else '{' + this.joinToString() + '}'
+}
 
 private fun loadAnswerInto(quiz: FourChoicesQuiz, answerIndex: Int,
                            imageView: ImageView, loader: RequestManager) {
@@ -50,7 +55,7 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
     class SetEquationViewHolder(view: View): QuizViewHolder(view) {
 
         val setsRecyclerView: RecyclerView
-        val verifyButton: Button
+        private val verifyButton: Button
 
         lateinit var leftSetRPN: SetRPN
         lateinit var rightSetRPN: SetRPN
@@ -62,18 +67,34 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                 val map: MutableMap<Char, MutableSet<Char>> = HashMap()
                 setsRecyclerView.forEach {
                     val editText: EditText = it.findViewById(R.id.edit_set_values)
-                    map[editText.hint[0]] = editText.text.toSet().toMutableSet()
+                    map[editText.hint[0]] = editText.text.toString().
+                    replace(", ", "").toSet().toMutableSet()
                 }
                 val leftEvaluated: Set<Char> = leftSetRPN.evaluate(map)
                 val rightEvaluated: Set<Char> = rightSetRPN.evaluate(map)
                 if (leftEvaluated == rightEvaluated) {
-                    Toast.makeText(view.context, "Correct!", Toast.LENGTH_SHORT).show()
+                    val alertDialog = AlertDialog.Builder(view.context)
+                        .setTitle("Правильно")
+                        .setMessage("Так тримати!")
+                        .setPositiveButton("ОК") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                    alertDialog.show()
                 } else {
-                    Toast.makeText(view.context, "Incorrect!", Toast.LENGTH_SHORT).show()
+                    val leftSide: String = leftEvaluated.getSetRepresentation()
+                    val rightSide: String = rightEvaluated.getSetRepresentation()
+                    val alertDialog = AlertDialog.Builder(view.context)
+                        .setTitle("Неправильно")
+                        .setMessage("$leftSide != $rightSide")
+                        .setPositiveButton("ОК") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                    alertDialog.show()
                 }
             }
         }
-
     }
 
     class YesNoViewHolder(view: View): QuizViewHolder(view) {
@@ -226,12 +247,10 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                 Toast.makeText(holder.itemView.context,
                     "There are ${holder.leftSetRPN.numberOfVariables} sets",
                     Toast.LENGTH_SHORT).show()
-                val adapter = SetInputAdapter(holder.leftSetRPN.setNames)
-                holder.setsRecyclerView.adapter = adapter
+                holder.setsRecyclerView.adapter = SetInputAdapter(holder.leftSetRPN.setNames)
             }
         }
     }
 
     override fun getItemCount(): Int = dataSet.size
-
 }

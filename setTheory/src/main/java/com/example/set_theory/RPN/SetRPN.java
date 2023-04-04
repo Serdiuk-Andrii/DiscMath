@@ -101,7 +101,7 @@ public class SetRPN {
                 stack.push(labeledSets.get(symbol));
             } else {
                 // Pop the first set and check if is it an unary operation
-                Set<Character> first = stack.pop();
+                Set<Character> first = new HashSet<>(stack.pop());
                 if (symbol == COMPLEMENT) {
                     if (universalSet == null) {
                         throw new UniversalSetMissingException();
@@ -112,7 +112,7 @@ public class SetRPN {
                 }
                 // The symbol represents a binary operation
                 // Pop two sets from the stack and perform the operation
-                Set<Character> second = stack.pop();
+                Set<Character> second = new HashSet<>(stack.pop());
                 // After this switch, the second set contains the result of the operation
                 switch (symbol) {
                     case UNION:
