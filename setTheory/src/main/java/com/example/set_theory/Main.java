@@ -16,15 +16,11 @@ public class Main {
         //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         //String input = reader.readLine();
         long start = System.nanoTime();
-        String input = "((A + B) * !(C △ D) + !E)";
+        String input = "((A + B))";
         Map<Character, Set<Character>> map = new HashMap<>();
         map.put('A', new HashSet<>(Set.of('a', 'b', 'c')));
         map.put('B', new HashSet<>(Set.of('d')));
-        map.put('C', new HashSet<>(Set.of('d', 'e', 'y')));
-        map.put('D', new HashSet<>(Set.of('e', 'd', 'y')));
-        map.put('E', new HashSet<>(Set.of('y', 'x')));
-        Set<Character> universalSet = Set.of('a', 'b', 'c', 'd', 'e', 'j', 'y', 'x');
-        SetRPN converter = new SetRPN(input, universalSet);
+        SetRPN converter = new SetRPN(input);
         Set<Character> result = converter.evaluate(map);
         long finish = System.nanoTime();
         System.out.println("Time in milliseconds: " + (finish - start) / 1_000_000);

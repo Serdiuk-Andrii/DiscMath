@@ -1,29 +1,32 @@
 package com.example.set_theory.RPN;
 
+import static com.example.set_theory.RPN.OperatorComparator.COMPLEMENT;
+import static com.example.set_theory.RPN.OperatorComparator.DIFFERENCE;
+import static com.example.set_theory.RPN.OperatorComparator.INTERSECTION;
+import static com.example.set_theory.RPN.OperatorComparator.SYMMETRIC_DIFFERENCE;
+import static com.example.set_theory.RPN.OperatorComparator.UNION;
+
 import com.example.set_theory.exceptions.UniversalSetMissingException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-import static com.example.set_theory.RPN.OperatorComparator.*;
-
-import org.jetbrains.annotations.NotNull;
-
 public class SetRPN {
 
     private final String expression;
-    private Set<Character> universalSet = null;
+    private Set<Character> universalSet;
+
+    private boolean isUniversalSetRequired;
 
     private final String postfixExpression;
 
-    private final List<Character> sets;
+    private final Set<Character> sets;
 
     private static boolean isOperand(char symbol) {
         return Character.isUpperCase(symbol);
@@ -32,14 +35,9 @@ public class SetRPN {
     public SetRPN(@NotNull final String expression) throws UnknownOperatorException {
         this.expression = expression.replace(" ",
                 "");
-        this.sets = new ArrayList<>(2 * expression.length() / 3);
+        this.sets = new HashSet<>(expression.length());
+        this.isUniversalSetRequired = false;
         this.postfixExpression = convertToRPN();
-    }
-
-    public SetRPN(@NotNull final String expression, @NotNull final Set<Character> universalSet)
-            throws UnknownOperatorException {
-        this(expression);
-        this.universalSet = universalSet;
     }
 
     public String convertToRPN() throws UnknownOperatorException {
@@ -51,6 +49,9 @@ public class SetRPN {
                 result.append(symbol);
                 sets.add(symbol);
                 continue;
+            }
+            if (symbol == COMPLEMENT) {
+                isUniversalSetRequired = true;
             }
             // If the stack is empty or if the symbol is an opening bracket,
             // we should put it on the stack
@@ -73,7 +74,7 @@ public class SetRPN {
             if (!OperatorComparator.AVAILABLE_CHARACTERS.contains(symbol)) {
                 throw new UnknownOperatorException(symbol);
             }
-            while (true) {
+            while (!stack.isEmpty()) {
                 char top = stack.peek();
                 if (top == '(' || comparator.compare(symbol, top) > 0) {
                     break;
@@ -146,7 +147,7 @@ public class SetRPN {
                 collect(Collectors.toSet());
     }
 
-    public List<Character> getSetNames() { return sets; }
+    public Set<Character> getSetNames() { return sets; }
 
     public int getNumberOfVariables() {
         return sets.size();
@@ -160,4 +161,11 @@ public class SetRPN {
         return universalSet;
     }
 
+    public boolean isUniversalSetRequired() {
+        return isUniversalSetRequired;
+    }
+
+    public void setUniversalSet(Set<Character> universalSet) {
+        this.universalSet = universalSet;
+    }
 }

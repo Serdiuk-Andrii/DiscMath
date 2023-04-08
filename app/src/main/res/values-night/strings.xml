@@ -26,4 +26,5 @@
     <string name="explanation_title">Пояснення</string>
     <string name="set_equation_check_button_text">Перевірити</string>
     <string name="set_theory_quiz_title">Наведіть приклади множин, для яких виконується рівність</string>
+    <string name="universal_set_symbol">Ω</string>
 </resources>

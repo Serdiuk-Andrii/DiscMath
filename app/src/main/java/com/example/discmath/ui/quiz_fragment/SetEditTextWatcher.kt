@@ -1,40 +1,57 @@
 package com.example.discmath.ui.quiz_fragment
 
+import android.content.Context.VIBRATOR_SERVICE
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 
 
-fun String.modifyToSetRepresentation(): String {
-    if (this.length <= 1) {
-        return this
-    }
-    return if (!this.last().isLetter()) {
-        this.removeSuffix(", ")
-    } else {
+val REGEX_TO_REMOVE: Regex = Regex("[, ]")
 
-        if (this.dropLast(1).contains(this.last())) {
-            this.dropLast(1)
-        } else {
-            StringBuilder(this).insert(this.length - 1, ", ").toString()
-        }
-    }
+fun CharSequence.hasDuplicates(): Boolean {
+    return this.toSet().size != this.length
 }
 
-class SetEditTextWatcher(private val textField: EditText) : TextWatcher {
+open class SetEditTextWatcher(open val textField: EditText): TextWatcher {
+
+    protected var previousText: String = ""
 
     override fun beforeTextChanged(s: CharSequence?, before: Int, p2: Int, count: Int) {
 
     }
 
     override fun onTextChanged(text: CharSequence?, p1: Int, before: Int, count: Int) {
-        textField.removeTextChangedListener(this)
-        textField.setText(text!!.toString().modifyToSetRepresentation())
-        textField.setSelection(textField.text.length)
-        textField.addTextChangedListener(this)
+        // Changing the text only if something has changed
+        if (before != count) {
+            textField.removeTextChangedListener(this)
+            val formattedText = text!!.replace(REGEX_TO_REMOVE, "")
+            val newText = if (formattedText.hasDuplicates()) {
+                vibrate()
+                previousText
+            } else {
+                formattedText.toSet().joinToString()
+            }
+            previousText = newText
+            textField.setText(newText)
+            textField.setSelection(newText.length)
+            textField.addTextChangedListener(this)
+        }
     }
 
     override fun afterTextChanged(field: Editable?) {
 
+    }
+
+    protected fun vibrate() {
+        val vibrator = textField.context.getSystemService(VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT > 25) {
+            vibrator.vibrate(VibrationEffect.createOneShot(150,
+                VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(150)
+        }
     }
 }

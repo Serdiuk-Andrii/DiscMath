@@ -1,5 +1,6 @@
 package com.example.discmath.entity.quizzes
 
+import com.example.set_theory.RPN.OperatorComparator.*
 import com.google.firebase.firestore.DocumentSnapshot
 
 const val TYPE_KEY = "type"
@@ -24,10 +25,11 @@ class BasicQuizFactory: QuizFactory {
                 YesNoQuiz(problemUrl, correctAnswerIndex)
             }
             QuizType.SET_EQUATION -> {
-                SetEquationQuiz(problemUrl,
-                    documentSnapshot.get(LEFT_EQUATION_KEY) as String,
-                    documentSnapshot.get(RIGHT_EQUATION_KEY) as String
-                    )
+                val leftSide = documentSnapshot.get(LEFT_EQUATION_KEY) as String
+                val rightSide = documentSnapshot.get(RIGHT_EQUATION_KEY) as String
+                val universalSetRequired = leftSide.contains(COMPLEMENT) || rightSide.contains(
+                    COMPLEMENT)
+                SetEquationQuiz(problemUrl, leftSide, rightSide, universalSetRequired)
             }
         }
     }

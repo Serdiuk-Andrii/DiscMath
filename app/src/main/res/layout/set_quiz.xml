@@ -6,11 +6,12 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/set_problem_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="0dp"
+        android:textColor="@color/black"
         android:layout_marginEnd="30dp"
         android:text="@string/set_theory_quiz_title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,9 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:contentDescription="@string/problem_image_description"
+        android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/set_problem_title"
         tools:srcCompat="@tools:sample/avatars" />
 
     <!--
@@ -41,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/set_problem">
 -->
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -62,6 +64,50 @@
     </androidx.core.widget.NestedScrollView>
     -->
 
+    <LinearLayout
+        android:id="@+id/universal_set_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout">
+
+        <EditText
+            android:id="@+id/universal_set_permanent"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
+            android:layout_weight="1"
+            android:importantForAutofill="no"
+            android:hint="@string/universal_set_symbol"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout"
+            android:inputType="none" />
+
+        <EditText
+            android:id="@+id/universal_set_additional"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:layout_marginTop="24dp"
+            android:longClickable="false"
+            android:digits="abcdefghijklmnopqrstuvwxyz"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:hint="@string/universal_set_symbol"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/set_verify_button"
         android:layout_width="wrap_content"
@@ -70,7 +116,7 @@
         android:text="@string/set_equation_check_button_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/universal_set_linear_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

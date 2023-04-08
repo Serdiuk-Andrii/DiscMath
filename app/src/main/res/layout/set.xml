@@ -10,7 +10,9 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:digits="abcdefghijklmnopqrstuvwxyz"
-        />
+        android:textIsSelectable="false"
+        android:longClickable="false"
+        android:importantForAutofill="no" />
 
     <!--
 

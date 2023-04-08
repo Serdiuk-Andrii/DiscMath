@@ -55,45 +55,19 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
     class SetEquationViewHolder(view: View): QuizViewHolder(view) {
 
         val setsRecyclerView: RecyclerView
-        private val verifyButton: Button
+        val universalSetPermanentEditText: TextView
+        val universalSetAdditionalEditText: EditText
+        val verifyButton: Button
 
         lateinit var leftSetRPN: SetRPN
         lateinit var rightSetRPN: SetRPN
+
         init {
             problemImage = view.findViewById(R.id.set_problem)
+            universalSetPermanentEditText = view.findViewById(R.id.universal_set_permanent)
+            universalSetAdditionalEditText = view.findViewById(R.id.universal_set_additional)
             setsRecyclerView = view.findViewById(R.id.sets_recycler_view)
             verifyButton = view.findViewById(R.id.set_verify_button)
-            verifyButton.setOnClickListener {
-                val map: MutableMap<Char, MutableSet<Char>> = HashMap()
-                setsRecyclerView.forEach {
-                    val editText: EditText = it.findViewById(R.id.edit_set_values)
-                    map[editText.hint[0]] = editText.text.toString().
-                    replace(", ", "").toSet().toMutableSet()
-                }
-                val leftEvaluated: Set<Char> = leftSetRPN.evaluate(map)
-                val rightEvaluated: Set<Char> = rightSetRPN.evaluate(map)
-                if (leftEvaluated == rightEvaluated) {
-                    val alertDialog = AlertDialog.Builder(view.context)
-                        .setTitle("Правильно")
-                        .setMessage("Так тримати!")
-                        .setPositiveButton("ОК") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .create()
-                    alertDialog.show()
-                } else {
-                    val leftSide: String = leftEvaluated.getSetRepresentation()
-                    val rightSide: String = rightEvaluated.getSetRepresentation()
-                    val alertDialog = AlertDialog.Builder(view.context)
-                        .setTitle("Неправильно")
-                        .setMessage("$leftSide != $rightSide")
-                        .setPositiveButton("ОК") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .create()
-                    alertDialog.show()
-                }
-            }
         }
     }
 
@@ -242,12 +216,74 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
             }
             is SetEquationViewHolder -> {
                 quiz as SetEquationQuiz
+                // Building the reverse polish notation for the both sides of the equation
                 holder.leftSetRPN = SetRPN(quiz.leftEquation)
                 holder.rightSetRPN = SetRPN(quiz.rightEquation)
-                Toast.makeText(holder.itemView.context,
-                    "There are ${holder.leftSetRPN.numberOfVariables} sets",
-                    Toast.LENGTH_SHORT).show()
-                holder.setsRecyclerView.adapter = SetInputAdapter(holder.leftSetRPN.setNames)
+                // Setting the click listener
+                holder.verifyButton.setOnClickListener {
+                    // Putting the entered values into the map
+                    val map: MutableMap<Char, MutableSet<Char>> = HashMap()
+                    holder.setsRecyclerView.forEach {
+                        val editText: EditText = it.findViewById(R.id.edit_set_values)
+                        map[editText.hint[0]] = editText.text.toString().
+                            replace(REGEX_TO_REMOVE, "").toSet().toMutableSet()
+                    }
+                    // If there is the universal set, read the given values
+                    if (quiz.isUniversalSetRequired) {
+                        var universalSet: Set<Char> = holder.universalSetPermanentEditText.
+                        text.toString().replace(REGEX_TO_REMOVE, "").toCharArray().toSet()
+                        val additionalElements: Set<Char> = holder.universalSetAdditionalEditText.
+                            text.toString().replace(REGEX_TO_REMOVE, "").toCharArray().toSet()
+                        universalSet = universalSet.union(additionalElements)
+                        holder.leftSetRPN.universalSet = universalSet
+                        holder.rightSetRPN.universalSet = universalSet
+                    }
+                    // Then, evaluate the expressions
+                    val leftEvaluated: Set<Char> = holder.leftSetRPN.evaluate(map)
+                    val rightEvaluated: Set<Char> = holder.rightSetRPN.evaluate(map)
+                    if (leftEvaluated == rightEvaluated) {
+                        val alertDialog = AlertDialog.Builder(holder.itemView.context)
+                            .setTitle("Правильно")
+                            .setMessage("Так тримати!")
+                            .setPositiveButton("ОК") { dialog, _ ->
+                                dialog.dismiss()
+                                correctAnswerCallback()
+                            }
+                            .create()
+                        alertDialog.show()
+                    } else {
+                        val leftSide: String = leftEvaluated.getSetRepresentation()
+                        val rightSide: String = rightEvaluated.getSetRepresentation()
+                        val alertDialog = AlertDialog.Builder(holder.itemView.context)
+                            .setTitle("Неправильно")
+                            .setMessage("$leftSide ≠ $rightSide")
+                            .setPositiveButton("ОК") { dialog, _ ->
+                                dialog.dismiss()
+                                incorrectAnswerCallback()
+                            }
+                            .create()
+                        alertDialog.show()
+                    }
+                }
+                val sets: Array<Char> = holder.leftSetRPN.setNames.
+                    union(holder.rightSetRPN.setNames).toTypedArray()
+                if (!quiz.isUniversalSetRequired) {
+                    holder.universalSetPermanentEditText.visibility = View.GONE
+                    holder.universalSetAdditionalEditText.visibility = View.GONE
+                    holder.setsRecyclerView.adapter = SimpleSetInputAdapter(sets)
+                } else {
+                    val additionalElementsTextWatcher = UniversalSetAdditionalElementsTextWatcher(
+                        holder.universalSetAdditionalEditText)
+                    holder.universalSetAdditionalEditText.addTextChangedListener(
+                        additionalElementsTextWatcher
+                    )
+                    val universalSetObserver = UniversalSetObserver(
+                        holder.universalSetPermanentEditText, additionalElementsTextWatcher)
+                    additionalElementsTextWatcher.setObserver(universalSetObserver)
+                    holder.setsRecyclerView.adapter = BoundToUniversalSetInputAdapter(sets,
+                        universalSetObserver)
+
+                }
             }
         }
     }
