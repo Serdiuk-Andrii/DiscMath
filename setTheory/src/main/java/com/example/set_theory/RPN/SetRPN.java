@@ -21,7 +21,6 @@ public class SetRPN {
 
     private final String expression;
     private Set<Character> universalSet;
-
     private boolean isUniversalSetRequired;
 
     private final String postfixExpression;

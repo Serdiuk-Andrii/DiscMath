@@ -13,10 +13,6 @@ class LearningItemAdapter(private val dataSet: Array<LearningItem>,
                           private val itemClickedCallback:  ((LearningItem) -> Unit)):
     RecyclerView.Adapter<LearningItemAdapter.ViewHolder>() {
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
-     */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val learningItemName: TextView
         val pdfIcon: ImageView

@@ -13,7 +13,6 @@ import com.example.discmath.R
 import com.example.discmath.databinding.FragmentChooseMultipleSectionsBinding
 import com.example.discmath.entity.learning_section.LearningSection
 import com.example.discmath.entity.learning_section.SECTIONS_COLLECTION_STORAGE_PATH
-import com.example.discmath.entity.learning_section.SECTION_NAME_STORAGE_PATH
 import com.example.discmath.ui.quiz_fragment.view_models.QuizPreferencesViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -49,10 +48,7 @@ class ChooseMultipleSectionsFragment : Fragment() {
         db.collection(SECTIONS_COLLECTION_STORAGE_PATH).get().addOnSuccessListener {
                 querySnapshot ->
             val sections: List<LearningSection> = querySnapshot.documents.map {
-                    documentSnapshot ->
-                LearningSection(name = documentSnapshot.get(SECTION_NAME_STORAGE_PATH) as String,
-                    collectionPath = documentSnapshot.reference.path
-                )
+                    documentSnapshot -> LearningSection(documentSnapshot)
             }
             sectionsRecyclerView.adapter = LearningSectionTestOptionAdapter(sections.toTypedArray(),
                 ::itemClicked)
