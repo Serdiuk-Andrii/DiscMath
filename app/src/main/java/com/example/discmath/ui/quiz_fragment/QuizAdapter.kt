@@ -107,9 +107,10 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
         return dataSet[position].quizType.ordinal
     }
 
-    fun nextQuiz() {
-        dataSet.removeFirst()
+    fun nextQuiz(): Quiz {
+        val quiz = dataSet.removeFirst()
         notifyItemRemoved(0)
+        return quiz
     }
 
     fun isTheLastQuiz(): Boolean {

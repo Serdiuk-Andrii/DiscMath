@@ -22,8 +22,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/sections_chosen_summary_card"
-        android:layout_width="320dp"
-        android:layout_height="120dp"
+        android:layout_width="340dp"
+        android:layout_height="80dp"
         android:layout_marginTop="40dp"
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp"
@@ -46,8 +46,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/time_summary_card"
-        android:layout_width="320dp"
-        android:layout_height="120dp"
+        android:layout_width="340dp"
+        android:layout_height="80dp"
         android:layout_marginTop="40dp"
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp"

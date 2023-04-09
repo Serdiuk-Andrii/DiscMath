@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.quiz_fragment.choose_time.ChooseTimeTypeFragment">
 
+    <TextView
+        android:text="@string/choose_time_type_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timeOptionsRecyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        app:layoutManager="LinearLayoutManager"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layoutManager="LinearLayoutManager"
+        android:layout_marginTop="20dp"
+        />
 
 
-</FrameLayout>
+</LinearLayout>

@@ -15,8 +15,8 @@ fun loadImageIntoViewFrom(url: String, imageView: ImageView, loader: RequestMana
 const val QUIZ_PROBLEM_KEY = "url"
 const val ANSWER_KEY = "correct"
 
-abstract class Quiz(
-    open val problemUrl: String, open val quizType: QuizType) {
+abstract class Quiz(open val problemUrl: String, open val quizType: QuizType,
+                    open val learningSectionName: String) {
 
     private fun loadProblemInto(imageView: ImageView, loader: RequestManager) {
 

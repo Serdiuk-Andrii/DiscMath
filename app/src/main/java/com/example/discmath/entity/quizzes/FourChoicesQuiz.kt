@@ -9,6 +9,7 @@ const val DEFAULT_EXPLANATION = "obvious"
 
 open class FourChoicesQuiz(
     override val problemUrl: String, open val solutionsUrl: ArrayList<*>,
-    override val correctAnswerIndex: Int):
-    QuizWithIndexedAnswer(problemUrl, correctAnswerIndex, QuizType.MULTIPLE_CHOICE) {
+    override val correctAnswerIndex: Int, override val learningSectionName: String):
+    QuizWithIndexedAnswer(problemUrl, correctAnswerIndex, QuizType.MULTIPLE_CHOICE,
+        learningSectionName) {
 }
