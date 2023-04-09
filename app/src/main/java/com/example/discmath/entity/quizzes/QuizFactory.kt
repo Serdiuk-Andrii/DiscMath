@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 
 interface QuizFactory {
 
-    fun getQuizFromDocumentSnapshot(documentSnapshot: DocumentSnapshot): Quiz
+    fun getQuizFromDocumentSnapshot(documentSnapshot: DocumentSnapshot,
+                                    learningSectionName: String): Quiz
 
 }

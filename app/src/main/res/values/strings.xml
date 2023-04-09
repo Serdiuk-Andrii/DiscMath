@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">DiscMath</string>
-    <string name="theory">Theory</string>
-    <string name="exercises">Exercises</string>
-    <string name="statistics">Statistics</string>
-    <string name="problem">Problem</string>
-    <string name="skip">Skip</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="theory">Теорія</string>
+    <string name="exercises">Задачі</string>
+    <string name="statistics">Статистика</string>
+    <string name="problem">Задача</string>
+    <string name="skip">Пропустити</string>
+
     <string name="videoOptionTitle">Подивитися в записі</string>
     <string name="pdfTypeTitle">Переглянути в PDF</string>
     <string name="pdf_icon_description">PDF icon</string>
@@ -16,11 +15,11 @@
     <string name="training_encouragement">Тренуйся!</string>
     <string name="start_training_button_text">Розпочати</string>
     <string name="app_logo_splash_screen">App logo splash screen</string>
-    <string name="all_sections_training_type_title">All sections</string>
-    <string name="choose_sections_training_type_title">Choose sections</string>
-    <string name="choose_training_type_title">Choose training type</string>
-    <string name="choose_sections_continue_button">Next</string>
-    <string name="selected_item_icon">Selected</string>
+    <string name="all_sections_training_type_title">Усі теми</string>
+    <string name="choose_sections_training_type_title">Обрати теми</string>
+    <string name="choose_training_type_title">Оберіть тип тренування</string>
+    <string name="choose_sections_continue_button">Далі</string>
+    <string name="selected_item_icon">Обраний</string>
     <string name="quiz_preferences_summary_text">Налаштування тесту</string>
     <string name="start_quiz_button_text">Розпочати</string>
     <string name="quiz_summary_sections_number_text">
@@ -29,7 +28,7 @@
     <string name="yes_button_text">Так</string>
     <string name="no_button_text">Ні</string>
     <string name="problem_image_description">Задача</string>
-    <string name="skip_button_text">Skip</string>
+    <string name="skip_button_text">Пропустити</string>
     <string name="quiz_results_title">Результати</string>
     <string name="quiz_results_come_back_button_text">Назад</string>
     <string name="trophy_image_description">Trophy image</string>
@@ -38,4 +37,8 @@
     <string name="set_equation_check_button_text">Перевірити</string>
     <string name="set_theory_quiz_title">Наведіть приклади множин, для яких виконується рівність</string>
     <string name="universal_set_symbol">Ω</string>
+    <string name="expand_arrow_down_description">Розгорнути</string>
+    <string name="quiz_section_result_correct_answers_title">Правильні відповіді:</string>
+    <string name="quiz_section_correct_answers">%1$d з %2$d</string>
+    <string name="choose_time_type_title">Час тренування</string>
 </resources>

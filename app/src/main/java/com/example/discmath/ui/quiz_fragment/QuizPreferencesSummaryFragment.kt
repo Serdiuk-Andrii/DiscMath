@@ -91,9 +91,12 @@ class QuizPreferencesSummaryFragment : Fragment() {
             //TODO: Notice that this may be inefficient
             val tasks = sections.map { section ->
                 db.collection(section.getQuizzesPath()).get()}
-            Tasks.whenAllSuccess<QuerySnapshot>(tasks).addOnSuccessListener {
-                it.forEach { snapshot ->  quizzesViewModel.addQuizzes(snapshot.documents.map {
-                        documentSnapshot -> quizFactory.getQuizFromDocumentSnapshot(documentSnapshot)
+            Tasks.whenAllSuccess<QuerySnapshot>(tasks).addOnSuccessListener { querySnapshots ->
+                querySnapshots.forEach { snapshot ->  quizzesViewModel.addQuizzes(snapshot.documents.map {
+                        documentSnapshot ->
+                    val path = documentSnapshot.reference.path
+                    val name = sections.first { path.contains(it.collectionPath) }.name
+                    quizFactory.getQuizFromDocumentSnapshot(documentSnapshot, name)
                     })
                 }
                 navController.navigate(R.id.quizFragment)

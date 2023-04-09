@@ -13,13 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentQuizBinding
+import com.example.discmath.entity.quizzes.Quiz
+import com.example.discmath.ui.quiz_fragment.view_models.QuizResultsViewModel
 import com.example.discmath.ui.quiz_fragment.view_models.QuizViewModel
-import com.example.set_theory.RPN.SetRPN
-
-
-// Keys for intents
-const val TOTAL_ANSWERS_INTENT_KEY = "total"
-const val CORRECT_ANSWERS_INTENT_KEY = "correct"
 
 class QuizFragment : Fragment() {
 
@@ -30,6 +26,7 @@ class QuizFragment : Fragment() {
 
     // View-models
     private lateinit var quizzesViewModel: QuizViewModel
+    private lateinit var quizzesResultsViewModel: QuizResultsViewModel
 
     // Views
     private lateinit var skipButton: Button
@@ -44,48 +41,71 @@ class QuizFragment : Fragment() {
     private var correctAnswers: Int = 0
     private var totalAnswers: Int = 0
 
+    private lateinit var currentQuiz: Quiz
+
+    private val resultsMap: MutableMap<String, Pair<Int, Int>> = mutableMapOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        correctAnswers = 0
-        totalAnswers = 0
-        quizzesViewModel = ViewModelProvider(requireActivity())[QuizViewModel::class.java]
-        navController = findNavController()
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
-        val root = binding.root
-        skipButton = binding.skipButton
-        quizRecyclerView = binding.quizzesRecyclerView
-        quizRecyclerView.layoutManager =
-            object : LinearLayoutManager(context, HORIZONTAL, false)
-            { override fun canScrollHorizontally() = false }
+        initializeViewModels()
+        initializeViews()
         adapter = QuizAdapter(
             dataSet = quizzesViewModel.quizzes.value!!,
             correctAnswerCallback = ::onCorrectAnswer,
             incorrectAnswerCallback = ::onIncorrectAnswer)
+        currentQuiz = quizzesViewModel.quizzes.value!![0]
         quizRecyclerView.adapter = adapter
-        skipButton.setOnClickListener {navigateFurther()}
-        return root
+        navController = findNavController()
+        return binding.root
+    }
+
+    private fun initializeViewModels() {
+        quizzesViewModel = ViewModelProvider(requireActivity())[QuizViewModel::class.java]
+        quizzesResultsViewModel = ViewModelProvider(requireActivity())[QuizResultsViewModel::class.java]
+    }
+
+    private fun initializeViews() {
+        skipButton = binding.skipButton
+        skipButton.setOnClickListener {onIncorrectAnswer()}
+        quizRecyclerView = binding.quizzesRecyclerView
+        quizRecyclerView.layoutManager =
+            object : LinearLayoutManager(context, HORIZONTAL, false)
+            { override fun canScrollHorizontally() = false }
     }
 
     private fun navigateFurther() {
         if (!adapter.isTheLastQuiz()) {
-            adapter.nextQuiz()
+            currentQuiz = adapter.nextQuiz()
         } else {
-            navController.navigate(R.id.quizResultsFragment, Bundle().apply {
-                putInt(TOTAL_ANSWERS_INTENT_KEY, totalAnswers)
-                putInt(CORRECT_ANSWERS_INTENT_KEY, correctAnswers)
-            })
+            putDataIntoViewModel()
+            navController.navigate(R.id.quizResultsFragment)
         }
     }
 
+    private fun putDataIntoViewModel() {
+        quizzesResultsViewModel.setCorrectAnswers(correctAnswers)
+        quizzesResultsViewModel.setTotalAnswers(totalAnswers)
+        val resultsBySection = resultsMap.map{entry ->  Triple(entry.key,
+            entry.value.first, entry.value.second)}.toTypedArray()
+        quizzesResultsViewModel.setResultsBySection(resultsBySection)
+    }
+
     private fun onCorrectAnswer() {
+        val quizSectionName: String = currentQuiz.learningSectionName
+        val currentPair = resultsMap.getOrPut(quizSectionName) {Pair(0, 0)}
+        resultsMap[quizSectionName] = Pair(currentPair.first + 1, currentPair.second + 1)
         correctAnswers++
         totalAnswers++
         navigateFurther()
     }
 
     private fun onIncorrectAnswer() {
+        val quizSectionName: String = currentQuiz.learningSectionName
+        val currentPair = resultsMap.getOrPut(quizSectionName) {Pair(0, 0)}
+        resultsMap[quizSectionName] = Pair(currentPair.first, currentPair.second + 1)
         totalAnswers++
         navigateFurther()
     }
