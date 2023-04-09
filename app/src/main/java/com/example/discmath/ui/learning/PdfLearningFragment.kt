@@ -15,14 +15,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class PdfLearningFragment : Fragment() {
 
     private var _binding: FragmentLearningPdfBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     private lateinit var name: String
     private lateinit var url: String
     private lateinit var pdfView: PDFView
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

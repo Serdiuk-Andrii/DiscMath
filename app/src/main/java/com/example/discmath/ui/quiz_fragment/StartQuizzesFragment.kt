@@ -32,7 +32,6 @@ class StartQuizzesFragment : Fragment() {
         _binding = FragmentStartQuizzesBinding.inflate(inflater, container, false)
         // Views
         val root: View = binding.root
-        image = binding.imageTraining
         encouragingText = binding.textTrainingEncouragement
         startButton = binding.buttonStartTraining
         // Navigation

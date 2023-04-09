@@ -5,8 +5,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:gravity="top|center_horizontal"
-    tools:context=".ui.quiz_fragment.QuizResultsFragment">
+    android:gravity="center"
+    tools:context=".ui.quiz_fragment.QuizResultsFragment"
+    android:background="@color/background"
+    >
 
     <TextView
         android:id="@+id/quiz_results_title"
@@ -77,6 +79,11 @@
         android:layout_width="120dp"
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
-        android:text="@string/quiz_results_come_back_button_text"/>
+        android:text="@string/quiz_results_come_back_button_text"
+        android:background="@color/button_soft"
+        android:backgroundTint="@color/button_soft"
+        android:textColor="@color/black"
+        android:elevation="2dp"
+        />
 
 </LinearLayout>

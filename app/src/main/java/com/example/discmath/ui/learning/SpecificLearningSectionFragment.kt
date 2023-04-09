@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -11,10 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentSpecificLearningSectionBinding
 import com.example.discmath.entity.learning_item.LearningItem
-import com.example.discmath.entity.learning_section.NAME_FIELD_KEY
-import com.example.discmath.entity.learning_section.PDF_URL_FIELD_KEY
-import com.example.discmath.entity.learning_section.TYPE_FIELD_KEY
-import com.example.discmath.entity.learning_section.VIDEO_URL_FIELD_KEY
 import com.example.discmath.ui.learning.adapters.LearningItemAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -38,6 +35,10 @@ class SpecificLearningSectionFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    // Views
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var sectionNameTextView: TextView
+
     // TODO: This viewModel should probably be used for caching the data
     private lateinit var learningItemViewModel: LearningItemViewModel
 
@@ -55,34 +56,32 @@ class SpecificLearningSectionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSpecificLearningSectionBinding.inflate(inflater, container, false)
-        val root: View = binding.root
         //learningItemViewModel = ViewModelProvider(this)[LearningItemViewModel::class.java]
 
         // Initialize the RecyclerView and download the information
-        val recyclerView: RecyclerView = binding.learningItemsRecyclerView
+        initializeViews()
+        bindDataToViews()
+
+        return binding.root
+    }
+
+    private fun initializeViews() {
+        recyclerView = binding.learningItemsRecyclerView
         val adapter = LearningItemAdapter(arrayOf()) {
             navigateToLearningItem(it)
         }
-
         recyclerView.adapter = adapter
+        sectionNameTextView = binding.sectionName
+    }
+
+    private fun bindDataToViews() {
+        sectionNameTextView.text = sectionName
         db.collection(collectionPath).get().addOnSuccessListener { querySnapshot ->
-            val learningItems: List<LearningItem> =
-                querySnapshot.documents.map { documentSnapshot ->
-                    LearningItem(
-                        typeString = documentSnapshot.get(TYPE_FIELD_KEY) as String,
-                        name = documentSnapshot.get(NAME_FIELD_KEY) as String,
-                        urlVideo = documentSnapshot.get(VIDEO_URL_FIELD_KEY) as String,
-                        urlPdf = documentSnapshot.get(PDF_URL_FIELD_KEY) as String
-                    )
-                }
-            recyclerView.adapter = LearningItemAdapter(
-                learningItems.toTypedArray()
-            ) {
-                navigateToLearningItem(it)
-                Toast.makeText(context, it.name, Toast.LENGTH_SHORT).show()
-            }
+            val learningItems: List<LearningItem> = querySnapshot.documents.
+                map { documentSnapshot -> LearningItem(documentSnapshot) }
+            recyclerView.adapter = LearningItemAdapter(learningItems.toTypedArray())
+                { navigateToLearningItem(it) }
         }
-        return root
     }
 
     private fun navigateToLearningItem(learningItem: LearningItem) {

@@ -1,5 +1,6 @@
 package com.example.discmath.ui.quiz_fragment
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +46,9 @@ class QuizFragment : Fragment() {
 
     private val resultsMap: MutableMap<String, Pair<Int, Int>> = mutableMapOf()
 
+    // Media
+    private lateinit var correctMediaPlayer: MediaPlayer
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +56,7 @@ class QuizFragment : Fragment() {
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         initializeViewModels()
         initializeViews()
+        initializeMedia()
         adapter = QuizAdapter(
             dataSet = quizzesViewModel.quizzes.value!!,
             correctAnswerCallback = ::onCorrectAnswer,
@@ -76,6 +81,10 @@ class QuizFragment : Fragment() {
             { override fun canScrollHorizontally() = false }
     }
 
+    private fun initializeMedia() {
+        correctMediaPlayer = MediaPlayer.create(this.context, R.raw.correct)
+    }
+
     private fun navigateFurther() {
         if (!adapter.isTheLastQuiz()) {
             currentQuiz = adapter.nextQuiz()
@@ -94,6 +103,7 @@ class QuizFragment : Fragment() {
     }
 
     private fun onCorrectAnswer() {
+        playCorrectSound()
         val quizSectionName: String = currentQuiz.learningSectionName
         val currentPair = resultsMap.getOrPut(quizSectionName) {Pair(0, 0)}
         resultsMap[quizSectionName] = Pair(currentPair.first + 1, currentPair.second + 1)
@@ -102,12 +112,22 @@ class QuizFragment : Fragment() {
         navigateFurther()
     }
 
+    private fun playCorrectSound() {
+        correctMediaPlayer.start()
+
+    }
+
     private fun onIncorrectAnswer() {
+        playIncorrectSound()
         val quizSectionName: String = currentQuiz.learningSectionName
         val currentPair = resultsMap.getOrPut(quizSectionName) {Pair(0, 0)}
         resultsMap[quizSectionName] = Pair(currentPair.first, currentPair.second + 1)
         totalAnswers++
         navigateFurther()
+    }
+
+    private fun playIncorrectSound() {
+
     }
 
 }

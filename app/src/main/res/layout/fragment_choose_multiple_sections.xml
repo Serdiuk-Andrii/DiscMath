@@ -6,15 +6,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.quiz_fragment.choose_sections.ChooseMultipleSectionsFragment">
 
+    <TextView
+        android:id="@+id/sections_selection_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:text="@string/learning_section_selection_title"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_choose_multiple_sections"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/sections_selection_text"
         android:layout_centerInParent="true"
         android:layout_marginBottom="30dp"
         android:paddingBottom="30dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        />
 
     <Button
         android:id="@+id/sections_chosen_confirm_button"
@@ -26,6 +35,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="10dp"
+        android:background="@color/button_soft"
+        android:backgroundTint="@color/button_soft"
         />
 
 

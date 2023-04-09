@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.quiz_fragment.choose_sections.ChooseTrainingTypeFragment">
+    tools:context=".ui.quiz_fragment.choose_sections.ChooseTrainingTypeFragment"
+    android:background="@color/background"
+    >
 
     <TextView
         android:id="@+id/training_type_text"
@@ -26,7 +28,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="130dp"
         android:layout_marginEnd="40dp"
-        app:cardBackgroundColor="#535252"
+        app:cardBackgroundColor="@color/card"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +57,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="40dp"
-        app:cardBackgroundColor="#535252"
+        app:cardBackgroundColor="@color/card"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="370dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
     <androidx.cardview.widget.CardView
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_gravity="center_horizontal"
-        app:cardBackgroundColor="@color/material_dynamic_neutral_variant40"
+        app:cardBackgroundColor="@color/primary"
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp"
         >

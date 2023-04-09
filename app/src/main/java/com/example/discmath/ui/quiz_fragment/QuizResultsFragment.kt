@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentQuizResultsBinding
+import com.example.discmath.toggleVisibility
 import com.example.discmath.ui.quiz_fragment.view_models.QuizResultsViewModel
 
 class QuizResultsFragment : Fragment() {
@@ -63,8 +64,7 @@ class QuizResultsFragment : Fragment() {
         quizResultsRecyclerView = binding.quizResultsRecyclerView
         quizExpandResultsButton = binding.quizResultsExpandButton
         quizExpandResultsButton.setOnClickListener {
-            quizResultsRecyclerView.visibility =
-                if(quizResultsRecyclerView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            quizResultsRecyclerView.toggleVisibility()
         }
     }
 

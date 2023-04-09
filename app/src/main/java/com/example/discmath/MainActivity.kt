@@ -9,6 +9,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.discmath.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+fun View.toggleVisibility() {
+    this.visibility = if(this.visibility == View.GONE) View.VISIBLE else View.GONE
+}
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -17,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val currentTime = System.currentTimeMillis()
         installSplashScreen().setKeepOnScreenCondition(condition =
-        { System.currentTimeMillis() - currentTime >= 15000 })
+        { System.currentTimeMillis() - currentTime >= 1500 })
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -29,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val bottomNavigationIds: Set<Int> = setOf(
-            R.id.navigation_sections, R.id.start_quizzes_fragment, R.id.navigation_notifications
+            R.id.learning_fragment, R.id.start_quizzes_fragment, R.id.navigation_notifications
         )
 
         navController.addOnDestinationChangedListener { _, destination, _ ->

@@ -3,24 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_sections">
+    app:startDestination="@+id/learning_fragment">
 
     <fragment
         android:id="@+id/navigation_sections"
         android:name="com.example.discmath.ui.learning.SectionsLearningFragment"
-        android:label="@string/theory"
-        tools:layout="@layout/fragment_learning_sections" />
+        tools:layout="@layout/fragment_learning_sections" >
+        <action
+            android:id="@+id/action_navigation_sections_to_specificLearningSectionFragment"
+            app:destination="@id/specificLearningSectionFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.discmath.ui.notifications.NotificationsFragment"
-        android:label="@string/statistics"
-        tools:layout="@layout/fragment_notifications" />
+        android:name="com.example.discmath.ui.assistant.AssistantFragment"
+        android:label="@string/assistant_title"
+        tools:layout="@layout/fragment_assistant" />
     <fragment
         android:id="@+id/specificLearningSectionFragment"
         android:name="com.example.discmath.ui.learning.SpecificLearningSectionFragment"
         android:label="fragment_specific_learning_section"
-        tools:layout="@layout/fragment_specific_learning_section" />
+        tools:layout="@layout/fragment_specific_learning_section" >
+        <action
+            android:id="@+id/action_specificLearningSectionFragment_to_chooseLearningTypeFragment"
+            app:destination="@id/chooseLearningTypeFragment" />
+        <action
+            android:id="@+id/action_specificLearningSectionFragment_to_pdfLearningFragment"
+            app:destination="@id/pdfLearningFragment" />
+        <action
+            android:id="@+id/action_specificLearningSectionFragment_to_video_learning_fragment"
+            app:destination="@id/video_learning_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/start_quizzes_fragment"
@@ -112,6 +125,15 @@
         <action
             android:id="@+id/action_quizResultsFragment_to_startQuizzesFragment"
             app:destination="@id/start_quizzes_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/learning_fragment"
+        android:name="com.example.discmath.ui.learning.LearningFragment"
+        android:label="@string/theory"
+        tools:layout="@layout/fragment_learning" >
+        <action
+            android:id="@+id/action_learningFragment_to_navigation_sections"
+            app:destination="@id/navigation_sections" />
     </fragment>
 
 

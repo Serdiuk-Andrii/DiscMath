@@ -2,16 +2,13 @@
     <string name="app_name">DiscMath</string>
     <string name="theory">Теорія</string>
     <string name="exercises">Задачі</string>
-    <string name="statistics">Статистика</string>
     <string name="problem">Задача</string>
     <string name="skip">Пропустити</string>
 
     <string name="videoOptionTitle">Подивитися в записі</string>
     <string name="pdfTypeTitle">Переглянути в PDF</string>
     <string name="pdf_icon_description">PDF icon</string>
-    <string name="video_icon_description">video icon</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="video_icon_description">Значок відео</string>
     <string name="training_encouragement">Тренуйся!</string>
     <string name="start_training_button_text">Розпочати</string>
     <string name="app_logo_splash_screen">App logo splash screen</string>
@@ -37,8 +34,13 @@
     <string name="set_equation_check_button_text">Перевірити</string>
     <string name="set_theory_quiz_title">Наведіть приклади множин, для яких виконується рівність</string>
     <string name="universal_set_symbol">Ω</string>
+    <string name="universal_set_additional_elements">Ω+</string>
     <string name="expand_arrow_down_description">Розгорнути</string>
     <string name="quiz_section_result_correct_answers_title">Правильні відповіді:</string>
     <string name="quiz_section_correct_answers">%1$d з %2$d</string>
     <string name="choose_time_type_title">Час тренування</string>
+    <string name="theory_title">Теорія</string>
+    <string name="lets_go">Уперед!</string>
+    <string name="learning_section_selection_title">Теми</string>
+    <string name="assistant_title">Антитренажер</string>
 </resources>
