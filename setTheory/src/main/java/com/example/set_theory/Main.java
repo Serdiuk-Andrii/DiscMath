@@ -1,7 +1,12 @@
 package com.example.set_theory;
 
-import com.example.set_theory.RPN.SetRPN;
-import com.example.set_theory.exceptions.UniversalSetMissingException;
+import static com.example.set_theory.RPN.OperatorComparator.COMPLEMENT;
+
+import com.example.set_theory.RPN.CurriedDifferenceFunction;
+import com.example.set_theory.RPN.OperatorComparator;
+import com.example.set_theory.RPN.RPN;
+import com.example.set_theory.RPN.SetEvaluator;
+import com.example.set_theory.exceptions.IllegalNumberOfArgumentsException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 
 import java.util.HashMap;
@@ -9,19 +14,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import kotlin.Function;
+
 public class Main {
 
-    public static void main(String[] args) throws UniversalSetMissingException,
-            UnknownOperatorException {
-        //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        //String input = reader.readLine();
+    public static void main(String[] args) throws UnknownOperatorException, IllegalNumberOfArgumentsException {
         long start = System.nanoTime();
-        String input = "((A + B))";
+        String input = "((!A + !B))";
         Map<Character, Set<Character>> map = new HashMap<>();
         map.put('A', new HashSet<>(Set.of('a', 'b', 'c')));
         map.put('B', new HashSet<>(Set.of('d')));
-        SetRPN converter = new SetRPN(input);
-        Set<Character> result = converter.evaluate(map);
+        RPN<Set<Character>> converter = new RPN<>(input, new OperatorComparator());
+        Map<Character, Function<Set<Character>>> evaluator = new SetEvaluator();
+        Function<Set<Character>> complement = new CurriedDifferenceFunction(Set.of('a', 'b', 'c', 'd'));
+        evaluator.put(COMPLEMENT, complement);
+        Set<Character> result = converter.evaluate(evaluator, map);
         long finish = System.nanoTime();
         System.out.println("Time in milliseconds: " + (finish - start) / 1_000_000);
         for (char element: result) {

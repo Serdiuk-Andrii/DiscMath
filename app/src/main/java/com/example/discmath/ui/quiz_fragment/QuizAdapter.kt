@@ -11,7 +11,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.discmath.R
 import com.example.discmath.entity.quizzes.*
-import com.example.set_theory.RPN.SetRPN
+import com.example.set_theory.RPN.OperatorComparator
+import com.example.set_theory.RPN.RPN
+import com.example.set_theory.RPN.SetEvaluator
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 fun Set<Char>.getSetRepresentation(): String {
@@ -59,8 +61,8 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
         val universalSetAdditionalEditText: EditText
         val verifyButton: Button
 
-        lateinit var leftSetRPN: SetRPN
-        lateinit var rightSetRPN: SetRPN
+        lateinit var leftSetRPN: RPN<Set<Char>>
+        lateinit var rightSetRPN: RPN<Set<Char>>
 
         init {
             problemImage = view.findViewById(R.id.set_problem)
@@ -217,9 +219,12 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
             }
             is SetEquationViewHolder -> {
                 quiz as SetEquationQuiz
+                val comparator = OperatorComparator()
                 // Building the reverse polish notation for the both sides of the equation
-                holder.leftSetRPN = SetRPN(quiz.leftEquation)
-                holder.rightSetRPN = SetRPN(quiz.rightEquation)
+                holder.leftSetRPN =
+                    RPN(quiz.leftEquation, comparator)
+                holder.rightSetRPN =
+                    RPN(quiz.rightEquation, comparator)
                 // Setting the click listener
                 holder.verifyButton.setOnClickListener {
                     // Putting the entered values into the map
@@ -229,19 +234,28 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                         map[editText.hint[0]] = editText.text.toString().
                             replace(REGEX_TO_REMOVE, "").toSet().toMutableSet()
                     }
+                    val evaluator = SetEvaluator()
                     // If there is the universal set, read the given values
-                    if (quiz.isUniversalSetRequired) {
+                   if (quiz.isUniversalSetRequired) {
                         var universalSet: Set<Char> = holder.universalSetPermanentEditText.
                         text.toString().replace(REGEX_TO_REMOVE, "").toCharArray().toSet()
                         val additionalElements: Set<Char> = holder.universalSetAdditionalEditText.
                             text.toString().replace(REGEX_TO_REMOVE, "").toCharArray().toSet()
                         universalSet = universalSet.union(additionalElements)
-                        holder.leftSetRPN.universalSet = universalSet
-                        holder.rightSetRPN.universalSet = universalSet
+                        evaluator.addComplementToUniversalSet(universalSet)
+                    }
+                    val copy = mutableMapOf<Char, Set<Char>>()
+                    for (entry in map) {
+                        val copySet = entry.value.toSet()
+                        copy[entry.key] = copySet
                     }
                     // Then, evaluate the expressions
-                    val leftEvaluated: Set<Char> = holder.leftSetRPN.evaluate(map)
-                    val rightEvaluated: Set<Char> = holder.rightSetRPN.evaluate(map)
+                    val leftEvaluated: Set<Char> = holder.leftSetRPN.evaluate(evaluator,
+                        copy as Map<Char, Set<Char>>
+                    )
+                    val rightEvaluated: Set<Char> = holder.rightSetRPN.evaluate(evaluator,
+                        map as Map<Char, Set<Char>>
+                    )
                     if (leftEvaluated == rightEvaluated) {
                         val alertDialog = AlertDialog.Builder(holder.itemView.context)
                             .setTitle("Правильно")
