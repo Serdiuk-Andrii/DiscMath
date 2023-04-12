@@ -50,8 +50,8 @@ class ChooseMultipleSectionsFragment : Fragment() {
             val sections: List<LearningSection> = querySnapshot.documents.map {
                     documentSnapshot -> LearningSection(documentSnapshot)
             }
-            sectionsRecyclerView.adapter = LearningSectionTestOptionAdapter(sections.toTypedArray(),
-                ::itemClicked)
+            sectionsRecyclerView.adapter = LearningSectionTestOptionAdapter(sections.sorted()
+                .toTypedArray(), ::itemClicked)
         }
         nextButton.setOnClickListener {
             quizPreferencesViewModel.setSectionRestrictions(chosenSections.toTypedArray())

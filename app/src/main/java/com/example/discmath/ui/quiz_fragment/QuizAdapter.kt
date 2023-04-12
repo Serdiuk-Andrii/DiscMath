@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.discmath.R
 import com.example.discmath.entity.quizzes.*
-import com.example.set_theory.RPN.OperatorComparator
+import com.example.set_theory.RPN.SetTheoryOperatorComparator
 import com.example.set_theory.RPN.RPN
 import com.example.set_theory.RPN.SetEvaluator
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -219,7 +219,8 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
             }
             is SetEquationViewHolder -> {
                 quiz as SetEquationQuiz
-                val comparator = OperatorComparator()
+                val comparator =
+                    SetTheoryOperatorComparator()
                 // Building the reverse polish notation for the both sides of the equation
                 holder.leftSetRPN =
                     RPN(quiz.leftEquation, comparator)

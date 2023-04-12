@@ -1,6 +1,6 @@
 package com.example.discmath.entity.quizzes
 
-import com.example.set_theory.RPN.OperatorComparator.COMPLEMENT
+import com.example.set_theory.RPN.SetTheoryOperatorComparator.COMPLEMENT
 import com.google.firebase.firestore.DocumentSnapshot
 
 const val TYPE_KEY = "type"

@@ -1,10 +1,10 @@
 package com.example.set_theory.RPN;
 
-import static com.example.set_theory.RPN.OperatorComparator.COMPLEMENT;
-import static com.example.set_theory.RPN.OperatorComparator.DIFFERENCE;
-import static com.example.set_theory.RPN.OperatorComparator.INTERSECTION;
-import static com.example.set_theory.RPN.OperatorComparator.SYMMETRIC_DIFFERENCE;
-import static com.example.set_theory.RPN.OperatorComparator.UNION;
+import static com.example.set_theory.RPN.SetTheoryOperatorComparator.COMPLEMENT;
+import static com.example.set_theory.RPN.SetTheoryOperatorComparator.DIFFERENCE;
+import static com.example.set_theory.RPN.SetTheoryOperatorComparator.INTERSECTION;
+import static com.example.set_theory.RPN.SetTheoryOperatorComparator.SYMMETRIC_DIFFERENCE;
+import static com.example.set_theory.RPN.SetTheoryOperatorComparator.UNION;
 
 import java.util.HashMap;
 import java.util.HashSet;

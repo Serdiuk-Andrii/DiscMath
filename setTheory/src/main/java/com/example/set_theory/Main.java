@@ -1,22 +1,14 @@
 package com.example.set_theory;
 
-import static com.example.set_theory.RPN.OperatorComparator.COMPLEMENT;
-
-import com.example.set_theory.RPN.CurriedDifferenceFunction;
 import com.example.set_theory.RPN.LogicComparator;
-import com.example.set_theory.RPN.LogicEvaluator;
-import com.example.set_theory.RPN.OperatorComparator;
 import com.example.set_theory.RPN.RPN;
 import com.example.set_theory.RPN.SetEvaluator;
-import com.example.set_theory.exceptions.IllegalNumberOfArgumentsException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import kotlin.Function;
 
 public class Main {
 

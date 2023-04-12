@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-public class OperatorComparator implements Comparator<Character> {
+public class SetTheoryOperatorComparator implements Comparator<Character> {
 
     public static final char UNION = '+';
     public static final char INTERSECTION = '*';
