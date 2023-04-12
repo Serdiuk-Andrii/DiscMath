@@ -281,8 +281,8 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                         alertDialog.show()
                     }
                 }
-                val sets: Array<Char> = holder.leftSetRPN.setNames.
-                    union(holder.rightSetRPN.setNames).toTypedArray()
+                val sets: Array<Char> = holder.leftSetRPN.operandsNames.
+                    union(holder.rightSetRPN.operandsNames).toTypedArray()
                 if (!quiz.isUniversalSetRequired) {
                     holder.universalSetPermanentEditText.visibility = View.GONE
                     holder.universalSetAdditionalEditText.visibility = View.GONE

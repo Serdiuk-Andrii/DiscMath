@@ -4,6 +4,7 @@ import com.example.set_theory.RPN.LogicComparator;
 import com.example.set_theory.RPN.RPN;
 import com.example.set_theory.RPN.SetEvaluator;
 import com.example.set_theory.exceptions.UnknownOperatorException;
+import com.example.set_theory.logic.TruthTable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,19 @@ public class Main {
 
     public static void main(String[] args) throws UnknownOperatorException {
         long start = System.nanoTime();
+        testTrustTableBuilder();
+        long finish = System.nanoTime();
+        System.out.println("Time in milliseconds: " + (finish - start) / 1_000_000);
+
+    }
+
+    private static void testTrustTableBuilder() throws UnknownOperatorException {
+        String expression = "(a ^ b) → (!a ∨ !b)";
+        TruthTable table = TruthTable.buildTruthTable(expression);
+        System.out.println(table);
+    }
+
+    private static void testRPN() throws UnknownOperatorException {
         /*
         String input = "((!A + !B))";
         Map<Character, Set<Character>> map = new HashMap<>();
@@ -31,9 +45,6 @@ public class Main {
         map.put('B', new HashSet<>(Set.of('b', 'c')));
         RPN<Set<Character>> converter = new RPN<>(input, new LogicComparator());
         Set<Character> result = converter.evaluate(new SetEvaluator(), map);
-        long finish = System.nanoTime();
-        System.out.println("Time in milliseconds: " + (finish - start) / 1_000_000);
-
     }
 
 }

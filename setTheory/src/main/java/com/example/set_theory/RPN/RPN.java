@@ -19,7 +19,7 @@ public class RPN<T> {
 
     private final String expression;
     private final String postfixExpression;
-    private final Set<Character> sets;
+    private final Set<Character> operands;
 
     private static boolean isOperand(char symbol) {
         return Character.isLetter(symbol);
@@ -29,7 +29,7 @@ public class RPN<T> {
             throws UnknownOperatorException {
         this.expression = expression.replace(" ",
                 "");
-        this.sets = new HashSet<>(expression.length());
+        this.operands = new HashSet<>(expression.length());
         this.postfixExpression = convertToRPN(comparator);
     }
 
@@ -39,7 +39,7 @@ public class RPN<T> {
         for (char symbol: expression.toCharArray()) {
             if (isOperand(symbol)) {
                 result.append(symbol);
-                sets.add(symbol);
+                operands.add(symbol);
                 continue;
             }
             // If the stack is empty or if the symbol is an opening bracket,
@@ -112,12 +112,10 @@ public class RPN<T> {
         return stack.peek();
     }
 
+    public Set<Character> getOperandsNames() { return operands; }
 
-
-    public Set<Character> getSetNames() { return sets; }
-
-    public int getNumberOfVariables() {
-        return sets.size();
+    public int getNumberOfOperands() {
+        return operands.size();
     }
 
     public String getExpression() {
