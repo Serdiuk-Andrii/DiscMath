@@ -33,8 +33,8 @@ public class SetEvaluator extends HashMap<Character, Function<Set<Character>>> {
         Function<Set<Character>> difference =
                 (Function2<Set<Character>, Set<Character>, Set<Character>>)
                         (first, second) -> {
-                            second.removeAll(first);
-                            return second;
+                            first.removeAll(second);
+                            return first;
                         };
         Function<Set<Character>> symmetricDifference =
                 (Function2<Set<Character>, Set<Character>, Set<Character>>)

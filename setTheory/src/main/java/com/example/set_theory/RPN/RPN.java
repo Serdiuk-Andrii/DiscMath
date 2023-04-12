@@ -1,6 +1,5 @@
 package com.example.set_theory.RPN;
 
-import com.example.set_theory.exceptions.IllegalNumberOfArgumentsException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +22,7 @@ public class RPN<T> {
     private final Set<Character> sets;
 
     private static boolean isOperand(char symbol) {
-        return Character.isUpperCase(symbol);
+        return Character.isLetter(symbol);
     }
 
     public RPN(@NotNull final String expression, @NotNull final Comparator<Character> comparator)
@@ -34,8 +33,7 @@ public class RPN<T> {
         this.postfixExpression = convertToRPN(comparator);
     }
 
-    public String convertToRPN(final Comparator<Character> comparator)
-            throws UnknownOperatorException {
+    public String convertToRPN(final Comparator<Character> comparator) {
         StringBuilder result = new StringBuilder(expression.length());
         Stack<Character> stack = new Stack<>();
         for (char symbol: expression.toCharArray()) {
@@ -62,9 +60,9 @@ public class RPN<T> {
                 }
                 continue;
             }
-            if (!OperatorComparator.AVAILABLE_CHARACTERS.contains(symbol)) {
+            /*if (!OperatorComparator.AVAILABLE_CHARACTERS.contains(symbol)) {
                 throw new UnknownOperatorException(symbol);
-            }
+            }*/
             while (!stack.isEmpty()) {
                 char top = stack.peek();
                 if (top == '(' || comparator.compare(symbol, top) > 0) {
@@ -94,7 +92,6 @@ public class RPN<T> {
             } else {
                 Function<T> function = evaluator.get(symbol);
                 // Pop the first set and check if is it an unary operation
-                // TODO: verify that you do not need a copy
                 T first = stack.pop();
                 if (function instanceof Function1) {
                     Function1<T, T> unaryFunction = (Function1<T, T>) function;
@@ -103,10 +100,12 @@ public class RPN<T> {
                 }
                 // The symbol represents a binary operation
                 // Pop two elements from the stack and perform the operation
-                // TODO: verify that you do not need a copy
                 T second = stack.pop();
                 Function2<T, T, T> binaryFunction = (Function2<T, T, T>) function;
-                second = binaryFunction.invoke(first, second);
+                // Notice that the second element appears earlier in the expression.
+                // The order is important because we do not know whether the operation is
+                // commutative
+                second = binaryFunction.invoke(second, first);
                 stack.push(second);
             }
         }
