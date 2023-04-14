@@ -4,6 +4,8 @@ import com.example.set_theory.RPN.LogicComparator;
 import com.example.set_theory.RPN.RPN;
 import com.example.set_theory.RPN.SetEvaluator;
 import com.example.set_theory.exceptions.UnknownOperatorException;
+import com.example.set_theory.logic.CNF;
+import com.example.set_theory.logic.DNF;
 import com.example.set_theory.logic.TruthTable;
 
 import java.util.HashMap;
@@ -22,8 +24,10 @@ public class Main {
     }
 
     private static void testTrustTableBuilder() throws UnknownOperatorException {
-        String expression = "(a ^ b) → (!a ∨ !b)";
+        String expression = "((p ∨ q) → !r) ∨ (!p ^ (q ∨ r))";
         TruthTable table = TruthTable.buildTruthTable(expression);
+        String cnf = CNF.buildCNFBasedOnTruthTable(table.getSymbols(), table.getRows());
+        String dnf = DNF.buildDNFBasedOnTruthTable(table.getSymbols(), table.getRows());
         System.out.println(table);
     }
 

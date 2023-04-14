@@ -15,6 +15,10 @@ public class LogicEvaluator extends HashMap<Character, Function<Boolean>> {
     public static final char NOT = '!';
     public static final char XOR = '⊕';
 
+    public static final String DISJUNCTION_SEPARATOR = " " + OR + " ";
+    public static final String CONJUNCTION_SEPARATOR = " " + AND + " ";
+
+
     public LogicEvaluator() {
         super();
 
