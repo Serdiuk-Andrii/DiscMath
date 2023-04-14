@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginTop="100dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/text_answer_image_problem"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:contentDescription="@string/problem_image_description" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:labelFor="@id/text_answer"
+        android:text="@string/problem_answer"
+        android:textAllCaps="true"
+        android:textColor="@color/black" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_answer_layout"
+        android:layout_gravity="center"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="30dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_answer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAutofill="no"
+            android:gravity="center"
+            android:inputType="number"
+            android:textColor="@color/white"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/text_answer_verify_button"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="@string/verify_button_text"
+        android:textColor="@color/white" />
+
+
+</LinearLayout>

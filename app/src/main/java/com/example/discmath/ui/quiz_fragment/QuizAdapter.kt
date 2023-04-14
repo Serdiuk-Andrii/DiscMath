@@ -1,19 +1,25 @@
 package com.example.discmath.ui.quiz_fragment
 
 import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.discmath.R
 import com.example.discmath.entity.quizzes.*
-import com.example.set_theory.RPN.SetTheoryOperatorComparator
 import com.example.set_theory.RPN.RPN
 import com.example.set_theory.RPN.SetEvaluator
+import com.example.set_theory.RPN.SetTheoryOperatorComparator
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 fun Set<Char>.getSetRepresentation(): String {
@@ -29,6 +35,13 @@ private fun loadAnswerInto(quiz: FourChoicesQuiz, answerIndex: Int,
     val url: String = solutionData[SOLUTION_URL_KEY] as String
     loadImageIntoViewFrom(url, imageView, loader)
 }
+
+const val CORRECT_ANSWER_TITLE = "Правильно!"
+const val CORRECT_ANSWER_DESCRIPTION = "Так тримати!"
+
+const val INCORRECT_ANSWER_TITLE = "Неправильно!"
+
+const val OK = "OK"
 
 fun loadAnswerInto(quiz: FourChoicesQuiz, answerIndex: Int, imageView: ImageView,
                    loader: RequestManager, makeVisible: Boolean) {
@@ -105,6 +118,20 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
 
     }
 
+    class ImageQuizTextAnswerViewHolder(view: View): QuizViewHolder(view) {
+
+        val editTextAnswer: EditText
+        val verifyButton: Button
+        var buttonHasNotMoved: Boolean
+
+        init {
+            problemImage = view.findViewById(R.id.text_answer_image_problem)
+            editTextAnswer = view.findViewById(R.id.text_answer)
+            verifyButton = view.findViewById(R.id.text_answer_verify_button)
+            buttonHasNotMoved = true
+        }
+    }
+
     override fun getItemViewType(position: Int): Int {
         return dataSet[position].quizType.ordinal
     }
@@ -137,6 +164,11 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                         inflate(R.layout.set_quiz, parent, false)
                 SetEquationViewHolder(view)
             }
+            QuizType.IMAGE_PROBLEM_TEXT_ANSWER.ordinal -> {
+                val view = inflater.
+                    inflate(R.layout.image_problem_text_answer, parent, false)
+                ImageQuizTextAnswerViewHolder(view)
+            }
             else -> {throw java.lang.RuntimeException()}
         }
     }
@@ -152,6 +184,7 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
         quiz.loadProblemInto(imageView = holder.problemImage,
             loader = loader,
             makeVisible = true)
+        val context = holder.itemView.context
         when (holder) {
             is MultipleChoiceViewHolder -> {
                 quiz as FourChoicesQuiz
@@ -168,12 +201,8 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                         imageView.setOnClickListener {
                             if (!holder.hasAttempted) {
                                 correctAnswerCallback()
-                                Toast.makeText(holder.itemView.context,
-                                    "Correct!", Toast.LENGTH_SHORT).show()
                             } else {
                                 incorrectAnswerCallback()
-                                Toast.makeText(holder.itemView.context,
-                                    "Incorrect!", Toast.LENGTH_SHORT).show()
                             }
                         }
                     } else {
@@ -208,13 +237,9 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                 }
                 correctAnswer.setOnClickListener {
                     correctAnswerCallback()
-                    Toast.makeText(holder.itemView.context,
-                        "Correct!", Toast.LENGTH_SHORT).show()
                 }
                 wrongAnswer.setOnClickListener {
                     incorrectAnswerCallback()
-                    Toast.makeText(holder.itemView.context,
-                        "Incorrect!", Toast.LENGTH_SHORT).show()
                 }
             }
             is SetEquationViewHolder -> {
@@ -258,27 +283,11 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
                         map as Map<Char, Set<Char>>
                     )
                     if (leftEvaluated == rightEvaluated) {
-                        val alertDialog = AlertDialog.Builder(holder.itemView.context)
-                            .setTitle("Правильно")
-                            .setMessage("Так тримати!")
-                            .setPositiveButton("ОК") { dialog, _ ->
-                                dialog.dismiss()
-                                correctAnswerCallback()
-                            }
-                            .create()
-                        alertDialog.show()
+                        showSuccessDialog(context, CORRECT_ANSWER_TITLE, CORRECT_ANSWER_DESCRIPTION)
                     } else {
                         val leftSide: String = leftEvaluated.getSetRepresentation()
                         val rightSide: String = rightEvaluated.getSetRepresentation()
-                        val alertDialog = AlertDialog.Builder(holder.itemView.context)
-                            .setTitle("Неправильно")
-                            .setMessage("$leftSide ≠ $rightSide")
-                            .setPositiveButton("ОК") { dialog, _ ->
-                                dialog.dismiss()
-                                incorrectAnswerCallback()
-                            }
-                            .create()
-                        alertDialog.show()
+                        showFailureDialog(context, INCORRECT_ANSWER_TITLE, "$leftSide ≠ $rightSide")
                     }
                 }
                 val sets: Array<Char> = holder.leftSetRPN.operandsNames.
@@ -301,7 +310,49 @@ class QuizAdapter(private val dataSet: MutableList<Quiz>,
 
                 }
             }
+            is ImageQuizTextAnswerViewHolder -> {
+                quiz as ImageQuizTextAnswer
+                holder.verifyButton.setOnClickListener {
+                    val answer: String = holder.editTextAnswer.text.toString()
+                    if (answer.isBlank()) {
+                        val from = if(holder.buttonHasNotMoved) 0F else 180F
+                        val to = if(holder.buttonHasNotMoved) 180F else 360F
+                        val animation: Animation = RotateAnimation(from, to,
+                            holder.verifyButton.pivotX, holder.verifyButton.pivotY)
+                        animation.duration = 1500
+                        animation.fillAfter = true
+                        holder.buttonHasNotMoved = !holder.buttonHasNotMoved
+                        holder.verifyButton.startAnimation(animation)
+                    }
+                    else if (answer == quiz.correctAnswer) {
+                        showSuccessDialog(context, CORRECT_ANSWER_TITLE, CORRECT_ANSWER_DESCRIPTION)
+                    } else {
+                        showFailureDialog(context, INCORRECT_ANSWER_TITLE,
+                            "$answer ≠ ${quiz.correctAnswer}")
+                    }
+                }
+            }
         }
+    }
+
+    private fun showSuccessDialog(context: Context, title: String, description: String) {
+        showDialog(context, title, description, correctAnswerCallback)
+    }
+
+    private fun showFailureDialog(context: Context, title: String, description: String) {
+        showDialog(context, title, description, incorrectAnswerCallback)
+    }
+
+    private fun showDialog(context: Context, title: String, description: String,
+                           callback:  (() -> Unit)) {
+        val alertDialog = AlertDialog.Builder(context)
+            .setTitle(title).setMessage(description)
+            .setPositiveButton(OK) { dialog, _ ->
+                dialog.dismiss()
+                callback()
+            }
+            .create()
+        alertDialog.show()
     }
 
     override fun getItemCount(): Int = dataSet.size

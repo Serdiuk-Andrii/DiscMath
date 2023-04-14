@@ -31,7 +31,7 @@
     <string name="trophy_image_description">Trophy image</string>
     <string name="quiz_results_summary_text">Правильні відповіді: %1$d з %2$d</string>
     <string name="explanation_title">Пояснення</string>
-    <string name="set_equation_check_button_text">Перевірити</string>
+    <string name="verify_button_text">Перевірити</string>
     <string name="set_theory_quiz_title">Наведіть приклади множин, для яких виконується рівність</string>
     <string name="universal_set_symbol">Ω</string>
     <string name="universal_set_additional_elements">Ω+</string>
@@ -43,4 +43,5 @@
     <string name="lets_go">Уперед!</string>
     <string name="learning_section_selection_title">Теми</string>
     <string name="assistant_title">Антитренажер</string>
+    <string name="problem_answer">Відповідь</string>
 </resources>

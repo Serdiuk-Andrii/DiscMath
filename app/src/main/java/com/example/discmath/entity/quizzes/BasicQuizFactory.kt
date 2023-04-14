@@ -5,18 +5,22 @@ import com.google.firebase.firestore.DocumentSnapshot
 
 const val TYPE_KEY = "type"
 
-class BasicQuizFactory: QuizFactory {
+class BasicQuizFactory : QuizFactory {
 
-    override fun getQuizFromDocumentSnapshot(documentSnapshot: DocumentSnapshot,
-                                             learningSectionName: String
+    override fun getQuizFromDocumentSnapshot(
+        documentSnapshot: DocumentSnapshot,
+        learningSectionName: String
     ): Quiz {
         val quizType: QuizType = QuizType.getQuizTypeFromString(
-            documentSnapshot.get(TYPE_KEY) as String)
+            documentSnapshot.get(TYPE_KEY) as String
+        )
         val problemUrl: String = documentSnapshot.get(QUIZ_PROBLEM_KEY) as String
-        return when(quizType) {
+        //TODO: Consider creating an abstract method for initializing a quiz with a document
+        return when (quizType) {
             QuizType.MULTIPLE_CHOICE -> {
                 val correctAnswerIndex: Int = documentSnapshot.getLong(ANSWER_KEY)!!.toInt()
-                FourChoicesQuiz(problemUrl,
+                FourChoicesQuiz(
+                    problemUrl,
                     documentSnapshot.get(SOLUTIONS_KEY) as ArrayList<*>,
                     correctAnswerIndex, learningSectionName
                 )
@@ -29,9 +33,16 @@ class BasicQuizFactory: QuizFactory {
                 val leftSide = documentSnapshot.get(LEFT_EQUATION_KEY) as String
                 val rightSide = documentSnapshot.get(RIGHT_EQUATION_KEY) as String
                 val universalSetRequired = leftSide.contains(COMPLEMENT) || rightSide.contains(
-                    COMPLEMENT)
-                SetEquationQuiz(problemUrl, leftSide, rightSide, universalSetRequired,
-                    learningSectionName)
+                    COMPLEMENT
+                )
+                SetEquationQuiz(
+                    problemUrl, leftSide, rightSide, universalSetRequired,
+                    learningSectionName
+                )
+            }
+            QuizType.IMAGE_PROBLEM_TEXT_ANSWER -> {
+                val correctAnswer = documentSnapshot.get(TEXT_ANSWER_KEY) as String
+                ImageQuizTextAnswer(problemUrl, correctAnswer, learningSectionName)
             }
         }
     }
