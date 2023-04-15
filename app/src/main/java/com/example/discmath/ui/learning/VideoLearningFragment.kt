@@ -3,16 +3,19 @@ package com.example.discmath.ui.learning
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.discmath.databinding.FragmentLearningVideoBinding
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 class VideoLearningFragment : Fragment() {
@@ -22,13 +25,21 @@ class VideoLearningFragment : Fragment() {
     private lateinit var name: String
     private lateinit var url: String
 
+
+    // Views
     private lateinit var nameTextView: TextView
     private lateinit var urlTextView: TextView
     private lateinit var videoView: YouTubePlayerView
+    private lateinit var fullScreenContainer: ViewGroup
+
+    // YouTube player
+    private lateinit var youtubePlayer: YouTubePlayer
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private var isFullscreen: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,27 +55,66 @@ class VideoLearningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLearningVideoBinding.inflate(inflater, container, false)
-        nameTextView = binding.name
-        urlTextView = binding.url
-        //webView = binding.lectureVideo
-        val root: View = binding.root
-        nameTextView.text = name
-        urlTextView.text = url
-        videoView = binding.lectureVideo
-
+        initializeViews()
 
         // Sets custom view
-        /*
         val listener: YouTubePlayerListener = object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                val defaultPlayerUiController =
-                    DefaultPlayerUiController(videoView, youTubePlayer)
-                videoView.setCustomPlayerUi(defaultPlayerUiController.rootView)
+
             }
+
+
         }
-        val options: IFramePlayerOptions = IFramePlayerOptions.Builder().controls(0).build()
+        videoView.addFullscreenListener(object: FullscreenListener {
+
+            override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
+                isFullscreen = true
+
+                videoView.visibility = View.GONE
+                urlTextView.visibility = View.GONE
+                nameTextView.visibility = View.GONE
+                fullScreenContainer.visibility = View.VISIBLE
+                fullScreenContainer.addView(fullscreenView)
+                val window = requireActivity().window
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.insetsController?.hide(WindowInsets.Type.statusBars())
+                } else {
+                    @Suppress("DEPRECATION")
+                    window.setFlags(
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    )
+                }
+                //TODO: fix this
+                Thread.sleep(200)
+            }
+
+            override fun onExitFullscreen() {
+                isFullscreen = false
+
+                videoView.visibility = View.VISIBLE
+                urlTextView.visibility = View.VISIBLE
+                nameTextView.visibility = View.VISIBLE
+
+                val window = requireActivity().window
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.insetsController?.show(WindowInsets.Type.statusBars())
+                } else {
+                    @Suppress("DEPRECATION")
+                    window.clearFlags(
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    )
+                }
+                fullScreenContainer.visibility = View.GONE
+                fullScreenContainer.removeAllViews()
+            }
+
+        })
+
+        val options: IFramePlayerOptions = IFramePlayerOptions.Builder().controls(1)
+            .rel(0).ccLoadPolicy(1).fullscreen(1).build()
         videoView.initialize(listener, options)
-        */
+
         val videoId: String? = Uri.parse(url).getQueryParameter("v")
         if (videoId == null) {
             Toast.makeText(context, "There is no video id in the url", Toast.LENGTH_SHORT).show()
@@ -72,96 +122,21 @@ class VideoLearningFragment : Fragment() {
             videoView.getYouTubePlayerWhenReady(object: YouTubePlayerCallback {
                 override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.loadVideo(videoId, 100F)
+                    this@VideoLearningFragment.youtubePlayer = youTubePlayer
                 }
             })
-            /*
-            val fullScreenHelper: FullScreenHelper = FullScreenHelper(
-                requireActivity(), arrayOf(urlTextView, nameTextView)
-            )
-            videoView.addFullScreenListener(object: YouTubePlayerFullScreenListener {
-                override fun onYouTubePlayerEnterFullScreen() {
-                    val attrs = activity!!.window!!.attributes
-                    attrs.flags.and(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                    activity!!.window.attributes = attrs
-
-                    fullScreenHelper.enterFullScreen()
-                }
-
-                override fun onYouTubePlayerExitFullScreen() {
-                    fullScreenHelper.exitFullScreen()
-                }
-            })
-            */
         }
-        /*val videoId: String? = Uri.parse(url).getQueryParameter("v")
-        if (videoId == null) {
-            Toast.makeText(context, "There is no video id in the url", Toast.LENGTH_SHORT).show()
-        } else {
-            val embeddedUrl: String = "http://www.youtube.com/embed/$videoId/?autoplay=1&vq=small"
-            val webSettings: WebSettings = webView.settings
-            webSettings.javaScriptEnabled = true
-            webSettings.loadWithOverviewMode = true
-            webSettings.useWideViewPort = true
-            //webView.webViewClient = WebViewClient()
-            // webView.settings.javaScriptEnabled = true
+        lifecycle.addObserver(videoView)
+        return binding.root
+    }
 
-            val html = "<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "  <body>\n" +
-                    "    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->\n" +
-                    "    <div id=\"player\"></div>\n" +
-                    "\n" +
-                    "    <script>\n" +
-                    "      // 2. This code loads the IFrame Player API code asynchronously.\n" +
-                    "      var tag = document.createElement('script');\n" +
-                    "\n" +
-                    "      tag.src = \"https://www.youtube.com/iframe_api\";\n" +
-                    "      var firstScriptTag = document.getElementsByTagName('script')[0];\n" +
-                    "      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);\n" +
-                    "\n" +
-                    "      // 3. This function creates an <iframe> (and YouTube player)\n" +
-                    "      //    after the API code downloads.\n" +
-                    "      var player;\n" +
-                    "      function onYouTubeIframeAPIReady() {\n" +
-                    "        player = new YT.Player('player', {\n" +
-                    "          height: '590',\n" +
-                    "          width: '940',\n" +
-                    "          videoId: '$videoId',\n" +
-                    "          playerVars: {\n" +
-                    "            'playsinline': 0,\n" +
-                    "            'start': 10\n" +
-                    "          },\n" +
-                    "          events: {\n" +
-                    "            'onReady': onPlayerReady,\n" +
-                    "            'onStateChange': onPlayerStateChange\n" +
-                    "          }\n" +
-                    "        });\n" +
-                    "      }\n" +
-                    "\n" +
-                    "      // 4. The API will call this function when the video player is ready.\n" +
-                    "      function onPlayerReady(event) {\n" +
-                    "        event.target.playVideo();\n" +
-                    "      }\n" +
-                    "\n" +
-                    "      // 5. The API calls this function when the player's state changes.\n" +
-                    "      //    The function indicates that when playing a video (state=1),\n" +
-                    "      //    the player should play for six seconds and then stop.\n" +
-                    "      var done = false;\n" +
-                    "      function onPlayerStateChange(event) {\n" +
-                    "        if (event.data == YT.PlayerState.PLAYING && !done) {\n" +
-                    "          setTimeout(stopVideo, 60000);\n" +
-                    "          done = true;\n" +
-                    "        }\n" +
-                    "      }\n" +
-                    "      function stopVideo() {\n" +
-                    "        player.stopVideo();\n" +
-                    "      }\n" +
-                    "    </script>\n" +
-                    "  </body>\n" +
-                    "</html>"
-            val encodedHtml = Base64.encodeToString(html.toByteArray(), Base64.NO_PADDING)
-            webView.loadData(encodedHtml, "text/html", "base64")
-        }*/
+    private fun initializeViews() {
+        nameTextView = binding.name
+        urlTextView = binding.url
+        nameTextView.text = name
+        urlTextView.text = url
+        videoView = binding.lectureVideo
+        fullScreenContainer = binding.fullScreenContainer
 
         urlTextView.setOnClickListener {
             val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -176,7 +151,12 @@ class VideoLearningFragment : Fragment() {
             }
         }
 
-        return root
+        //webView = binding.lectureVideo
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        videoView.release()
     }
 
 }
