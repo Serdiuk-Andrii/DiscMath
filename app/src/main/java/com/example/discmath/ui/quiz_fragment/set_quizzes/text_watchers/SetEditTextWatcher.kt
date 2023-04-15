@@ -1,4 +1,4 @@
-package com.example.discmath.ui.quiz_fragment
+package com.example.discmath.ui.quiz_fragment.set_quizzes.text_watchers
 
 import android.content.Context.VIBRATOR_SERVICE
 import android.os.Build

@@ -1,4 +1,4 @@
-package com.example.discmath.ui.quiz_fragment
+package com.example.discmath.ui.quiz_fragment.set_quizzes.text_watchers
 
 import android.widget.EditText
 
@@ -9,7 +9,8 @@ fun String.getDifferenceCharacters(other: String): Collection<Char> {
 }
 
 class SetEditTextWatcherBoundToUniversalSet(override val textField: EditText, private val universalSetWatcher:
-                UniversalSetObserver): SetEditTextWatcher(textField) {
+UniversalSetObserver
+): SetEditTextWatcher(textField) {
 
 
     override fun onTextChanged(text: CharSequence?, p1: Int, before: Int, count: Int) {

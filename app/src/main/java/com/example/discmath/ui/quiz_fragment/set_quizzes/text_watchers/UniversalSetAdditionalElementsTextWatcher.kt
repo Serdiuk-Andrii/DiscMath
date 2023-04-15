@@ -1,4 +1,4 @@
-package com.example.discmath.ui.quiz_fragment
+package com.example.discmath.ui.quiz_fragment.set_quizzes.text_watchers
 
 import android.text.Editable
 import android.widget.EditText

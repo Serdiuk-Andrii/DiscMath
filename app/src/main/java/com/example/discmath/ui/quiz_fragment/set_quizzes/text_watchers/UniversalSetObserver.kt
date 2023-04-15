@@ -1,9 +1,10 @@
-package com.example.discmath.ui.quiz_fragment
+package com.example.discmath.ui.quiz_fragment.set_quizzes.text_watchers
 
 import android.widget.TextView
 
 class UniversalSetObserver(private val permanentElementsView: TextView,
-                           private val additionalElements: UniversalSetAdditionalElementsTextWatcher) {
+                           private val additionalElements: UniversalSetAdditionalElementsTextWatcher
+) {
 
     private val permanentElements: MutableMap<Char, Int> = mutableMapOf()
 

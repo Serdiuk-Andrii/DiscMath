@@ -1,4 +1,4 @@
-package com.example.discmath.ui.quiz_fragment
+package com.example.discmath.ui.quiz_fragment.set_quizzes.adapter
 
 import android.view.LayoutInflater
 import android.view.View

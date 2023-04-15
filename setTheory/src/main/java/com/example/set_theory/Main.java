@@ -28,6 +28,8 @@ public class Main {
         TruthTable table = TruthTable.buildTruthTable(expression);
         String cnf = CNF.buildCNFBasedOnTruthTable(table.getSymbols(), table.getRows());
         String dnf = DNF.buildDNFBasedOnTruthTable(table.getSymbols(), table.getRows());
+        System.out.println("CNF: " + cnf);
+        System.out.println("DNF: " + dnf);
         System.out.println(table);
     }
 
