@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val bottomNavigationIds: Set<Int> = setOf(
-            R.id.learning_fragment, R.id.start_quizzes_fragment, R.id.navigation_notifications
+            R.id.learning_fragment, R.id.start_quizzes_fragment, R.id.assistant_fragment
         )
 
         navController.addOnDestinationChangedListener { _, destination, _ ->

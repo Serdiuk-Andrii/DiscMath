@@ -15,10 +15,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/assistant_fragment"
         android:name="com.example.discmath.ui.assistant.AssistantFragment"
         android:label="@string/assistant_title"
-        tools:layout="@layout/fragment_assistant" />
+        tools:layout="@layout/fragment_assistant" >
+        <action
+            android:id="@+id/action_navigation_notifications_to_assistantListFragment"
+            app:destination="@id/assistant_options_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/specificLearningSectionFragment"
         android:name="com.example.discmath.ui.learning.SpecificLearningSectionFragment"
@@ -135,6 +139,20 @@
             android:id="@+id/action_learningFragment_to_navigation_sections"
             app:destination="@id/navigation_sections" />
     </fragment>
+    <fragment
+        android:id="@+id/assistant_options_fragment"
+        android:name="com.example.discmath.ui.assistant.AssistantListFragment"
+        android:label="fragment_assistant_list"
+        tools:layout="@layout/fragment_assistant_list" >
+        <action
+            android:id="@+id/action_assistant_options_fragment_to_assistant_logic"
+            app:destination="@id/assistant_logic" />
+    </fragment>
+    <fragment
+        android:id="@+id/assistant_logic"
+        android:name="com.example.discmath.ui.assistant.logic.LogicFormulaAssistantFragment"
+        android:label="fragment_logic_formula_assistant"
+        tools:layout="@layout/fragment_logic_formula_assistant" />
 
 
 </navigation>

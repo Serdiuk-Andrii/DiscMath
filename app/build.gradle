@@ -39,8 +39,8 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':mathematics')
     // Algorithms
-    implementation project(path: ':setTheory')
 
     // ----- Firebase -----
     // Import the BoM for the Firebase platform

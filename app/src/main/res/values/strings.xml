@@ -44,4 +44,10 @@
     <string name="learning_section_selection_title">Теми</string>
     <string name="assistant_title">Антитренажер</string>
     <string name="problem_answer">Відповідь</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logic_calculate_button">Обрахувати</string>
+    <string name="logic_title">Вираз числення висловлювань</string>
+    <string name="logic_CNF_title">КНФ</string>
+    <string name="logic_DNF_title">ДНФ</string>
 </resources>
