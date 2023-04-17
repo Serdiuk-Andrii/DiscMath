@@ -45,7 +45,7 @@ class BasicQuizFactory : QuizFactory {
             QuizType.IMAGE_PROBLEM_TEXT_ANSWER -> {
                 val problemUrl: String = documentSnapshot.get(QUIZ_PROBLEM_KEY) as String
                 val correctAnswer = documentSnapshot.get(TEXT_ANSWER_KEY) as String
-                ImageQuizTextAnswer(problemUrl, correctAnswer, learningSectionName)
+                ImageQuizNumericAnswer(problemUrl, correctAnswer.toInt(), learningSectionName)
             }
             QuizType.MULTIPLE_CHOICE_IMAGE -> {
                 val optionsUrl = documentSnapshot.get(OPTIONS_KEY) as ArrayList<String>

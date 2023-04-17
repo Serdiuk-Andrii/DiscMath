@@ -70,6 +70,15 @@ fun loadAnswersIntoViews(
     }
 }
 
+fun String.containsOnlyGivenCharacter(char: Char): Boolean {
+    for (character in this) {
+        if (character != char) {
+            return false
+        }
+    }
+    return true
+}
+
 class QuizAdapter(
     private val dataSet: MutableList<Quiz>,
     private val correctAnswerCallback: (() -> Unit),
@@ -143,6 +152,34 @@ class QuizAdapter(
         init {
             problemImage = view.findViewById(R.id.text_answer_image_problem)
             editTextAnswer = view.findViewById(R.id.text_answer)
+            /*
+            editTextAnswer.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+                override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    val timeStart = System.currentTimeMillis()
+                    val currentSelectionStart = editTextAnswer.selectionStart
+                    editTextAnswer.removeTextChangedListener(this)
+                    val textString = text!!.toString()
+                    val textToSet =
+                        if (textString.length == 1 && textString.containsOnlyGivenCharacter('0')) {
+                            "0"
+                        } else {
+                            text
+                        }
+                    editTextAnswer.setText(textToSet)
+                    editTextAnswer.setSelection(textToSet.length.coerceAtMost(currentSelectionStart))
+                    editTextAnswer.addTextChangedListener(this)
+                    val timeEnd = System.currentTimeMillis()
+                    Toast.makeText(
+                        editTextAnswer.context,
+                        "${timeEnd - timeStart}", Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun afterTextChanged(p0: Editable?) {}
+            })
+            */
             verifyButton = view.findViewById(R.id.text_answer_verify_button)
             buttonHasNotMoved = true
         }
@@ -359,7 +396,7 @@ class QuizAdapter(
                 }
             }
             is ImageQuizTextAnswerViewHolder -> {
-                quiz as ImageQuizTextAnswer
+                quiz as ImageQuizNumericAnswer
                 holder.verifyButton.setOnClickListener {
                     val answer: String = holder.editTextAnswer.text.toString()
                     if (answer.isBlank()) {
@@ -373,12 +410,12 @@ class QuizAdapter(
                         animation.fillAfter = true
                         holder.buttonHasNotMoved = !holder.buttonHasNotMoved
                         holder.verifyButton.startAnimation(animation)
-                    } else if (answer == quiz.correctAnswer) {
+                    } else if (answer.toInt() == quiz.correctAnswer) {
                         showSuccessDialog(context, CORRECT_ANSWER_TITLE, CORRECT_ANSWER_DESCRIPTION)
                     } else {
                         showFailureDialog(
                             context, INCORRECT_ANSWER_TITLE,
-                            "$answer ≠ ${quiz.correctAnswer}"
+                            "${answer.toInt()} ≠ ${quiz.correctAnswer}"
                         )
                     }
                 }
@@ -394,8 +431,10 @@ class QuizAdapter(
                     if (correctAnswers == actualAnswers) {
                         showSuccessDialog(context, CORRECT_ANSWER_TITLE, CORRECT_ANSWER_DESCRIPTION)
                     } else {
-                        showFailureDialog(context, INCORRECT_ANSWER_TITLE,
-                            "Правильні варіанти: ${correctAnswers.sorted()}")
+                        showFailureDialog(
+                            context, INCORRECT_ANSWER_TITLE,
+                            "Правильні варіанти: ${correctAnswers.sorted()}"
+                        )
                     }
                 }
             }
