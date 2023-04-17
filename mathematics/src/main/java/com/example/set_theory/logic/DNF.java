@@ -11,15 +11,15 @@ import kotlin.Pair;
 
 public class DNF {
 
-    public static String buildDNFBasedOnTruthTable(final List<Character> symbols,
-                                                   final List<Pair<List<Boolean>, Boolean>> rows) {
-        return rows.stream().filter(Pair::getSecond).map(pair -> getConjunction(symbols,
+    public static String buildDNFBasedOnTruthTable(final TruthTable table) {
+        return table.getRows().stream().filter(Pair::getSecond).map(pair ->
+                getConjunction(table.getSymbols(),
                         pair.getFirst())).collect(Collectors.joining(DISJUNCTION_SEPARATOR));
     }
 
     public static String buildDNFBasedOnExpression(final String expression) throws UnknownOperatorException {
         TruthTable table = TruthTable.buildTruthTable(expression);
-        return buildDNFBasedOnTruthTable(table.getSymbols(), table.getRows());
+        return buildDNFBasedOnTruthTable(table);
     }
 
     private static String getConjunction(final List<Character> symbols, final List<Boolean> row) {

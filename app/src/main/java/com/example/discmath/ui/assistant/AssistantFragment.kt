@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentAssistantBinding
@@ -21,15 +20,12 @@ class AssistantFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val assistantViewModel =
-            ViewModelProvider(this)[AssistantViewModel::class.java]
+        // val assistantViewModel = ViewModelProvider(this)[AssistantViewModel::class.java]
         _binding = FragmentAssistantBinding.inflate(inflater, container, false)
         initializeViews()
         return binding.root

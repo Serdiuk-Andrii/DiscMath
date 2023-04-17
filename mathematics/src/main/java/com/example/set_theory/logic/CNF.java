@@ -11,16 +11,15 @@ import kotlin.Pair;
 
 public class CNF {
 
-    public static String buildCNFBasedOnTruthTable(final List<Character> symbols,
-                                                   final List<Pair<List<Boolean>, Boolean>> rows) {
-        return rows.stream().filter(row -> !row.getSecond()).map(pair ->
-                getDisjunction(symbols, pair.getFirst())).
+    public static String buildCNFBasedOnTruthTable(final TruthTable table) {
+        return table.getRows().stream().filter(row -> !row.getSecond()).map(pair ->
+                getDisjunction(table.getSymbols(), pair.getFirst())).
                 collect(Collectors.joining(CONJUNCTION_SEPARATOR));
     }
 
     public static String buildCNFBasedOnExpression(final String expression) throws UnknownOperatorException {
         TruthTable table = TruthTable.buildTruthTable(expression);
-        return buildCNFBasedOnTruthTable(table.getSymbols(), table.getRows());
+        return buildCNFBasedOnTruthTable(table);
     }
 
     private static String getDisjunction(final List<Character> symbols, final List<Boolean> row) {

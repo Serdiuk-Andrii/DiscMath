@@ -26,8 +26,8 @@ public class Main {
     private static void testTrustTableBuilder() throws UnknownOperatorException {
         String expression = "((p ∨ q) → !r) ∨ (!p ^ (q ∨ r))";
         TruthTable table = TruthTable.buildTruthTable(expression);
-        String cnf = CNF.buildCNFBasedOnTruthTable(table.getSymbols(), table.getRows());
-        String dnf = DNF.buildDNFBasedOnTruthTable(table.getSymbols(), table.getRows());
+        String cnf = CNF.buildCNFBasedOnTruthTable(table);
+        String dnf = DNF.buildDNFBasedOnTruthTable(table);
         System.out.println("CNF: " + cnf);
         System.out.println("DNF: " + dnf);
         System.out.println(table);

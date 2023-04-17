@@ -24,7 +24,7 @@
         android:id="@+id/logic_formula_edit_text"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="80dp"
         android:textColor="@color/black"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,6 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logic_calculate_button"
+        android:visibility="gone"
         >
 
         <TextView
@@ -74,9 +75,8 @@
                 android:id="@+id/CNF_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 />
 
         </HorizontalScrollView>
@@ -103,9 +103,8 @@
                 android:id="@+id/DNF_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 />
 
         </HorizontalScrollView>
@@ -124,10 +123,14 @@
 
         <TableLayout
             android:id="@+id/logic_truth_table"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@color/primary"
+            android:elevation="4dp"
+            android:stretchColumns="*"
+            android:animateLayoutChanges="true"
             />
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
