@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
@@ -21,11 +22,15 @@ class AssistantListFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    // Navigation
+    private lateinit var navController: NavController
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAssistantListBinding.inflate(inflater, container, false)
+        navController = findNavController()
         initializeViews()
         // Inflate the layout for this fragment
         return binding.root
@@ -34,13 +39,14 @@ class AssistantListFragment : Fragment() {
     private fun initializeViews() {
         recyclerView = binding.assistantOptionsRecyclerView
         val options: Array<AssistantOption> = arrayOf(
-            AssistantOption("Числення висловлювань", R.id.assistant_logic)
+            AssistantOption("Числення висловлювань", R.id.assistant_logic),
+            AssistantOption("Теорія графів", R.id.assistant_graph_theory)
         )
         recyclerView.adapter = AssistantOptionsAdapter(options, ::navigateTo)
     }
 
     private fun navigateTo(destination: Int) {
-        findNavController().navigate(destination)
+        navController.navigate(destination)
     }
 
 }

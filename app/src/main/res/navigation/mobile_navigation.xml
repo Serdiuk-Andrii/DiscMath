@@ -147,12 +147,20 @@
         <action
             android:id="@+id/action_assistant_options_fragment_to_assistant_logic"
             app:destination="@id/assistant_logic" />
+        <action
+            android:id="@+id/assistant_graph_theory_navigation"
+            app:destination="@id/assistant_graph_theory" />
     </fragment>
     <fragment
         android:id="@+id/assistant_logic"
         android:name="com.example.discmath.ui.assistant.logic.LogicFormulaAssistantFragment"
         android:label="fragment_logic_formula_assistant"
         tools:layout="@layout/fragment_logic_formula_assistant" />
+    <fragment
+        android:id="@+id/assistant_graph_theory"
+        android:name="com.example.discmath.ui.assistant.graph_theory.GraphTheoryFragment"
+        android:label="fragment_graph_theory"
+        tools:layout="@layout/fragment_graph_theory" />
 
 
 </navigation>
