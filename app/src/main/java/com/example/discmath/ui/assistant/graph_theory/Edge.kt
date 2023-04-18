@@ -7,10 +7,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.discmath.R
 
 @SuppressLint("ViewConstructor")
-class Edge(
-    currentContext: Context, private val firstVertex: Vertex,
-    private val secondVertex: Vertex
-) : View(currentContext) {
+class Edge(currentContext: Context, val firstVertex: Vertex, val secondVertex: Vertex) :
+    View(currentContext) {
 
     init {
         this.setBackgroundColor(resources.getColor(R.color.black, null))
@@ -18,6 +16,8 @@ class Edge(
         this.z = -1F
         this.pivotX = 0F
         this.pivotY = 0F
+        firstVertex.addEdge(this)
+        secondVertex.addEdge(this)
         this.reposition()
     }
 

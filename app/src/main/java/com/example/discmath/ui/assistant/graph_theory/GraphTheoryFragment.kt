@@ -38,6 +38,7 @@ class GraphTheoryFragment : Fragment() {
     // State
     private var selectedVertex: Vertex? = null
     private var vertexNextId: Int = 0
+    private val vertices: MutableList<Vertex> = mutableListOf()
 
     private val nextId get() = vertexNextId++
 
@@ -75,23 +76,33 @@ class GraphTheoryFragment : Fragment() {
 
         layout.setOnTouchListener { _, event ->
             if (event?.action == MotionEvent.ACTION_DOWN) {
-                val newVertex = Vertex(requireContext(), nextId)
-                newVertex.background = vertexStillBackground
-                newVertex.layoutParams = ConstraintLayout.LayoutParams(vertexWidth, vertexHeight)
-                newVertex.elevation = 15F
-                newVertex.x = event.x - vertexWidth / 2
-                newVertex.y = event.y - vertexHeight / 2
-                newVertex.setOnTouchListener(VertexTouchListener(this))
-                layout.addView(newVertex)
+                val vertex = Vertex(requireContext(), nextId)
+                vertex.background = vertexStillBackground
+                vertex.layoutParams = ConstraintLayout.LayoutParams(vertexWidth, vertexHeight)
+                vertex.x = event.x - vertexWidth / 2
+                vertex.y = event.y - vertexHeight / 2
+                vertex.setOnTouchListener(VertexTouchListener(this))
+                vertices.add(vertex)
+                layout.addView(vertex)
                 layout.performClick()
             }
             true
         }
-
+        /*
+                layout.allViews.forEach { view ->
+                    if (view != layout) {
+                        run {
+                            view.scaleX = view.scaleX * 0.5F
+                            view.scaleY = view.scaleY * 0.5F
+                        }
+                    }
+         }
+         */
     }
 
     fun notifyVertexSelected(vertex: Vertex) {
-        if (selectedVertex != null && vertex != selectedVertex) {
+        if (selectedVertex != null && vertex != selectedVertex &&
+            !vertex.isAdjacent(selectedVertex!!)) {
             val edge = Edge(requireContext(), selectedVertex!!, vertex)
             layout.addView(edge)
             selectedVertex!!.background = vertexStillBackground
@@ -124,6 +135,7 @@ class GraphTheoryFragment : Fragment() {
                     .y(event.rawY + dy)
                     .setDuration(0)
                     .start()
+                view.repositionEdges()
             }
             return true
         }
