@@ -8,8 +8,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.allViews
 import androidx.fragment.app.Fragment
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentGraphTheoryBinding
@@ -42,7 +44,6 @@ class GraphTheoryFragment : Fragment() {
 
     private val nextId get() = vertexNextId++
 
-
     // Drawables
     private lateinit var vertexStillBackground: Drawable
     private lateinit var vertexSelectedBackground: Drawable
@@ -74,20 +75,44 @@ class GraphTheoryFragment : Fragment() {
     private fun initializeViews() {
         layout = binding.graphBuilderLayout
 
-        layout.setOnTouchListener { _, event ->
-            if (event?.action == MotionEvent.ACTION_DOWN) {
-                val vertex = Vertex(requireContext(), nextId)
-                vertex.background = vertexStillBackground
-                vertex.layoutParams = ConstraintLayout.LayoutParams(vertexWidth, vertexHeight)
-                vertex.x = event.x - vertexWidth / 2
-                vertex.y = event.y - vertexHeight / 2
-                vertex.setOnTouchListener(VertexTouchListener(this))
-                vertices.add(vertex)
-                layout.addView(vertex)
-                layout.performClick()
+        layout.setOnTouchListener(object: OnTouchListener {
+
+            var lastX: Float = 0F
+            var lastY: Float = 0F
+
+            override fun onTouch(view: View, event: MotionEvent): Boolean {
+                val action = event.action
+                if (action == MotionEvent.ACTION_DOWN) {
+                    val vertex = Vertex(requireContext(), nextId)
+                    vertex.background = vertexStillBackground
+                    vertex.layoutParams = ConstraintLayout.LayoutParams(vertexWidth, vertexHeight)
+                    vertex.x = event.x - vertexWidth / 2
+                    vertex.y = event.y - vertexHeight / 2
+                    vertex.setOnTouchListener(VertexTouchListener(this@GraphTheoryFragment))
+                    vertices.add(vertex)
+                    layout.addView(vertex)
+                    layout.performClick()
+
+                    lastX = event.rawX
+                    lastY = event.rawY
+                } else if (action == MotionEvent.ACTION_MOVE) {
+                    Toast.makeText(context, "Move", Toast.LENGTH_SHORT).show()
+                    layout.allViews.forEach {
+                        if (it != layout) {
+                            it.animate()
+                                .x(it.x - (lastX - event.rawX))
+                                .y(it.y - (lastY - event.rawY))
+                                .setDuration(0)
+                                .setInterpolator { 0.95f }
+                                .start()
+                        }
+                    }
+                    lastX = event.rawX
+                    lastY = event.rawY
+                }
+                return true
             }
-            true
-        }
+        })
         /*
                 layout.allViews.forEach { view ->
                     if (view != layout) {
