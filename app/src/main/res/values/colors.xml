@@ -9,6 +9,7 @@
     <color name="card">@color/primary</color>
     <color name="button_soft">@color/primary_second</color>
     <color name="button_bright">#FFF200</color>
+    <color name="graph_builder_toolbox_option_background">#A59E9E</color>
 
 
     <color name="purple_200">#FFBB86FC</color>

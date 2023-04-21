@@ -2,6 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="graph_vertex_width">27dp</dimen>
-    <dimen name="graph_vertex_height">27dp</dimen>
+    <dimen name="graph_vertex_width">23dp</dimen>
+    <dimen name="graph_vertex_height">23dp</dimen>
+    <dimen name="graph_toolbox_radius">20dp</dimen>
 </resources>

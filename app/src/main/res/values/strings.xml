@@ -50,4 +50,7 @@
     <string name="logic_title">Вираз числення висловлювань</string>
     <string name="logic_CNF_title">КНФ</string>
     <string name="logic_DNF_title">ДНФ</string>
+    <string name="graph_theory_modify_option_description">Режим редагування</string>
+    <string name="graph_theory_move_option_description">Режим переміщення</string>
+    <string name="graph_theory_edge_option_description">Режим додавання ребер</string>
 </resources>

@@ -10,4 +10,15 @@
     >
 
 
+    <include
+        android:id="@+id/graph_builder_toolbox"
+        layout="@layout/graph_theory_toolbox"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
