@@ -1,18 +1,19 @@
 package com.example.discmath.ui.learning
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningVideoBinding
+import com.example.discmath.ui.learning.adapters.VideoTimestampAdapter
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
@@ -20,9 +21,20 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import okhttp3.*
+import java.io.IOException
 
 class VideoLearningFragment : Fragment() {
 
+    // Network and YouTube
+    private val httpClient: OkHttpClient = OkHttpClient()
+    private lateinit var youtubeAPIKey: String
+    private val timestampRegex: Regex = "\\d{1,2}(:\\d{2})+".toRegex()
+
+    // JSON parser
+    private val parser: ObjectMapper = ObjectMapper()
+
+    // Views
     private var _binding: FragmentLearningVideoBinding? = null
 
     private lateinit var name: String
@@ -30,9 +42,8 @@ class VideoLearningFragment : Fragment() {
 
 
     // Views
-    private lateinit var nameTextView: TextView
-    private lateinit var urlTextView: TextView
     private lateinit var videoView: YouTubePlayerView
+    private lateinit var videoTimestamps: RecyclerView
     private lateinit var fullScreenContainer: ViewGroup
 
     // YouTube player
@@ -49,9 +60,11 @@ class VideoLearningFragment : Fragment() {
             if (isFullscreen) {
                 youtubePlayer.toggleFullscreen()
             } else {
+                this.isEnabled = false
                 findNavController().popBackStack()
             }
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +81,8 @@ class VideoLearningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLearningVideoBinding.inflate(inflater, container, false)
+        youtubeAPIKey = requireActivity().resources.getString(R.string.google_api_key)
         initializeViews()
-
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
         //lifecycle.addObserver(videoView)
         return binding.root
@@ -78,25 +91,9 @@ class VideoLearningFragment : Fragment() {
 
 
     private fun initializeViews() {
-        nameTextView = binding.name
-        urlTextView = binding.url
-        nameTextView.text = name
-        urlTextView.text = url
         videoView = binding.lectureVideo
+        videoTimestamps = binding.videoTimestamps
         fullScreenContainer = binding.fullScreenContainer
-
-        urlTextView.setOnClickListener {
-            val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse(url)
-            )
-            try {
-                startActivity(appIntent)
-            } catch (ex: ActivityNotFoundException) {
-                startActivity(webIntent)
-            }
-        }
 
         val listener: YouTubePlayerListener = object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
@@ -111,11 +108,10 @@ class VideoLearningFragment : Fragment() {
                 isFullscreen = true
 
                 videoView.visibility = View.GONE
-                urlTextView.visibility = View.GONE
-                nameTextView.visibility = View.GONE
+                videoTimestamps.visibility = View.GONE
                 fullScreenContainer.visibility = View.VISIBLE
                 fullScreenContainer.addView(fullscreenView)
-                /*
+
                 val window = requireActivity().window
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.insetsController?.hide(WindowInsets.Type.statusBars())
@@ -126,7 +122,7 @@ class VideoLearningFragment : Fragment() {
                         WindowManager.LayoutParams.FLAG_FULLSCREEN
                     )
                 }
-                */
+
                 //TODO: fix this
                 Thread.sleep(200)
             }
@@ -135,9 +131,8 @@ class VideoLearningFragment : Fragment() {
                 isFullscreen = false
 
                 videoView.visibility = View.VISIBLE
-                urlTextView.visibility = View.VISIBLE
-                nameTextView.visibility = View.VISIBLE
-                /*
+                videoTimestamps.visibility = View.VISIBLE
+
                 val window = requireActivity().window
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.insetsController?.show(WindowInsets.Type.statusBars())
@@ -147,7 +142,7 @@ class VideoLearningFragment : Fragment() {
                         WindowManager.LayoutParams.FLAG_FULLSCREEN
                     )
                 }
-                */
+
                 fullScreenContainer.visibility = View.GONE
                 fullScreenContainer.removeAllViews()
             }
@@ -164,15 +159,67 @@ class VideoLearningFragment : Fragment() {
         } else {
             videoView.getYouTubePlayerWhenReady(object: YouTubePlayerCallback {
                 override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.loadVideo(videoId, 100F)
+                    youTubePlayer.loadVideo(videoId, 0F)
                     this@VideoLearningFragment.youtubePlayer = youTubePlayer
                 }
             })
+            val requestUrl = getYoutubeRequestUrl(videoId)
+            val request: Request = Request.Builder().url(requestUrl).build()
+            httpClient.newCall(request).enqueue(object: Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    notifyVideoInformationRequestHasFailed()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        val bodyString = response.body!!.string()
+                        response.body!!.close()
+                        val node = parser.readValue(bodyString, ObjectNode::class.java)
+                        try {
+                            val description = node["items"]!![0]["snippet"]["description"]
+                            val timestamps = getTimestampsFromVideoDescription(description.toString())
+                            this@VideoLearningFragment.requireActivity().runOnUiThread {
+                                videoTimestamps.adapter = VideoTimestampAdapter(timestamps)
+                            }
+                        } catch (e: NullPointerException) {
+                            notifyVideoInformationRequestHasFailed()
+                        }
+                    } else {
+                        notifyVideoInformationRequestHasFailed()
+                    }
+                }
+            })
         }
-        //webView = binding.lectureVideo
     }
 
+    private fun notifyVideoInformationRequestHasFailed() {
 
+    }
+
+    private fun getTimestampsFromVideoDescription(description: String): Array<Pair<String, String>> {
+        val timestampsStartIndex = description.indexOf("0:00")
+        if (timestampsStartIndex == -1) {
+            return arrayOf()
+        }
+        val shortDescription = description.substring(timestampsStartIndex)
+        val lines = shortDescription.split("\\n")
+        val timestamps: ArrayList<Pair<String, String>> = arrayListOf()
+        for (line in lines) {
+            val timestampEndIndex = line.indexOf(' ')
+            if (timestampEndIndex == -1) {
+                break
+            }
+            val timestamp = line.substring(0, timestampEndIndex)
+            if (!timestampRegex.matches(timestamp)) {
+                break
+            }
+            timestamps.add(Pair(timestamp, line.substring(timestampEndIndex)))
+        }
+        return timestamps.toTypedArray()
+    }
+
+    private fun getYoutubeRequestUrl(videoId: String): String = "https://www.googleapis.com/youtube/" +
+            "v3/videos?part=snippet&id=${videoId}&key=${youtubeAPIKey}"
 
     override fun onDestroy() {
         super.onDestroy()

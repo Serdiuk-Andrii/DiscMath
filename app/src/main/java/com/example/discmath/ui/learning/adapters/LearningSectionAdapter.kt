@@ -14,7 +14,7 @@ import com.example.discmath.entity.quizzes.loadImageIntoViewFrom
 
 class LearningSectionAdapter(private val dataSet: Array<LearningSection>,
                              private val itemClickedCallback:  ((LearningSection) -> Unit))
-    :RecyclerView.Adapter<LearningSectionAdapter.ViewHolder>(){
+    :RecyclerView.Adapter<LearningSectionAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
