@@ -8,14 +8,15 @@
     tools:context=".ui.assistant.logic.LogicFormulaAssistantFragment">
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:labelFor="@id/logic_formula_edit_text"
         android:text="@string/logic_title"
-        android:textStyle="bold"
-        android:textColor="@color/black"
         android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -132,5 +133,15 @@
             />
 
     </ScrollView>
+
+    <include
+        android:id="@+id/logic_keyboard"
+        layout="@layout/assistant_logic_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logic_formula_edit_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@
 
     <string name="videoOptionTitle">Подивитися в записі</string>
     <string name="pdfTypeTitle">Переглянути в PDF</string>
-    <string name="pdf_icon_description">PDF icon</string>
+    <string name="pdf_icon_description">PDF</string>
     <string name="video_icon_description">Значок відео</string>
     <string name="training_encouragement">Тренуйся!</string>
     <string name="start_training_button_text">Розпочати</string>
@@ -47,7 +47,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logic_calculate_button">Обрахувати</string>
-    <string name="logic_title">Вираз числення висловлювань</string>
+    <string name="logic_title">Вкажіть вираз F:</string>
     <string name="logic_CNF_title">КНФ</string>
     <string name="logic_DNF_title">ДНФ</string>
     <string name="graph_theory_modify_option_description">Режим редагування</string>
@@ -55,4 +55,7 @@
     <string name="graph_theory_edge_option_description">Режим додавання ребер</string>
     <string name="timestamps_absent_text">Це відео не має таймкодів</string>
     <string name="timestamps_network_error">Помилка мережі, спробуйте ще раз</string>
+    <string name="logic_conjunction">∧</string>
+    <string name="logic_disjunction">∨</string>
+    <string name="logic_implication">→</string>
 </resources>

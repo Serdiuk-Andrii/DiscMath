@@ -1,5 +1,7 @@
 package com.example.discmath.ui.learning
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -7,6 +9,9 @@ import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +42,9 @@ fun parseTimestampToTimeInSeconds(timestamp: String): Float {
 }
 
 class VideoLearningFragment : Fragment() {
+
+    // System
+    private lateinit var window: Window
 
     // Network and YouTube
     private val httpClient: OkHttpClient = OkHttpClient()
@@ -100,12 +108,13 @@ class VideoLearningFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        window = requireActivity().window
         _binding = FragmentLearningVideoBinding.inflate(inflater, container, false)
         youtubeAPIKey = requireActivity().resources.getString(R.string.google_api_key)
         initializeViewData()
         initializeViews()
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        //lifecycle.addObserver(videoView)
+        lifecycle.addObserver(videoView)
         return binding.root
     }
 
@@ -140,10 +149,13 @@ class VideoLearningFragment : Fragment() {
                         WindowManager.LayoutParams.FLAG_FULLSCREEN
                     )
                 }
+                hideSystemUI()
+                requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 //TODO: fix this
                 Thread.sleep(200)
             }
 
+            @SuppressLint("SourceLockedOrientationActivity")
             override fun onExitFullscreen() {
                 isFullscreen = false
                 toggleViewsVisibility(View.VISIBLE)
@@ -157,9 +169,11 @@ class VideoLearningFragment : Fragment() {
                         WindowManager.LayoutParams.FLAG_FULLSCREEN
                     )
                 }
-
+                showSystemUI()
+                requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 fullScreenContainer.visibility = View.GONE
                 fullScreenContainer.removeAllViews()
+
             }
 
         })
@@ -302,6 +316,22 @@ class VideoLearningFragment : Fragment() {
     private fun getYoutubeRequestUrl(videoId: String): String =
         "https://www.googleapis.com/youtube/" +
                 "v3/videos?part=snippet&id=${videoId}&key=${youtubeAPIKey}"
+
+
+    private fun showSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowInsetsControllerCompat(window,
+            window.decorView.findViewById(android.R.id.content)).show(WindowInsetsCompat.Type.systemBars())
+    }
+
+    private fun hideSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window,
+            window.decorView.findViewById(android.R.id.content)).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

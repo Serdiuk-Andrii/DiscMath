@@ -1,4 +1,4 @@
-package com.example.discmath.ui.glide;
+package com.example.discmath.ui.util.glide;
 
 import android.content.Context;
 

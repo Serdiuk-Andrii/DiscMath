@@ -34,6 +34,7 @@ class LogicFormulaAssistantFragment : Fragment() {
     private lateinit var DNFText: TextView
     private lateinit var truthTableLayout: TableLayout
     private lateinit var calculationResults: View
+    //private lateinit var keyboard: View
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -56,7 +57,33 @@ class LogicFormulaAssistantFragment : Fragment() {
         DNFText = binding.DNFText
         truthTableLayout = binding.logicTruthTable
         calculationResults = binding.logicCalculationResults
+        /*
+        keyboard = binding.logicKeyboard.root
 
+        keyboard.allViews.forEach {
+            if (it is Button) {
+                val text = it.text
+                it.setOnClickListener {
+                    formulaEditText.setText("${formulaEditText.text}${text}")
+                }
+            }
+        }
+
+        formulaEditText.setOnTouchListener { view, event ->
+            val inputManager: InputMethodManager = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            if (view == formulaEditText && event.action == MotionEvent.ACTION_DOWN) {
+                formulaEditText.requestFocus()
+                keyboard.toggleVisibility()
+            }
+            view.performClick()
+            true
+        }
+
+        formulaEditText.setOnClickListener {
+
+        }
+        */
         calculateButton.setOnClickListener {
             val expression: String = formulaEditText.text.toString()
             val truthTable: TruthTable = TruthTable.buildTruthTable(expression)
@@ -72,6 +99,8 @@ class LogicFormulaAssistantFragment : Fragment() {
             DNFText.text = DNF
             updateTruthTable(truthTable)
 
+
+
         }
     }
 
@@ -81,6 +110,7 @@ class LogicFormulaAssistantFragment : Fragment() {
         val rowGravity = Gravity.CENTER
         truthTableLayout.removeAllViews()
 
+        truthTable.symbols.add('F')
         val titleRow = TableRow(context)
         titleRow.background = rowBackground
         for (value in truthTable.symbols) {
