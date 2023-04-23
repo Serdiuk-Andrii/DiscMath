@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -24,6 +25,17 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import okhttp3.*
 import java.io.IOException
 
+fun parseTimestampToTimeInSeconds(timestamp: String): Float {
+    val timeSections = timestamp.split(':').reversed()
+    var result = 0.0
+    var currentPower = 1F
+    for (timeSection in timeSections) {
+        result += timeSection.toInt() * currentPower
+        currentPower *= 60F
+    }
+    return result.toFloat()
+}
+
 class VideoLearningFragment : Fragment() {
 
     // Network and YouTube
@@ -34,7 +46,6 @@ class VideoLearningFragment : Fragment() {
     private val videoTimestampsData: ArrayList<Pair<Float, Int>> = arrayListOf()
     private var currentTimestampIndex: Int = 0
 
-
     // JSON parser
     private val parser: ObjectMapper = ObjectMapper()
 
@@ -44,11 +55,16 @@ class VideoLearningFragment : Fragment() {
     private lateinit var name: String
     private lateinit var url: String
 
-
     // Views
+    private val viewsToHide: ArrayList<View> = arrayListOf()
     private lateinit var videoView: YouTubePlayerView
     private lateinit var videoTimestamps: RecyclerView
     private lateinit var fullScreenContainer: ViewGroup
+    private lateinit var timestampsErrorText: TextView
+
+    // View data
+    private lateinit var timestampsAbsentString: String
+    private lateinit var networkErrorString: String
 
     // YouTube player
     private lateinit var youtubePlayer: YouTubePlayer
@@ -86,6 +102,7 @@ class VideoLearningFragment : Fragment() {
     ): View {
         _binding = FragmentLearningVideoBinding.inflate(inflater, container, false)
         youtubeAPIKey = requireActivity().resources.getString(R.string.google_api_key)
+        initializeViewData()
         initializeViews()
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
         //lifecycle.addObserver(videoView)
@@ -93,18 +110,23 @@ class VideoLearningFragment : Fragment() {
     }
 
 
+    private fun initializeViewData() {
+        timestampsAbsentString = requireActivity().resources.getString(R.string.timestamps_absent_text)
+        networkErrorString = requireActivity().resources.getString(R.string.timestamps_network_error)
+    }
+
     private fun initializeViews() {
         videoView = binding.lectureVideo
+        viewsToHide.add(videoView)
         videoTimestamps = binding.videoTimestamps
         fullScreenContainer = binding.fullScreenContainer
+        timestampsErrorText = binding.timestampsErrorTextView
 
         videoView.addFullscreenListener(object : FullscreenListener {
 
             override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
                 isFullscreen = true
-
-                videoView.visibility = View.GONE
-                videoTimestamps.visibility = View.GONE
+                toggleViewsVisibility(View.GONE)
                 fullScreenContainer.visibility = View.VISIBLE
                 fullScreenContainer.addView(fullscreenView)
 
@@ -124,9 +146,7 @@ class VideoLearningFragment : Fragment() {
 
             override fun onExitFullscreen() {
                 isFullscreen = false
-
-                videoView.visibility = View.VISIBLE
-                videoTimestamps.visibility = View.VISIBLE
+                toggleViewsVisibility(View.VISIBLE)
 
                 val window = requireActivity().window
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -170,7 +190,7 @@ class VideoLearningFragment : Fragment() {
         val request: Request = Request.Builder().url(requestUrl).build()
         httpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                notifyVideoInformationRequestHasFailed()
+                notifyVideoInformationRequestHasFailed(networkErrorString)
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -182,53 +202,60 @@ class VideoLearningFragment : Fragment() {
                         val description =
                             node["items"]!![0]["snippet"]["description"].toString()
                         val timestamps = getTimestampsFromVideoDescription(description)
-                        initializeTimestampsData(timestamps)
-                        this@VideoLearningFragment.requireActivity().runOnUiThread {
-                            videoTimestamps.adapter = VideoTimestampAdapter(
-                                timestamps,
-                                ::timestampClicked
-                            )
-                        }
-                        videoView.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
-                            override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-                                youTubePlayer.addListener(object :
-                                    AbstractYouTubePlayerListener() {
-                                    override fun onCurrentSecond(
-                                        youTubePlayer: YouTubePlayer,
-                                        second: Float
-                                    ) {
-                                        super.onCurrentSecond(youTubePlayer, second)
-                                        val timestampIndex =
-                                            (videoTimestampsData.firstOrNull { it.first >= second }?.second
-                                                ?: videoTimestampsData.size) - 1
-                                        if (currentTimestampIndex != timestampIndex) {
-                                            currentTimestampIndex = timestampIndex
-                                            updateTimestamp()
-                                        }
-                                    }
-                                })
+                        if (timestamps.isEmpty()) {
+                            this@VideoLearningFragment.requireActivity().runOnUiThread {
+                                notifyVideoInformationRequestHasFailed(timestampsAbsentString)
                             }
+                        } else {
+                            viewsToHide.add(videoTimestamps)
+                            initializeTimestampsData(timestamps)
+                            this@VideoLearningFragment.requireActivity().runOnUiThread {
+                                videoTimestamps.adapter = VideoTimestampAdapter(
+                                    timestamps,
+                                    ::timestampClicked
+                                )
+                            }
+                            videoView.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                                override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                                    youTubePlayer.addListener(object :
+                                        AbstractYouTubePlayerListener() {
+                                        override fun onCurrentSecond(
+                                            youTubePlayer: YouTubePlayer,
+                                            second: Float
+                                        ) {
+                                            super.onCurrentSecond(youTubePlayer, second)
+                                            val timestampIndex =
+                                                (videoTimestampsData.firstOrNull { it.first >= second }?.second
+                                                    ?: videoTimestampsData.size) - 1
+                                            if (currentTimestampIndex != timestampIndex) {
+                                                currentTimestampIndex = timestampIndex
+                                                updateTimestamp()
+                                            }
+                                        }
+                                    })
+                                }
+
+                            })
                         }
-                        )
                     } catch (e: NullPointerException) {
-                        notifyVideoInformationRequestHasFailed()
+                        notifyVideoInformationRequestHasFailed(networkErrorString)
                     }
                 } else {
-                    notifyVideoInformationRequestHasFailed()
+                    notifyVideoInformationRequestHasFailed(networkErrorString)
                 }
             }
         })
     }
 
     private fun updateTimestamp() {
-        val currentHolder =  videoTimestamps.findViewHolderForLayoutPosition(currentTimestampIndex)
+        val currentHolder = videoTimestamps.findViewHolderForLayoutPosition(currentTimestampIndex)
                 as VideoTimestampAdapter.TimestampHolder
         (videoTimestamps.adapter as VideoTimestampAdapter).switchCurrentTimestamp(currentHolder)
     }
 
-    private fun timestampClicked(timestamp: String, position: Int) {
+    private fun timestampClicked(time: Float, position: Int) {
         currentTimestampIndex = position
-        youtubePlayer.seekTo(parseTimestampToTimeInSeconds(timestamp))
+        youtubePlayer.seekTo(time)
     }
 
     private fun initializeTimestampsData(data: Array<Pair<String, String>>) {
@@ -237,19 +264,11 @@ class VideoLearningFragment : Fragment() {
         }
     }
 
-    private fun parseTimestampToTimeInSeconds(timestamp: String): Float {
-        val timeSections = timestamp.split(':').reversed()
-        var result = 0.0
-        var currentPower = 1F
-        for (timeSection in timeSections) {
-            result += timeSection.toInt() * currentPower
-            currentPower *= 60F
-        }
-        return result.toFloat()
-    }
-
-    private fun notifyVideoInformationRequestHasFailed() {
-
+    private fun notifyVideoInformationRequestHasFailed(text: String) {
+        timestampsErrorText.visibility = View.VISIBLE
+        timestampsErrorText.text = text
+        videoTimestamps.visibility = View.GONE
+        viewsToHide.add(timestampsErrorText)
     }
 
     private fun getTimestampsFromVideoDescription(description: String): Array<Pair<String, String>> {
@@ -272,6 +291,12 @@ class VideoLearningFragment : Fragment() {
             timestamps.add(Pair(timestamp, line.substring(timestampEndIndex)))
         }
         return timestamps.toTypedArray()
+    }
+
+
+
+    private fun toggleViewsVisibility(visibility: Int) {
+        viewsToHide.forEach { it.visibility = visibility }
     }
 
     private fun getYoutubeRequestUrl(videoId: String): String =

@@ -8,9 +8,11 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
+import com.example.discmath.ui.learning.parseTimestampToTimeInSeconds
+import kotlin.properties.Delegates
 
 class VideoTimestampAdapter(private val dataset: Array<Pair<String, String>>,
-    private val callback:  ((String, Int) -> Unit))
+    private val callback:  ((Float, Int) -> Unit))
     : RecyclerView.Adapter<VideoTimestampAdapter.TimestampHolder>() {
 
     private lateinit var currentTimestampView: TimestampHolder
@@ -20,6 +22,7 @@ class VideoTimestampAdapter(private val dataset: Array<Pair<String, String>>,
 
           val timestampTime: TextView
           val timestampTitle: TextView
+          var timeInSeconds by Delegates.notNull<Float>()
 
           private val timestampTimeParentLayout: FrameLayout
           private val timestampTitleParentLayout: FrameLayout
@@ -61,9 +64,10 @@ class VideoTimestampAdapter(private val dataset: Array<Pair<String, String>>,
         val timestamp = dataset[position]
         holder.timestampTime.text = timestamp.first
         holder.timestampTitle.text = timestamp.second
+        holder.timeInSeconds = parseTimestampToTimeInSeconds(timestamp.first)
         holder.itemView.setOnClickListener {
             switchCurrentTimestamp(holder)
-            callback(timestamp.first, position)
+            callback(holder.timeInSeconds, position)
         }
     }
 

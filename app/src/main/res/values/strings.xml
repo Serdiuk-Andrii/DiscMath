@@ -53,4 +53,6 @@
     <string name="graph_theory_modify_option_description">Режим редагування</string>
     <string name="graph_theory_move_option_description">Режим переміщення</string>
     <string name="graph_theory_edge_option_description">Режим додавання ребер</string>
+    <string name="timestamps_absent_text">Це відео не має таймкодів</string>
+    <string name="timestamps_network_error">Помилка мережі, спробуйте ще раз</string>
 </resources>
