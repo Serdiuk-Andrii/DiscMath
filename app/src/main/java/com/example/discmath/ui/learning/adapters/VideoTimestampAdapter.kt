@@ -1,14 +1,19 @@
 package com.example.discmath.ui.learning.adapters
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 
-class VideoTimestampAdapter(private val dataset: Array<Pair<String, String>>)
+class VideoTimestampAdapter(private val dataset: Array<Pair<String, String>>,
+    private val callback:  ((String, Int) -> Unit))
     : RecyclerView.Adapter<VideoTimestampAdapter.TimestampHolder>() {
+
+    private lateinit var currentTimestampView: TimestampHolder
 
 
       class TimestampHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -16,9 +21,28 @@ class VideoTimestampAdapter(private val dataset: Array<Pair<String, String>>)
           val timestampTime: TextView
           val timestampTitle: TextView
 
+          private val timestampTimeParentLayout: FrameLayout
+          private val timestampTitleParentLayout: FrameLayout
+
+          private val timestampTitleBackground: Drawable
+
           init {
               timestampTime = view.findViewById(R.id.timestamp_time)
               timestampTitle = view.findViewById(R.id.timestamp_title)
+
+              timestampTimeParentLayout = view.findViewById(R.id.timestamp_time_layout)
+              timestampTitleParentLayout = view.findViewById(R.id.timestamp_title_layout)
+
+              timestampTitleBackground = timestampTitleParentLayout.background.constantState!!
+                    .newDrawable()
+          }
+
+          fun switchToSelectedBackground() {
+             timestampTitleParentLayout.background = timestampTimeParentLayout.background
+          }
+
+          fun switchToUnselectedBackground() {
+              timestampTitleParentLayout.background = timestampTitleBackground
           }
 
       }
@@ -30,9 +54,23 @@ class VideoTimestampAdapter(private val dataset: Array<Pair<String, String>>)
     }
 
     override fun onBindViewHolder(holder: TimestampHolder, position: Int) {
+        if (position == 0) {
+            currentTimestampView = holder
+            currentTimestampView.switchToSelectedBackground()
+        }
         val timestamp = dataset[position]
         holder.timestampTime.text = timestamp.first
         holder.timestampTitle.text = timestamp.second
+        holder.itemView.setOnClickListener {
+            switchCurrentTimestamp(holder)
+            callback(timestamp.first, position)
+        }
+    }
+
+    fun switchCurrentTimestamp(holder: TimestampHolder) {
+        currentTimestampView.switchToUnselectedBackground()
+        holder.switchToSelectedBackground()
+        currentTimestampView = holder
     }
 
     override fun getItemCount(): Int = dataset.size

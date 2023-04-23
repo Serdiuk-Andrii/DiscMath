@@ -31,6 +31,10 @@ class VideoLearningFragment : Fragment() {
     private lateinit var youtubeAPIKey: String
     private val timestampRegex: Regex = "\\d{1,2}(:\\d{2})+".toRegex()
 
+    private val videoTimestampsData: ArrayList<Pair<Float, Int>> = arrayListOf()
+    private var currentTimestampIndex: Int = 0
+
+
     // JSON parser
     private val parser: ObjectMapper = ObjectMapper()
 
@@ -89,20 +93,12 @@ class VideoLearningFragment : Fragment() {
     }
 
 
-
     private fun initializeViews() {
         videoView = binding.lectureVideo
         videoTimestamps = binding.videoTimestamps
         fullScreenContainer = binding.fullScreenContainer
 
-        val listener: YouTubePlayerListener = object : AbstractYouTubePlayerListener() {
-            override fun onReady(youTubePlayer: YouTubePlayer) {
-
-            }
-
-
-        }
-        videoView.addFullscreenListener(object: FullscreenListener {
+        videoView.addFullscreenListener(object : FullscreenListener {
 
             override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
                 isFullscreen = true
@@ -122,7 +118,6 @@ class VideoLearningFragment : Fragment() {
                         WindowManager.LayoutParams.FLAG_FULLSCREEN
                     )
                 }
-
                 //TODO: fix this
                 Thread.sleep(200)
             }
@@ -151,45 +146,106 @@ class VideoLearningFragment : Fragment() {
 
         val options: IFramePlayerOptions = IFramePlayerOptions.Builder().controls(1)
             .rel(0).ccLoadPolicy(1).fullscreen(1).build()
+        val listener: YouTubePlayerListener = object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {}
+        }
         videoView.initialize(listener, options)
 
         val videoId: String? = Uri.parse(url).getQueryParameter("v")
         if (videoId == null) {
             Toast.makeText(context, "There is no video id in the url", Toast.LENGTH_SHORT).show()
         } else {
-            videoView.getYouTubePlayerWhenReady(object: YouTubePlayerCallback {
+            videoView.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
                 override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.loadVideo(videoId, 0F)
                     this@VideoLearningFragment.youtubePlayer = youTubePlayer
                 }
             })
-            val requestUrl = getYoutubeRequestUrl(videoId)
-            val request: Request = Request.Builder().url(requestUrl).build()
-            httpClient.newCall(request).enqueue(object: Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    notifyVideoInformationRequestHasFailed()
-                }
+            downloadTimestamps(videoId)
+        }
+    }
 
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.isSuccessful) {
-                        val bodyString = response.body!!.string()
-                        response.body!!.close()
-                        val node = parser.readValue(bodyString, ObjectNode::class.java)
-                        try {
-                            val description = node["items"]!![0]["snippet"]["description"]
-                            val timestamps = getTimestampsFromVideoDescription(description.toString())
-                            this@VideoLearningFragment.requireActivity().runOnUiThread {
-                                videoTimestamps.adapter = VideoTimestampAdapter(timestamps)
-                            }
-                        } catch (e: NullPointerException) {
-                            notifyVideoInformationRequestHasFailed()
+    private fun downloadTimestamps(videoId: String) {
+        val requestUrl = getYoutubeRequestUrl(videoId)
+        val request: Request = Request.Builder().url(requestUrl).build()
+        httpClient.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                notifyVideoInformationRequestHasFailed()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val bodyString = response.body!!.string()
+                    response.body!!.close()
+                    val node = parser.readValue(bodyString, ObjectNode::class.java)
+                    try {
+                        val description =
+                            node["items"]!![0]["snippet"]["description"].toString()
+                        val timestamps = getTimestampsFromVideoDescription(description)
+                        initializeTimestampsData(timestamps)
+                        this@VideoLearningFragment.requireActivity().runOnUiThread {
+                            videoTimestamps.adapter = VideoTimestampAdapter(
+                                timestamps,
+                                ::timestampClicked
+                            )
                         }
-                    } else {
+                        videoView.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                            override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                                youTubePlayer.addListener(object :
+                                    AbstractYouTubePlayerListener() {
+                                    override fun onCurrentSecond(
+                                        youTubePlayer: YouTubePlayer,
+                                        second: Float
+                                    ) {
+                                        super.onCurrentSecond(youTubePlayer, second)
+                                        val timestampIndex =
+                                            (videoTimestampsData.firstOrNull { it.first >= second }?.second
+                                                ?: videoTimestampsData.size) - 1
+                                        if (currentTimestampIndex != timestampIndex) {
+                                            currentTimestampIndex = timestampIndex
+                                            updateTimestamp()
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        )
+                    } catch (e: NullPointerException) {
                         notifyVideoInformationRequestHasFailed()
                     }
+                } else {
+                    notifyVideoInformationRequestHasFailed()
                 }
-            })
+            }
+        })
+    }
+
+    private fun updateTimestamp() {
+        val currentHolder =  videoTimestamps.findViewHolderForLayoutPosition(currentTimestampIndex)
+                as VideoTimestampAdapter.TimestampHolder
+        (videoTimestamps.adapter as VideoTimestampAdapter).switchCurrentTimestamp(currentHolder)
+    }
+
+    private fun timestampClicked(timestamp: String, position: Int) {
+        currentTimestampIndex = position
+        youtubePlayer.seekTo(parseTimestampToTimeInSeconds(timestamp))
+    }
+
+    private fun initializeTimestampsData(data: Array<Pair<String, String>>) {
+        for ((index, timestamp) in data.withIndex()) {
+            videoTimestampsData.add(Pair(parseTimestampToTimeInSeconds(timestamp.first), index))
         }
+    }
+
+    private fun parseTimestampToTimeInSeconds(timestamp: String): Float {
+        val timeSections = timestamp.split(':').reversed()
+        var result = 0.0
+        var currentPower = 1F
+        for (timeSection in timeSections) {
+            result += timeSection.toInt() * currentPower
+            currentPower *= 60F
+        }
+        return result.toFloat()
     }
 
     private fun notifyVideoInformationRequestHasFailed() {
@@ -218,8 +274,9 @@ class VideoLearningFragment : Fragment() {
         return timestamps.toTypedArray()
     }
 
-    private fun getYoutubeRequestUrl(videoId: String): String = "https://www.googleapis.com/youtube/" +
-            "v3/videos?part=snippet&id=${videoId}&key=${youtubeAPIKey}"
+    private fun getYoutubeRequestUrl(videoId: String): String =
+        "https://www.googleapis.com/youtube/" +
+                "v3/videos?part=snippet&id=${videoId}&key=${youtubeAPIKey}"
 
     override fun onDestroy() {
         super.onDestroy()
