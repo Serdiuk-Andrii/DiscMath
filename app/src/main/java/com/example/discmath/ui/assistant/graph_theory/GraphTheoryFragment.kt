@@ -249,6 +249,7 @@ class GraphTheoryFragment : Fragment() {
         updateToolboxOnCurrentOption(option)
     }
 
+
     fun notifyVertexSelected(vertex: Vertex) {
         if (state != EditorState.MODIFY && state != EditorState.EDGE) {
             return
