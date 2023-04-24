@@ -58,5 +58,8 @@
     <string name="logic_conjunction">∧</string>
     <string name="logic_disjunction">∨</string>
     <string name="logic_implication">→</string>
+    <string name="logic_negation">!</string>
+    <string name="logic_xor">⊕</string>
+    <string name="logic_equivalence">↔</string>
     <string name="remove">Видалити</string>
 </resources>

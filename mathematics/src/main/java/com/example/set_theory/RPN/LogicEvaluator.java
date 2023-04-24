@@ -9,7 +9,7 @@ import kotlin.jvm.functions.Function2;
 
 public class LogicEvaluator extends HashMap<Character, Function<Boolean>> {
 
-    public static final char AND = '^';
+    public static final char AND = '∧';
     public static final char OR = '∨';
     public static final char IMPLICATION = '→';
     public static final char NOT = '!';

@@ -7,14 +7,20 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLogicFormulaAssistantBinding
+import com.example.discmath.ui.util.keyboard.LogicKeyboard
 import com.example.set_theory.logic.CNF
 import com.example.set_theory.logic.DNF
 import com.example.set_theory.logic.TruthTable
+
 
 fun Boolean.toInteger(): Int {
     if (this) {
@@ -34,19 +40,32 @@ class LogicFormulaAssistantFragment : Fragment() {
     private lateinit var DNFText: TextView
     private lateinit var truthTableLayout: TableLayout
     private lateinit var calculationResults: View
-    //private lateinit var keyboard: View
+    private lateinit var keyboard: LogicKeyboard
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (keyboard.visibility == View.VISIBLE) {
+                keyboard.visibility = View.GONE
+                formulaEditText.clearFocus()
+            } else {
+                this.isEnabled = false
+                findNavController().popBackStack()
+            }
+        }
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentLogicFormulaAssistantBinding.inflate(inflater, container, false)
         initializeViews()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
         return binding.root
     }
 
@@ -57,6 +76,20 @@ class LogicFormulaAssistantFragment : Fragment() {
         DNFText = binding.DNFText
         truthTableLayout = binding.logicTruthTable
         calculationResults = binding.logicCalculationResults
+        keyboard = binding.testKeyboard
+
+        formulaEditText.showSoftInputOnFocus = false
+        val ic: InputConnection = formulaEditText.onCreateInputConnection(EditorInfo())
+        keyboard.setInputConnection(ic)
+
+        formulaEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                keyboard.visibility = View.VISIBLE
+            } else {
+                keyboard.visibility = View.GONE
+            }
+        }
+
         /*
         keyboard = binding.logicKeyboard.root
 
@@ -85,17 +118,19 @@ class LogicFormulaAssistantFragment : Fragment() {
         }
         */
         calculateButton.setOnClickListener {
+            formulaEditText.clearFocus()
+
             val expression: String = formulaEditText.text.toString()
             val truthTable: TruthTable = TruthTable.buildTruthTable(expression)
 
             calculationResults.visibility = View.VISIBLE
 
             var CNF: String = CNF.buildCNFBasedOnTruthTable(truthTable)
-            CNF = CNF.replace('!', '¬').replace('^', '∧')
+            CNF = CNF.replace('!', '¬')
             CNFText.text = CNF
 
             var DNF: String = DNF.buildDNFBasedOnTruthTable(truthTable)
-            DNF = DNF.replace('!', '¬').replace('^', '∧')
+            DNF = DNF.replace('!', '¬')
             DNFText.text = DNF
             updateTruthTable(truthTable)
 
