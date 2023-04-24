@@ -10,6 +10,7 @@
     <color name="button_soft">@color/primary_second</color>
     <color name="button_bright">#FFF200</color>
     <color name="graph_builder_toolbox_option_background">#A59E9E</color>
+    <color name="edge_selected_color">#7E2509</color>
 
     <color name="timestamp_time_background">#CCD1D1D1</color>
     <color name="timestamp_title_background">#E3E3E3</color>

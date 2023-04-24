@@ -58,4 +58,5 @@
     <string name="logic_conjunction">∧</string>
     <string name="logic_disjunction">∨</string>
     <string name="logic_implication">→</string>
+    <string name="remove">Видалити</string>
 </resources>
