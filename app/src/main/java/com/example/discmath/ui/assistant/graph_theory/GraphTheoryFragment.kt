@@ -14,6 +14,7 @@ import androidx.core.view.allViews
 import androidx.fragment.app.Fragment
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentGraphTheoryBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.lang.Math.PI
 import kotlin.properties.Delegates
 
@@ -32,6 +33,7 @@ class GraphTheoryFragment : Fragment() {
     private var _binding: FragmentGraphTheoryBinding? = null
     private lateinit var layout: ConstraintLayout
     private lateinit var toolbox: LinearLayout
+    private lateinit var removeButton: FloatingActionButton
 
     // Toolbox
     private lateinit var modifyOption: View
@@ -50,6 +52,7 @@ class GraphTheoryFragment : Fragment() {
 
     // State
     private var selectedVertex: Vertex? = null
+    private var selectedEdge: Edge? = null
     private var vertexNextId: Int = 0
     private val vertices: MutableList<Vertex> = mutableListOf()
 
@@ -143,6 +146,9 @@ class GraphTheoryFragment : Fragment() {
         moveOption = binding.graphBuilderToolbox.graphBuilderMoveOption
         edgeOption = binding.graphBuilderToolbox.graphBuilderEdgeModeOption
         modifyOption = binding.graphBuilderToolbox.graphBuilderModifyModeOption
+        removeButton = binding.removeButton
+
+        fixedViews.add(removeButton)
 
         modifyOption.backgroundTintList = selectedToolboxOptionColor
 
@@ -157,6 +163,25 @@ class GraphTheoryFragment : Fragment() {
         modifyOption.setOnClickListener {
             selectGivenToolboxOption(modifyOption)
             state = EditorState.MODIFY
+        }
+
+        removeButton.setOnClickListener {
+            when(state) {
+                EditorState.MODIFY -> {
+                    vertices.remove(selectedVertex)
+                    layout.removeView(selectedVertex)
+                    for (edge in selectedVertex?.edges!!) {
+                        layout.removeView(edge.parent)
+                        edge.destruct()
+                    }
+                }
+                EditorState.EDGE -> {
+                    selectedEdge?.destruct()
+                    layout.removeView(selectedEdge?.parent)
+                }
+                else -> {}
+            }
+            removeButton.visibility = View.GONE
         }
 
         fixedViews.add(layout)
@@ -187,7 +212,7 @@ class GraphTheoryFragment : Fragment() {
                 } else if (action == MotionEvent.ACTION_MOVE) {
 
                     layout.allViews.forEach {
-                        if (it !in fixedViews) {
+                        if (it !in fixedViews && it !is Edge) {
                             it.animate()
                                 .x(it.x - (lastX - event.rawX))
                                 .y(it.y - (lastY - event.rawY))
@@ -218,14 +243,11 @@ class GraphTheoryFragment : Fragment() {
     }
 
     private fun selectGivenToolboxOption(option: View) {
-        toolbox.allViews.forEach {
-            if (it is FrameLayout && it != option) {
-                it.backgroundTintList = unselectedToolboxOptionColor
-            }
-        }
-        option.backgroundTintList = selectedToolboxOptionColor
+        disableFocusOnCurrentVertex()
+        disableFocusOnCurrentEdge()
+        removeButton.visibility = View.GONE
+        updateToolboxOnCurrentOption(option)
     }
-
 
     fun notifyVertexSelected(vertex: Vertex) {
         if (state != EditorState.MODIFY && state != EditorState.EDGE) {
@@ -236,15 +258,44 @@ class GraphTheoryFragment : Fragment() {
                 !vertex.isAdjacent(selectedVertex!!)
             ) {
                 val edge = Edge(requireContext(), selectedVertex!!, vertex)
-                layout.addView(edge)
-                selectedVertex!!.background = vertexStillBackground
-                selectedVertex = null
+                edge.setOnClickListener {
+                    switchSelectedEdge(edge)
+                    removeButton.visibility = View.VISIBLE
+                }
+                layout.addView(edge.parent)
+                //layout.addView(edge)
+                disableFocusOnCurrentVertex()
             } else {
-                selectedVertex?.background = vertexStillBackground
-                selectedVertex = vertex
-                selectedVertex!!.background = vertexSelectedBackground
+                switchSelectedVertex(vertex)
+            }
+        } else if (state == EditorState.MODIFY) {
+            removeButton.visibility = View.VISIBLE
+            switchSelectedVertex(vertex)
+        }
+    }
+
+    private fun updateToolboxOnCurrentOption(option: View) {
+        toolbox.allViews.forEach {
+            if (it is FrameLayout && it != option) {
+                it.backgroundTintList = unselectedToolboxOptionColor
             }
         }
+        option.backgroundTintList = selectedToolboxOptionColor
+    }
+
+    private fun disableFocusOnCurrentVertex() = switchSelectedVertex(null)
+    private fun disableFocusOnCurrentEdge() = switchSelectedEdge(null)
+
+    private fun switchSelectedVertex(vertex: Vertex?) {
+        selectedVertex?.background = vertexStillBackground
+        selectedVertex = vertex
+        selectedVertex?.background = vertexSelectedBackground
+    }
+
+    private fun switchSelectedEdge(edge: Edge?) {
+        selectedEdge?.setBackgroundColor(requireContext().getColor(R.color.black))
+        selectedEdge = edge
+        selectedEdge?.setBackgroundColor(requireContext().getColor(R.color.edge_selected_color))
     }
 
     private class VertexTouchListener(val fragment: GraphTheoryFragment) : OnTouchListener {

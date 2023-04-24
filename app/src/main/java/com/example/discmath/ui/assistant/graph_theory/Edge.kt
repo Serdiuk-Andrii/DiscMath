@@ -10,22 +10,36 @@ import com.example.discmath.R
 class Edge(currentContext: Context, val firstVertex: Vertex, val secondVertex: Vertex) :
     View(currentContext) {
 
+    private val edgeHeight =
+        currentContext.resources.getDimension(R.dimen.graph_edge_height).toInt()
+    val parent: ConstraintLayout
+
     init {
         this.setBackgroundColor(resources.getColor(R.color.black, null))
         this.elevation = 10F
-        this.z = -1F
+        this.z = firstVertex.z - 1
         this.pivotX = 0F
         this.pivotY = 0F
+        this.x = 0F
+        this.y = 0F
         firstVertex.addEdge(this)
         secondVertex.addEdge(this)
+        parent = ConstraintLayout(currentContext)
+        //parent.setBackgroundColor(currentContext.getColor(R.color.button_bright))
+        parent.pivotX = 0F
+        parent.pivotY = 0F
+        parent.addView(this)
+        parent.setOnClickListener { this.performClick() }
         this.reposition()
     }
 
     fun reposition() {
-        this.x = firstVertex.x + firstVertex.width / 2
-        this.y = firstVertex.y + firstVertex.height / 2
+        //val sign = sign(firstVertex.y - secondVertex.y)
+        parent.x = firstVertex.x + firstVertex.width / 2
+        parent.y = firstVertex.y + firstVertex.height / 2
         val distance = firstVertex.distance(secondVertex)
-        this.layoutParams = ConstraintLayout.LayoutParams(distance.toInt(), 5)
+        parent.layoutParams = ConstraintLayout.LayoutParams(distance.toInt(),
+           10 * edgeHeight)
         val leg = kotlin.math.abs(firstVertex.x - secondVertex.x)
         val angle = kotlin.math.acos(leg / distance).convertToDegrees()
         val rotation =
@@ -38,8 +52,14 @@ class Edge(currentContext: Context, val firstVertex: Vertex, val secondVertex: V
             } else {
                 angle
             }
-        this.rotation = rotation
+        parent.rotation = rotation
+        this.layoutParams = ConstraintLayout.LayoutParams(distance.toInt(),
+             edgeHeight)
     }
 
+    fun destruct() {
+        firstVertex.edges.remove(this)
+        secondVertex.edges.remove(this)
+    }
 
 }

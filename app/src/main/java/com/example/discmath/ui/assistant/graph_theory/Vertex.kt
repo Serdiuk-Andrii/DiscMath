@@ -1,11 +1,12 @@
 package com.example.discmath.ui.assistant.graph_theory
 
 import android.content.Context
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 class Vertex(currentContext: Context, val vertexId: Int,
-             private val edges: MutableList<Edge> = mutableListOf()):
+             val edges: CopyOnWriteArrayList<Edge> = CopyOnWriteArrayList()):
     androidx.appcompat.widget.AppCompatButton(currentContext) {
 
     init {
