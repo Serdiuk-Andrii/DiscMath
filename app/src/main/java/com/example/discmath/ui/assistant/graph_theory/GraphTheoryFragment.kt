@@ -7,13 +7,18 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.OnTouchListener
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.view.allViews
 import androidx.fragment.app.Fragment
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentGraphTheoryBinding
+import com.example.discmath.ui.util.color.getColor
+import com.example.graph_theory.Graph
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.lang.Math.PI
 import kotlin.properties.Delegates
@@ -21,6 +26,10 @@ import kotlin.properties.Delegates
 
 fun Float.convertToDegrees(): Float {
     return (this / PI * 180).toFloat()
+}
+
+fun List<Vertex>.getEdges(): Set<Edge> {
+    return this.map { it.edges }.flatMap { it.toSet() }.toSet()
 }
 
 class GraphTheoryFragment : Fragment() {
@@ -33,6 +42,7 @@ class GraphTheoryFragment : Fragment() {
     private var _binding: FragmentGraphTheoryBinding? = null
     private lateinit var layout: ConstraintLayout
     private lateinit var toolbox: LinearLayout
+    private lateinit var finishButton: ImageView
     private lateinit var removeButton: FloatingActionButton
 
     // Toolbox
@@ -147,8 +157,10 @@ class GraphTheoryFragment : Fragment() {
         edgeOption = binding.graphBuilderToolbox.graphBuilderEdgeModeOption
         modifyOption = binding.graphBuilderToolbox.graphBuilderModifyModeOption
         removeButton = binding.removeButton
+        finishButton = binding.finishButton
 
         fixedViews.add(removeButton)
+        fixedViews.add(finishButton)
 
         modifyOption.backgroundTintList = selectedToolboxOptionColor
 
@@ -183,6 +195,8 @@ class GraphTheoryFragment : Fragment() {
             }
             removeButton.visibility = View.GONE
         }
+
+        finishButton.setOnClickListener {finish()}
 
         fixedViews.add(layout)
         fixedViews.addAll(toolbox.allViews)
@@ -242,6 +256,50 @@ class GraphTheoryFragment : Fragment() {
          */
     }
 
+    private fun finish() {
+        selectGivenToolboxOption(moveOption)
+        toolbox.visibility = View.GONE
+        for((index, vertex) in vertices.withIndex()) {
+            vertex.vertexId = index
+        }
+        val currentTime = System.currentTimeMillis()
+        val result = vertices.map { vertex -> vertex.getNeighbours().map { it.vertexId } }
+        val graph = Graph(result)
+        getGraphConnectedComponents(graph)
+        getGraphCutVertices(graph)
+        getGraphBridges(graph)
+        val newTime = System.currentTimeMillis()
+        Toast.makeText(context, "${newTime - currentTime}", Toast.LENGTH_SHORT).show()
+
+    }
+
+    private fun getGraphConnectedComponents(graph: Graph) {
+        val connectedComponents = graph.connectedComponents
+        for ((index, component) in connectedComponents.withIndex()) {
+            val componentDrawable = vertexStillBackground.constantState!!.newDrawable()
+            val colorList = ColorStateList.valueOf(getColor(index).toColorInt())
+            componentDrawable.setTintList(colorList)
+            vertices.filter { vertex -> component.contains(vertex.vertexId) }.forEach {
+                it.background = componentDrawable
+            }
+        }
+    }
+
+    private fun getGraphCutVertices(graph: Graph) {
+        val cutVertices = graph.cutVertices
+        vertices.filter { cutVertices.contains(it.vertexId) }.forEach {
+            it.alpha = 0.75F
+        }
+        Toast.makeText(context, "Time: ${cutVertices.size}", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getGraphBridges(graph: Graph) {
+        val bridges = graph.bridges
+        bridges.map { pair -> vertices.find { it.vertexId == pair.first }!!
+            .getCorrespondingEdge(pair.second) }
+            .forEach { it.background.alpha = (0.5 * 255).toInt() }
+    }
+    
     private fun selectGivenToolboxOption(option: View) {
         disableFocusOnCurrentVertex()
         disableFocusOnCurrentEdge()
@@ -285,6 +343,7 @@ class GraphTheoryFragment : Fragment() {
         }
         option.backgroundTintList = selectedToolboxOptionColor
     }
+
 
     private fun disableFocusOnCurrentVertex() = switchSelectedVertex(null)
     private fun disableFocusOnCurrentEdge() = switchSelectedEdge(null)

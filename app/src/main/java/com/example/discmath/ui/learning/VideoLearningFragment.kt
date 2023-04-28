@@ -134,6 +134,7 @@ class VideoLearningFragment : Fragment() {
         videoView.addFullscreenListener(object : FullscreenListener {
 
             override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
+                requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 isFullscreen = true
                 toggleViewsVisibility(View.GONE)
                 fullScreenContainer.visibility = View.VISIBLE
@@ -150,13 +151,13 @@ class VideoLearningFragment : Fragment() {
                     )
                 }
                 hideSystemUI()
-                requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 //TODO: fix this
                 Thread.sleep(200)
             }
 
             @SuppressLint("SourceLockedOrientationActivity")
             override fun onExitFullscreen() {
+                requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 isFullscreen = false
                 toggleViewsVisibility(View.VISIBLE)
 
@@ -169,11 +170,9 @@ class VideoLearningFragment : Fragment() {
                         WindowManager.LayoutParams.FLAG_FULLSCREEN
                     )
                 }
-                showSystemUI()
-                requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 fullScreenContainer.visibility = View.GONE
                 fullScreenContainer.removeAllViews()
-
+                showSystemUI()
             }
 
         })

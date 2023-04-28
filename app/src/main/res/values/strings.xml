@@ -62,4 +62,10 @@
     <string name="logic_xor">⊕</string>
     <string name="logic_equivalence">↔</string>
     <string name="remove">Видалити</string>
+
+    <string name="logic_tautology_formula">тавтологією</string>
+    <string name="logic_satisfiable_formula">виконливою</string>
+    <string name="logic_contradiction_formula">суперечністю</string>
+    <string name="logic_formula_property_title">Ця формула є:</string>
+    <string name="graph_builder_finish_button_description">Продовжити</string>
 </resources>

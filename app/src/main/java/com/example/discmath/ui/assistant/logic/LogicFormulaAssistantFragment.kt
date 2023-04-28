@@ -42,6 +42,10 @@ class LogicFormulaAssistantFragment : Fragment() {
     private lateinit var calculationResults: View
     private lateinit var keyboard: LogicKeyboard
 
+    private lateinit var tautologyTextView: TextView
+    private lateinit var satisfiableTextView: TextView
+    private lateinit var contradictionTextView: TextView
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -78,6 +82,10 @@ class LogicFormulaAssistantFragment : Fragment() {
         calculationResults = binding.logicCalculationResults
         keyboard = binding.testKeyboard
 
+        tautologyTextView = binding.tautologyText
+        satisfiableTextView = binding.satisfiableText
+        contradictionTextView = binding.contradictionText
+
         formulaEditText.showSoftInputOnFocus = false
         val ic: InputConnection = formulaEditText.onCreateInputConnection(EditorInfo())
         keyboard.setInputConnection(ic)
@@ -90,33 +98,6 @@ class LogicFormulaAssistantFragment : Fragment() {
             }
         }
 
-        /*
-        keyboard = binding.logicKeyboard.root
-
-        keyboard.allViews.forEach {
-            if (it is Button) {
-                val text = it.text
-                it.setOnClickListener {
-                    formulaEditText.setText("${formulaEditText.text}${text}")
-                }
-            }
-        }
-
-        formulaEditText.setOnTouchListener { view, event ->
-            val inputManager: InputMethodManager = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-            if (view == formulaEditText && event.action == MotionEvent.ACTION_DOWN) {
-                formulaEditText.requestFocus()
-                keyboard.toggleVisibility()
-            }
-            view.performClick()
-            true
-        }
-
-        formulaEditText.setOnClickListener {
-
-        }
-        */
         calculateButton.setOnClickListener {
             formulaEditText.clearFocus()
 
@@ -134,8 +115,6 @@ class LogicFormulaAssistantFragment : Fragment() {
             DNFText.text = DNF
             updateTruthTable(truthTable)
 
-
-
         }
     }
 
@@ -144,6 +123,9 @@ class LogicFormulaAssistantFragment : Fragment() {
             R.drawable.row_background)
         val rowGravity = Gravity.CENTER
         truthTableLayout.removeAllViews()
+        tautologyTextView.visibility = View.GONE
+        satisfiableTextView.visibility = View.GONE
+        contradictionTextView.visibility = View.GONE
 
         truthTable.symbols.add('F')
         val titleRow = TableRow(context)
@@ -175,6 +157,14 @@ class LogicFormulaAssistantFragment : Fragment() {
             resultTextView.text = result.toInteger().toString()
             currentViewRow.addView(resultTextView)
             truthTableLayout.addView(currentViewRow)
+        }
+        if (truthTable.isSatisfiable) {
+            satisfiableTextView.visibility = View.VISIBLE
+            if (truthTable.isTautology) {
+                tautologyTextView.visibility = View.VISIBLE
+            }
+        } else {
+            contradictionTextView.visibility = View.VISIBLE
         }
     }
 

@@ -41,6 +41,7 @@ public class TruthTable {
             boolean result = postfixNotation.evaluate(evaluator, map);
             rows.add(new Pair<>(evaluation, result));
         }
+        operands.sort(Comparator.naturalOrder());
         return new TruthTable(operands, rows);
     }
 
@@ -60,6 +61,18 @@ public class TruthTable {
             result.add(combination);
         }
         return result;
+    }
+
+    public boolean isTautology() {
+        return this.rows.stream().allMatch(Pair::getSecond);
+    }
+
+    public boolean isSatisfiable() {
+        return this.rows.stream().anyMatch(Pair::getSecond);
+    }
+
+    public boolean isContradiction() {
+        return this.rows.stream().noneMatch(Pair::getSecond);
     }
 
     public List<Character> getSymbols() {

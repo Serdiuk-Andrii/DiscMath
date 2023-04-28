@@ -62,4 +62,6 @@ class Edge(currentContext: Context, val firstVertex: Vertex, val secondVertex: V
         secondVertex.edges.remove(this)
     }
 
+    fun getOtherVertex(vertex: Vertex): Vertex = if (vertex == firstVertex) secondVertex else firstVertex
+
 }

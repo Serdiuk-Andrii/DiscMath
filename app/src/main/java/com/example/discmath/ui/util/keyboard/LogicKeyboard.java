@@ -49,7 +49,6 @@ public class LogicKeyboard extends LinearLayout implements View.OnClickListener 
             view.setOnClickListener(this);
             keyValues.put(view, ((Button) view).getText().toString() );
         });
-
     }
 
     @Override

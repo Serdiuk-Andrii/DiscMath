@@ -1,13 +1,14 @@
 package com.example.discmath.ui.assistant.graph_theory
 
 import android.content.Context
+import androidx.appcompat.widget.AppCompatButton
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class Vertex(currentContext: Context, val vertexId: Int,
+class Vertex(currentContext: Context, var vertexId: Int,
              val edges: CopyOnWriteArrayList<Edge> = CopyOnWriteArrayList()):
-    androidx.appcompat.widget.AppCompatButton(currentContext) {
+    AppCompatButton(currentContext) {
 
     init {
         this.elevation = 15F
@@ -31,6 +32,12 @@ class Vertex(currentContext: Context, val vertexId: Int,
     fun isAdjacent(other: Vertex): Boolean {
         return this.edges.find{ edge -> (edge.firstVertex == other ||
                 edge.secondVertex == other) } != null
+    }
+
+    fun getNeighbours(): List<Vertex> = edges.map { edge -> edge.getOtherVertex(this) }
+
+    fun getCorrespondingEdge(otherVertex: Int): Edge {
+        return edges.filter { edge -> edge.getOtherVertex(this).vertexId == otherVertex }[0]
     }
 
 }
