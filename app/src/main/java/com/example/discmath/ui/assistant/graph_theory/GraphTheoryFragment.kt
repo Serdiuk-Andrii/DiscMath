@@ -15,6 +15,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.view.allViews
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentGraphTheoryBinding
 import com.example.discmath.ui.util.color.getColor
@@ -28,9 +31,10 @@ fun Float.convertToDegrees(): Float {
     return (this / PI * 180).toFloat()
 }
 
-fun List<Vertex>.getEdges(): Set<Edge> {
-    return this.map { it.edges }.flatMap { it.toSet() }.toSet()
-}
+fun List<Vertex>.getEdges(): Set<Edge> = this.map { it.edges }.flatMap { it.toSet() }.toSet()
+
+
+fun List<Vertex>.getGraph(): Graph = Graph(this.map { vertex -> vertex.getNeighbours().map { it.vertexId } })
 
 class GraphTheoryFragment : Fragment() {
 
@@ -44,6 +48,9 @@ class GraphTheoryFragment : Fragment() {
     private lateinit var toolbox: LinearLayout
     private lateinit var finishButton: ImageView
     private lateinit var removeButton: FloatingActionButton
+
+    // ViewModels
+    private lateinit var graphBuilderViewModel: GraphBuilderViewModel
 
     // Toolbox
     private lateinit var modifyOption: View
@@ -70,6 +77,9 @@ class GraphTheoryFragment : Fragment() {
 
     private var state: EditorState = EditorState.MODIFY
 
+    // Navigation
+    private lateinit var navController: NavController
+
     // Drawables
     private lateinit var vertexStillBackground: Drawable
     private lateinit var vertexSelectedBackground: Drawable
@@ -82,11 +92,17 @@ class GraphTheoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGraphTheoryBinding.inflate(inflater, container, false)
+        navController = findNavController()
+        initializeViewModels()
         initializeViewData()
         initializeDrawables()
         initializeViews()
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    private fun initializeViewModels() {
+        graphBuilderViewModel = ViewModelProvider(requireActivity())[GraphBuilderViewModel::class.java]
     }
 
 
@@ -113,6 +129,7 @@ class GraphTheoryFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initializeViews() {
         layout = binding.graphBuilderLayout
+        fixedViews.add(layout)
         val scaleListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
             private val minScale = 0.5F
@@ -148,35 +165,8 @@ class GraphTheoryFragment : Fragment() {
                 return true
             }
         }
-
+        initializeToolbox()
         val scaleDetector = ScaleGestureDetector(requireContext(), scaleListener)
-
-        // Initialize toolbox
-        toolbox = binding.graphBuilderToolbox.toolboxLayout
-        moveOption = binding.graphBuilderToolbox.graphBuilderMoveOption
-        edgeOption = binding.graphBuilderToolbox.graphBuilderEdgeModeOption
-        modifyOption = binding.graphBuilderToolbox.graphBuilderModifyModeOption
-        removeButton = binding.removeButton
-        finishButton = binding.finishButton
-
-        fixedViews.add(removeButton)
-        fixedViews.add(finishButton)
-
-        modifyOption.backgroundTintList = selectedToolboxOptionColor
-
-        moveOption.setOnClickListener {
-            selectGivenToolboxOption(moveOption)
-            state = EditorState.MOVE
-        }
-        edgeOption.setOnClickListener {
-            selectGivenToolboxOption(edgeOption)
-            state = EditorState.EDGE
-        }
-        modifyOption.setOnClickListener {
-            selectGivenToolboxOption(modifyOption)
-            state = EditorState.MODIFY
-        }
-
         removeButton.setOnClickListener {
             when(state) {
                 EditorState.MODIFY -> {
@@ -198,8 +188,6 @@ class GraphTheoryFragment : Fragment() {
 
         finishButton.setOnClickListener {finish()}
 
-        fixedViews.add(layout)
-        fixedViews.addAll(toolbox.allViews)
         layout.setOnTouchListener(object : OnTouchListener {
 
             var lastX: Float = 0F
@@ -244,36 +232,74 @@ class GraphTheoryFragment : Fragment() {
             }
         })
 
-        /*
-                layout.allViews.forEach { view ->
-                    if (view != layout) {
-                        run {
-                            view.scaleX = view.scaleX * 0.5F
-                            view.scaleY = view.scaleY * 0.5F
-                        }
-                    }
-         }
-         */
+    }
+
+    private fun initializeToolbox() {
+        // Initialize toolbox
+        toolbox = binding.graphBuilderToolbox.toolboxLayout
+        moveOption = binding.graphBuilderToolbox.graphBuilderMoveOption
+        edgeOption = binding.graphBuilderToolbox.graphBuilderEdgeModeOption
+        modifyOption = binding.graphBuilderToolbox.graphBuilderModifyModeOption
+        removeButton = binding.removeButton
+        finishButton = binding.finishButton
+
+        fixedViews.add(removeButton)
+        fixedViews.add(finishButton)
+
+        modifyOption.backgroundTintList = selectedToolboxOptionColor
+
+        moveOption.setOnClickListener {
+            selectGivenToolboxOption(moveOption)
+            state = EditorState.MOVE
+        }
+        edgeOption.setOnClickListener {
+            selectGivenToolboxOption(edgeOption)
+            state = EditorState.EDGE
+        }
+        modifyOption.setOnClickListener {
+            selectGivenToolboxOption(modifyOption)
+            state = EditorState.MODIFY
+        }
+        fixedViews.addAll(toolbox.allViews)
     }
 
     private fun finish() {
+        /*
         selectGivenToolboxOption(moveOption)
         toolbox.visibility = View.GONE
         for((index, vertex) in vertices.withIndex()) {
             vertex.vertexId = index
         }
         val currentTime = System.currentTimeMillis()
-        val result = vertices.map { vertex -> vertex.getNeighbours().map { it.vertexId } }
-        val graph = Graph(result)
+        val graph = vertices.getGraph()
         getGraphConnectedComponents(graph)
         getGraphCutVertices(graph)
         getGraphBridges(graph)
         val newTime = System.currentTimeMillis()
         Toast.makeText(context, "${newTime - currentTime}", Toast.LENGTH_SHORT).show()
+        */
+        //graphBuilderViewModel.setCurrentGraph(vertices.getGraph())
+        //navController.navigate(graphBuilderViewModel.nextFragmentId.value!!)
 
+        val bottomSheet = GraphBuilderBottomSheet(this)
+        bottomSheet.show(requireActivity().supportFragmentManager, GraphBuilderBottomSheet.TAG)
     }
 
-    private fun getGraphConnectedComponents(graph: Graph) {
+    fun getGraph(): Graph {
+        return this.vertices.getGraph()
+    }
+
+    fun clear() {
+        vertices.getEdges().forEach { layout.removeView(it.parent) }
+        vertices.forEach { layout.removeView(it) }
+        vertices.clear()
+        selectedVertex = null
+        selectedEdge = null
+        state = EditorState.MOVE
+        updateToolboxOnCurrentOption(moveOption)
+    }
+
+    fun getGraphConnectedComponents(graph: Graph) {
         val connectedComponents = graph.connectedComponents
         for ((index, component) in connectedComponents.withIndex()) {
             val componentDrawable = vertexStillBackground.constantState!!.newDrawable()
@@ -285,7 +311,7 @@ class GraphTheoryFragment : Fragment() {
         }
     }
 
-    private fun getGraphCutVertices(graph: Graph) {
+    fun getGraphCutVertices(graph: Graph) {
         val cutVertices = graph.cutVertices
         vertices.filter { cutVertices.contains(it.vertexId) }.forEach {
             it.alpha = 0.75F
@@ -293,7 +319,7 @@ class GraphTheoryFragment : Fragment() {
         Toast.makeText(context, "Time: ${cutVertices.size}", Toast.LENGTH_SHORT).show()
     }
 
-    private fun getGraphBridges(graph: Graph) {
+    fun getGraphBridges(graph: Graph) {
         val bridges = graph.bridges
         bridges.map { pair -> vertices.find { it.vertexId == pair.first }!!
             .getCorrespondingEdge(pair.second) }

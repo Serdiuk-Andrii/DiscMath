@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 
-class AssistantOptionsAdapter(private val dataset: Array<AssistantOption>,
+class AssistantOptionsAdapter(private val dataset: Array<NamedNavigationElement>,
                               private val itemClickedCallback:  ((Int) -> Unit)):
     RecyclerView.Adapter<AssistantOptionsAdapter.OptionViewHolder>() {
 

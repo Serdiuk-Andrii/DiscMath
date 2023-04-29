@@ -160,7 +160,11 @@
         android:id="@+id/assistant_graph_theory"
         android:name="com.example.discmath.ui.assistant.graph_theory.GraphTheoryFragment"
         android:label="fragment_graph_theory"
-        tools:layout="@layout/fragment_graph_theory" />
+        tools:layout="@layout/fragment_graph_theory" >
+        <action
+            android:id="@+id/action_assistant_graph_theory_self"
+            app:destination="@id/assistant_graph_theory" />
+    </fragment>
 
 
 </navigation>

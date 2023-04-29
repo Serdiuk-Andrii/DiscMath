@@ -33,8 +33,8 @@
     <string name="explanation_title">Пояснення</string>
     <string name="verify_button_text">Перевірити</string>
     <string name="set_theory_quiz_title">Наведіть приклади множин, для яких виконується рівність</string>
-    <string name="universal_set_symbol">Ω</string>
-    <string name="universal_set_additional_elements">Ω+</string>
+    <string name="universal_set_symbol" translatable="false">Ω</string>
+    <string name="universal_set_additional_elements" translatable="false">Ω+</string>
     <string name="expand_arrow_down_description">Розгорнути</string>
     <string name="quiz_section_result_correct_answers_title">Правильні відповіді:</string>
     <string name="quiz_section_correct_answers">%1$d з %2$d</string>
@@ -44,8 +44,7 @@
     <string name="learning_section_selection_title">Теми</string>
     <string name="assistant_title">Антитренажер</string>
     <string name="problem_answer">Відповідь</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="logic_calculate_button">Обрахувати</string>
     <string name="logic_title">Вкажіть вираз F:</string>
     <string name="logic_CNF_title">КНФ</string>
@@ -55,17 +54,28 @@
     <string name="graph_theory_edge_option_description">Режим додавання ребер</string>
     <string name="timestamps_absent_text">Це відео не має таймкодів</string>
     <string name="timestamps_network_error">Помилка мережі, спробуйте ще раз</string>
-    <string name="logic_conjunction">∧</string>
-    <string name="logic_disjunction">∨</string>
-    <string name="logic_implication">→</string>
-    <string name="logic_negation">!</string>
-    <string name="logic_xor">⊕</string>
-    <string name="logic_equivalence">↔</string>
+    <string name="logic_conjunction" translatable="false">∧</string>
+    <string name="logic_disjunction" translatable="false">∨</string>
+    <string name="logic_implication" translatable="false">→</string>
+    <string name="logic_negation" translatable="false">!</string>
+    <string name="logic_xor" translatable="false">⊕</string>
+    <string name="logic_equivalence" translatable="false">↔</string>
     <string name="remove">Видалити</string>
 
     <string name="logic_tautology_formula">тавтологією</string>
     <string name="logic_satisfiable_formula">виконливою</string>
     <string name="logic_contradiction_formula">суперечністю</string>
     <string name="logic_formula_property_title">Ця формула є:</string>
+
+    <string name="assistant_option_logic_title">Числення висловлювань</string>
+    <string name="assistant_option_graph_theory_title">Теорія графів</string>
+
     <string name="graph_builder_finish_button_description">Продовжити</string>
+    <string name="graph_actions_title_text">Що далі?</string>
+    <string name="graph_action_unary_operations">Унарні операції</string>
+    <string name="graph_action_binary_operations">Побудувати другий граф</string>
+
+    <string name="graph_unary_operation_cut_vertices">Точки з\'єднання</string>
+    <string name="graph_unary_operation_bridges">Мости</string>
+
 </resources>
