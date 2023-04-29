@@ -1,7 +1,12 @@
 package com.example.discmath.ui.assistant.graph_theory
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
@@ -11,6 +16,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.view.allViews
@@ -23,6 +29,8 @@ import com.example.discmath.databinding.FragmentGraphTheoryBinding
 import com.example.discmath.ui.util.color.getColor
 import com.example.graph_theory.Graph
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.File
+import java.io.FileOutputStream
 import java.lang.Math.PI
 import kotlin.properties.Delegates
 
@@ -287,6 +295,89 @@ class GraphTheoryFragment : Fragment() {
 
     fun getGraph(): Graph {
         return this.vertices.getGraph()
+    }
+
+    fun createPng() {
+        val bitmap = createGraphBitmap()
+        //val downloadFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val fileName = "mygraph.png"
+        val file = File(requireActivity().cacheDir, fileName)
+
+        // Create a file object with the desired directory and file name
+        //val file = File(downloadFolder, fileName)
+        val outputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        val uri = FileProvider.getUriForFile(requireContext(),
+            "${requireContext().packageName}.provider", file)
+
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "image/png"
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        requireContext().startActivity(Intent.createChooser(shareIntent, "Share Graph"))
+    }
+
+    private fun createGraphBitmap(): Bitmap {
+        /*
+        vertices.sortWith { first, second ->
+            when {
+                first.x < second.x -> -1
+                first.x > second.x -> 1
+                else -> 0
+            }
+        }
+
+        val smallest = vertices[0].x
+        vertices.sortWith { first, second ->
+            when {
+                first.x < second.x -> 1
+                first.x > second.x -> -1
+                else -> 0
+            }
+        }
+        val largest = vertices[0].x
+         */
+        // Get the dimensions of the layout
+        val width = layout.width //(largest - smallest).toInt() + 50
+        val height = layout.height
+
+        // Create a bitmap to draw the graph onto
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+        // Create a canvas to draw onto the bitmap
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.WHITE)
+        val paint = Paint()
+        paint.color = Color.BLACK
+
+        vertices.getEdges().forEach {
+            val startX = it.firstVertex.x + vertexWidth / 2F
+            val startY = it.firstVertex.y + vertexHeight / 2F
+            val endX = it.secondVertex.x + vertexWidth / 2F
+            val endY = it.secondVertex.y + vertexHeight / 2F
+            canvas.drawLine(startX, startY, endX, endY, paint)
+        }
+
+        // val translateX: Float = if(smallest < 0) -smallest else 0F
+
+        vertices.forEach {
+            val drawable = if (it == selectedVertex) {
+                vertexSelectedBackground
+            } else {
+                vertexStillBackground
+            }
+            val left = it.x.toInt()
+            val top = it.y.toInt()
+            val right = left + vertexWidth
+            val bottom = top + vertexHeight
+            drawable.setBounds(left, top, right, bottom)
+            drawable.draw(canvas)
+        }
+
+        return bitmap
     }
 
     fun clear() {

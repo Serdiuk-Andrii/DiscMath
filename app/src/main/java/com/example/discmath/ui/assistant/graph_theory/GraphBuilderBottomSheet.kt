@@ -66,6 +66,7 @@ class GraphBuilderBottomSheet(private val builder: GraphTheoryFragment): BottomS
                                 val graph = builder.getGraph()
                                 builder.getGraphConnectedComponents(graph)
                                 builder.getGraphCutVertices(graph)
+                                builder.createPng()
                                 dismiss()
                             },
                             NamedActionElement(resources.getString(R.string.graph_unary_operation_bridges))
@@ -73,6 +74,7 @@ class GraphBuilderBottomSheet(private val builder: GraphTheoryFragment): BottomS
                                 val graph = builder.getGraph()
                                 builder.getGraphConnectedComponents(graph)
                                 builder.getGraphBridges(graph)
+                                builder.createPng()
                                 dismiss()
                             },
                         )
