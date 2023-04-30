@@ -192,9 +192,9 @@ class VideoLearningFragment : Fragment() {
                 override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.loadVideo(videoId, 0F)
                     this@VideoLearningFragment.youtubePlayer = youTubePlayer
+                    downloadTimestamps(videoId)
                 }
             })
-            downloadTimestamps(videoId)
         }
     }
 
