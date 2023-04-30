@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentAssistantListBinding
-import com.example.discmath.ui.assistant.graph_theory.GraphBuilderViewModel
+import com.example.discmath.ui.assistant.graph_theory.view_model.GraphBuilderViewModel
 
 
 class AssistantListFragment : Fragment() {

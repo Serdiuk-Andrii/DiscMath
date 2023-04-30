@@ -72,10 +72,16 @@
 
     <string name="graph_builder_finish_button_description">Продовжити</string>
     <string name="graph_actions_title_text">Що далі?</string>
-    <string name="graph_action_unary_operations">Унарні операції</string>
-    <string name="graph_action_binary_operations">Побудувати другий граф</string>
 
+    <string name="graph_action_unary_operations">Унарні операції</string>
+    <string name="graph_action_binary_operations">Побудувати інший граф</string>
+
+    <string name="graph_unary_operation_connected_components">Компоненти зв\'язності</string>
     <string name="graph_unary_operation_cut_vertices">Точки з\'єднання</string>
     <string name="graph_unary_operation_bridges">Мости</string>
+
+    <string name="graph_builder_export_to_png">Експортувати в PNG</string>
+    <string name="graph_builder_export_to_png_intent_title">Поділитися графом</string>
+    <string name="graph_image_description">Зображення графа</string>
 
 </resources>

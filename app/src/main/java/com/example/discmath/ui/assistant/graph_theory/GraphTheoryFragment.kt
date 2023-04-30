@@ -26,12 +26,14 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentGraphTheoryBinding
+import com.example.discmath.ui.assistant.graph_theory.view_model.GraphBuilderViewModel
 import com.example.discmath.ui.util.color.getColor
 import com.example.graph_theory.Graph
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.Math.PI
+import java.util.*
 import kotlin.properties.Delegates
 
 
@@ -39,7 +41,7 @@ fun Float.convertToDegrees(): Float {
     return (this / PI * 180).toFloat()
 }
 
-fun List<Vertex>.getEdges(): Set<Edge> = this.map { it.edges }.flatMap { it.toSet() }.toSet()
+fun Collection<Vertex>.getEdges(): Set<Edge> = this.map { it.edges }.flatMap { it.toSet() }.toSet()
 
 
 fun List<Vertex>.getGraph(): Graph = Graph(this.map { vertex -> vertex.getNeighbours().map { it.vertexId } })
@@ -79,11 +81,12 @@ class GraphTheoryFragment : Fragment() {
     private var selectedVertex: Vertex? = null
     private var selectedEdge: Edge? = null
     private var vertexNextId: Int = 0
-    private val vertices: MutableList<Vertex> = mutableListOf()
+    val vertices: MutableList<Vertex> = mutableListOf()
 
     private val nextId get() = vertexNextId++
 
     private var state: EditorState = EditorState.MODIFY
+    var currentGraphIndex: Int? = null
 
     // Navigation
     private lateinit var navController: NavController
@@ -194,7 +197,11 @@ class GraphTheoryFragment : Fragment() {
             removeButton.visibility = View.GONE
         }
 
-        finishButton.setOnClickListener {finish()}
+        finishButton.setOnClickListener {
+            it.isEnabled = false
+            finish()
+            it.postDelayed({ it.isEnabled = true }, 1000)
+        }
 
         layout.setOnTouchListener(object : OnTouchListener {
 
@@ -205,18 +212,11 @@ class GraphTheoryFragment : Fragment() {
                 val action = event.action
                 if (action == MotionEvent.ACTION_DOWN) {
                     if (state == EditorState.MODIFY) {
-                        val vertex = Vertex(requireContext(), nextId)
-                        vertex.background = vertexStillBackground
-                        vertex.layoutParams =
-                            ConstraintLayout.LayoutParams(vertexWidth, vertexHeight)
-                        vertex.x = event.x - vertexWidth / 2
-                        vertex.y = event.y - vertexHeight / 2
-                        vertex.setOnTouchListener(VertexTouchListener(this@GraphTheoryFragment))
+                        val vertex = createVertex(event.x, event.y)
                         vertices.add(vertex)
                         layout.addView(vertex)
                         layout.performClick()
                     }
-
                     lastX = event.rawX
                     lastY = event.rawY
                 } else if (action == MotionEvent.ACTION_MOVE) {
@@ -272,23 +272,6 @@ class GraphTheoryFragment : Fragment() {
     }
 
     private fun finish() {
-        /*
-        selectGivenToolboxOption(moveOption)
-        toolbox.visibility = View.GONE
-        for((index, vertex) in vertices.withIndex()) {
-            vertex.vertexId = index
-        }
-        val currentTime = System.currentTimeMillis()
-        val graph = vertices.getGraph()
-        getGraphConnectedComponents(graph)
-        getGraphCutVertices(graph)
-        getGraphBridges(graph)
-        val newTime = System.currentTimeMillis()
-        Toast.makeText(context, "${newTime - currentTime}", Toast.LENGTH_SHORT).show()
-        */
-        //graphBuilderViewModel.setCurrentGraph(vertices.getGraph())
-        //navController.navigate(graphBuilderViewModel.nextFragmentId.value!!)
-
         val bottomSheet = GraphBuilderBottomSheet(this)
         bottomSheet.show(requireActivity().supportFragmentManager, GraphBuilderBottomSheet.TAG)
     }
@@ -317,10 +300,13 @@ class GraphTheoryFragment : Fragment() {
         shareIntent.type = "image/png"
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        requireContext().startActivity(Intent.createChooser(shareIntent, "Share Graph"))
+        requireContext().startActivity(Intent.createChooser(shareIntent,
+                resources.getString(R.string.graph_builder_export_to_png_intent_title)
+            ))
+
     }
 
-    private fun createGraphBitmap(): Bitmap {
+    fun createGraphBitmap(): Bitmap {
         /*
         vertices.sortWith { first, second ->
             when {
@@ -340,6 +326,7 @@ class GraphTheoryFragment : Fragment() {
         }
         val largest = vertices[0].x
          */
+
         // Get the dimensions of the layout
         val width = layout.width //(largest - smallest).toInt() + 50
         val height = layout.height
@@ -352,6 +339,7 @@ class GraphTheoryFragment : Fragment() {
         canvas.drawColor(Color.WHITE)
         val paint = Paint()
         paint.color = Color.BLACK
+        paint.strokeWidth = 5F
 
         vertices.getEdges().forEach {
             val startX = it.firstVertex.x + vertexWidth / 2F
@@ -364,11 +352,8 @@ class GraphTheoryFragment : Fragment() {
         // val translateX: Float = if(smallest < 0) -smallest else 0F
 
         vertices.forEach {
-            val drawable = if (it == selectedVertex) {
-                vertexSelectedBackground
-            } else {
-                vertexStillBackground
-            }
+
+            val drawable = vertexStillBackground//it.background.constantState!!.newDrawable().mutate()
             val left = it.x.toInt()
             val top = it.y.toInt()
             val right = left + vertexWidth
@@ -459,6 +444,7 @@ class GraphTheoryFragment : Fragment() {
             }
         }
         option.backgroundTintList = selectedToolboxOptionColor
+        removeButton.visibility = View.GONE
     }
 
 
@@ -503,6 +489,32 @@ class GraphTheoryFragment : Fragment() {
             return true
         }
 
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun createVertex(x: Float, y: Float): Vertex {
+        val vertex = Vertex(requireContext(), nextId)
+        vertex.background = vertexStillBackground
+        vertex.layoutParams = ConstraintLayout.LayoutParams(vertexWidth, vertexHeight)
+        vertex.x = x - vertexWidth / 2
+        vertex.y = y - vertexHeight / 2
+        vertex.setOnTouchListener(VertexTouchListener(this@GraphTheoryFragment))
+        return vertex
+    }
+    fun resetVertices(newVertices: Collection<Vertex>) {
+        vertices.clear()
+        vertices.addAll(newVertices)
+        val edges = newVertices.getEdges()
+        // TODO: Understand why this is necessary
+        val newBackground = ResourcesCompat.getDrawable(
+            resources,
+            R.drawable.circle_background, null
+        )!!
+        vertices.forEach {
+            it.background = newBackground
+            layout.addView(it)
+        }
+        edges.forEach { layout.addView(it.parent) }
     }
 
 }

@@ -13,6 +13,8 @@ import com.example.discmath.R
 import com.example.discmath.databinding.GraphBuilderOptionsBinding
 import com.example.discmath.ui.assistant.NamedActionElement
 import com.example.discmath.ui.assistant.graph_theory.adapters.GraphActionAdapter
+import com.example.discmath.ui.assistant.graph_theory.adapters.GraphHistoryAdapter
+import com.example.discmath.ui.assistant.graph_theory.view_model.GraphBuilderViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class GraphBuilderBottomSheet(private val builder: GraphTheoryFragment): BottomSheetDialogFragment() {
@@ -20,6 +22,9 @@ class GraphBuilderBottomSheet(private val builder: GraphTheoryFragment): BottomS
     // Views
     private var _binding: GraphBuilderOptionsBinding? = null
     private lateinit var actions: RecyclerView
+    private lateinit var history: RecyclerView
+
+    private lateinit var historyAdapter: GraphHistoryAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -53,6 +58,9 @@ class GraphBuilderBottomSheet(private val builder: GraphTheoryFragment): BottomS
     }
 
     private fun initializeViews() {
+        historyAdapter = GraphHistoryAdapter(graphBuilderViewModel.graphs.value!!, ::graphSelected)
+        history = binding.graphHistoryRecyclerView
+        history.adapter = historyAdapter
         actions = binding.graphActionsRecyclerView
         actions.adapter = GraphActionAdapter(
             arrayOf(
@@ -61,20 +69,22 @@ class GraphBuilderBottomSheet(private val builder: GraphTheoryFragment): BottomS
                 {
                     actions.adapter = GraphActionAdapter(
                         arrayOf(
-                            NamedActionElement(resources.getString(R.string.graph_unary_operation_cut_vertices))
+                            NamedActionElement(resources.getString(R.string.graph_unary_operation_connected_components))
                             {
                                 val graph = builder.getGraph()
                                 builder.getGraphConnectedComponents(graph)
+                                dismiss()
+                            },
+                            NamedActionElement(resources.getString(R.string.graph_unary_operation_cut_vertices))
+                            {
+                                val graph = builder.getGraph()
                                 builder.getGraphCutVertices(graph)
-                                builder.createPng()
                                 dismiss()
                             },
                             NamedActionElement(resources.getString(R.string.graph_unary_operation_bridges))
                             {
                                 val graph = builder.getGraph()
-                                builder.getGraphConnectedComponents(graph)
                                 builder.getGraphBridges(graph)
-                                builder.createPng()
                                 dismiss()
                             },
                         )
@@ -83,13 +93,42 @@ class GraphBuilderBottomSheet(private val builder: GraphTheoryFragment): BottomS
                 NamedActionElement(resources.getString(R.string.graph_action_binary_operations)
                 )
                 {
-                    val graph = builder.getGraph()
-                    graphBuilderViewModel.setCurrentGraph(graph)
-                    builder.clear()
+                    saveCurrentGraphAndClear()
+                    builder.currentGraphIndex = null
+                    dismiss()
+                },
+                NamedActionElement(resources.getString(R.string.graph_builder_export_to_png))
+                {
+                    builder.createPng()
                     dismiss()
                 }
             )
         )
+    }
+
+    private fun saveCurrentGraphAndClear(): GraphData {
+        val graphData = getCurrentGraph()
+        val index = builder.currentGraphIndex
+        if (index == null) {
+            graphBuilderViewModel.appendGraph(graphData)
+        } else {
+            graphBuilderViewModel.updateGraph(graphData, index)
+        }
+        builder.clear()
+        return graphData
+    }
+
+    private fun getCurrentGraph(): GraphData {
+        val vertices = builder.vertices
+        val bitmap = builder.createGraphBitmap()
+        return GraphData(vertices.toList(), bitmap)
+    }
+
+    private fun graphSelected(graphData: GraphData, index: Int) {
+        saveCurrentGraphAndClear()
+        builder.currentGraphIndex = index
+        builder.resetVertices(graphData.vertices.toList())
+        dismiss()
     }
 
     override fun onStart() {

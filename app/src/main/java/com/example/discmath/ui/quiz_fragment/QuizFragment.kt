@@ -114,7 +114,6 @@ class QuizFragment : Fragment() {
 
     private fun playCorrectSound() {
         correctMediaPlayer.start()
-
     }
 
     private fun onIncorrectAnswer() {
