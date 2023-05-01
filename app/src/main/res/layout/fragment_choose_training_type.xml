@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.quiz_fragment.choose_sections.ChooseTrainingTypeFragment"
+    tools:context=".ui.quizzes.choose_sections.ChooseTrainingTypeFragment"
     android:background="@color/background"
     >
 

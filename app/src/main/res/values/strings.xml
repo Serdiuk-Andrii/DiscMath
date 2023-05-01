@@ -83,5 +83,8 @@
     <string name="graph_builder_export_to_png">Експортувати в PNG</string>
     <string name="graph_builder_export_to_png_intent_title">Поділитися графом</string>
     <string name="graph_image_description">Зображення графа</string>
+    <string name="functions_title">Можливості:</string>
+
+    <string name="email_card_detail_transition_name">email_card_detail</string>
 
 </resources>

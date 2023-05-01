@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.quiz_fragment.choose_sections.ChooseMultipleSectionsFragment">
+    tools:context=".ui.quizzes.choose_sections.ChooseMultipleSectionsFragment">
 
     <TextView
         android:id="@+id/sections_selection_text"

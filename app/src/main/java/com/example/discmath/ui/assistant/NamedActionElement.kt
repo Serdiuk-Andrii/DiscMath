@@ -1,4 +1,3 @@
 package com.example.discmath.ui.assistant
 
-class NamedActionElement(val title: String, val itemClickedCallback: (() -> Unit)) {
-}
+open class NamedActionElement(open val title: String, open val itemClickedCallback: (() -> Unit))

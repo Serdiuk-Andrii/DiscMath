@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -53,11 +54,16 @@ class AssistantListFragment : Fragment() {
 
     private fun initializeViews() {
         recyclerView = binding.assistantOptionsRecyclerView
-        val options: Array<NamedNavigationElement> = arrayOf(
-            NamedNavigationElement(resources.getString(R.string.assistant_option_logic_title),
-                R.id.assistant_logic),
-            NamedNavigationElement(resources.getString(R.string.assistant_option_graph_theory_title),
-                R.id.assistant_graph_theory)
+        val options: Array<AssistantFunctionElement> = arrayOf(
+            AssistantFunctionElement(resources.getString(R.string.assistant_option_logic_title),
+                R.id.action_assistant_options_fragment_to_assistant_logic,
+                ResourcesCompat.getDrawable(resources, R.drawable.circle_background, null)!!,
+                arrayOf("Побудова КНФ та ДНФ", "Таблиця істинності")),
+            AssistantFunctionElement(resources.getString(R.string.assistant_option_graph_theory_title),
+                R.id.assistant_graph_theory_navigation,
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_launcher_foreground, null)!!,
+                arrayOf("Побудова та експорт графа", "Унарні та бінарні операції")
+            )
         )
         recyclerView.adapter = AssistantOptionsAdapter(options, ::navigateTo)
     }

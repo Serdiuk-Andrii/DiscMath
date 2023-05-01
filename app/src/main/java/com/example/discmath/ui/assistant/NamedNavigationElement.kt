@@ -1,3 +1,3 @@
 package com.example.discmath.ui.assistant
 
-class NamedNavigationElement(val title: String, val destinationFragmentId: Int)
+open class NamedNavigationElement(open val title: String, open val destinationFragmentId: Int)

@@ -1,5 +1,6 @@
 package com.example.discmath.ui.learning
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.discmath.R
 import com.example.discmath.databinding.FragmentSpecificLearningSectionBinding
 import com.example.discmath.entity.learning_item.LearningItem
 import com.example.discmath.ui.learning.adapters.LearningItemAdapter
+import com.google.android.material.transition.MaterialContainerTransform
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -48,7 +50,11 @@ class SpecificLearningSectionFragment : Fragment() {
             sectionName = it.getString(SECTION_NAME_KEY)!!
             collectionPath = it.getString(COLLECTION_PATH_KEY)!!
         }
-
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.nav_host_fragment_activity_main
+            duration = 1000L
+            scrimColor = Color.TRANSPARENT
+        }
     }
 
     override fun onCreateView(
@@ -59,6 +65,7 @@ class SpecificLearningSectionFragment : Fragment() {
         //learningItemViewModel = ViewModelProvider(this)[LearningItemViewModel::class.java]
 
         // Initialize the RecyclerView and download the information
+
         initializeViews()
         bindDataToViews()
 

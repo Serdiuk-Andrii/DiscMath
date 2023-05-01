@@ -7,15 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.discmath.databinding.FragmentLearningItemBinding
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class LearningItemFragment : Fragment() {
 
     private var _binding: FragmentLearningItemBinding? = null
 
-    //private var storageRef: StorageReference = FirebaseStorage.getInstance().reference
-    private var db = Firebase.firestore
+    // private var storageRef: StorageReference = FirebaseStorage.getInstance().reference
+    // private var db = Firebase.firestore
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -30,8 +28,7 @@ class LearningItemFragment : Fragment() {
             ViewModelProvider(this)[LearningItemViewModel::class.java]
 
         _binding = FragmentLearningItemBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {

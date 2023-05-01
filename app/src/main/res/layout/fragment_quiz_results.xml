@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".ui.quiz_fragment.QuizResultsFragment"
+    tools:context=".ui.quizzes.QuizResultsFragment"
     android:background="@color/background"
     >
 

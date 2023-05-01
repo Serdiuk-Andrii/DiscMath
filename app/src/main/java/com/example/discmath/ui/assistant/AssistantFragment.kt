@@ -36,7 +36,7 @@ class AssistantFragment : Fragment() {
 
         navigateButton = binding.navigateToAssistantButton
         navigateButton.setOnClickListener {
-            navigation.navigate(R.id.assistant_options_fragment)
+            navigation.navigate(R.id.assistant_list_fragment_navigation)
         }
     }
 

@@ -5,12 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningSectionsBinding
 import com.example.discmath.entity.learning_section.LearningSection
 import com.example.discmath.entity.learning_section.SECTIONS_COLLECTION_STORAGE_PATH
-import com.example.discmath.ui.learning.adapters.LearningSectionAdapter
+import com.example.discmath.ui.learning.adapters.LearningSectionViewPagerAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -23,6 +27,11 @@ class SectionsLearningFragment : Fragment() {
     // Firebase
     private var db = Firebase.firestore
 
+
+    // Views
+    private lateinit var sectionsViewPager :ViewPager2
+    private lateinit var tabLayout: TabLayout
+
     private var _binding: FragmentLearningSectionsBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,33 +43,39 @@ class SectionsLearningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLearningSectionsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        // Initialize the RecyclerView and download the information
-        val learningSections = binding.learningSectionsRecyclerView
-        val adapter = LearningSectionAdapter(arrayOf()) {
-            navigateToLearningSection(it)
-        }
-        learningSections.adapter = adapter
+        initializeViews()
+        return binding.root
+    }
+
+    private fun initializeViews() {
+        sectionsViewPager = binding.learningSectionsPager
+        tabLayout = binding.learningSectionsTabLayout
         db.collection(SECTIONS_COLLECTION_STORAGE_PATH).get().addOnSuccessListener {
                 querySnapshot ->
             val sections: List<LearningSection> = querySnapshot.documents.map {
-                documentSnapshot -> LearningSection(documentSnapshot)
+                    documentSnapshot -> LearningSection(documentSnapshot)
             }.sorted()
-            learningSections.adapter = LearningSectionAdapter(sections.toTypedArray()) {
-                navigateToLearningSection(it)
-            }
+            sectionsViewPager.adapter = LearningSectionViewPagerAdapter(
+                this,
+                sections.toTypedArray(), ::navigateToLearningSection)
+            TabLayoutMediator(tabLayout, sectionsViewPager) { tab, position ->
+                tab.text = sections[position].name
+            }.attach()
         }
-        return root
     }
 
-    private fun navigateToLearningSection(learningSection: LearningSection) {
+    private fun navigateToLearningSection(view: View, learningSection: LearningSection) {
+        val emailCardDetailTransitionName = getString(R.string.email_card_detail_transition_name)
+        val extras = FragmentNavigatorExtras(view to emailCardDetailTransitionName)
         val navController = findNavController()
         navController.navigate(
             R.id.specificLearningSectionFragment,
             Bundle().apply {
                 putString(SECTION_NAME_KEY, learningSection.name)
                 putString(COLLECTION_PATH_KEY, learningSection.getLearningElementsPath())
-            }
+            },
+            null,
+            extras
         )
     }
 

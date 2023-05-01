@@ -16,6 +16,8 @@
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:textSize="17sp"
+        android:transitionName="@string/email_card_detail_transition_name"
+        android:layout_marginTop="30dp"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -24,6 +26,7 @@
         android:id="@+id/learning_items_recycler_view"
         app:layoutManager="LinearLayoutManager"
         android:layout_gravity="center"
+        android:layout_marginTop="60dp"
         />
 
 </FrameLayout>

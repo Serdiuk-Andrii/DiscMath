@@ -20,8 +20,12 @@
         android:label="@string/assistant_title"
         tools:layout="@layout/fragment_assistant" >
         <action
-            android:id="@+id/action_navigation_notifications_to_assistantListFragment"
-            app:destination="@id/assistant_options_fragment" />
+            android:id="@+id/assistant_list_fragment_navigation"
+            app:destination="@id/assistant_options_fragment"
+            app:enterAnim="@anim/slide_from_top_to_center"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_to_top" />
     </fragment>
     <fragment
         android:id="@+id/specificLearningSectionFragment"
@@ -41,16 +45,20 @@
 
     <fragment
         android:id="@+id/start_quizzes_fragment"
-        android:name="com.example.discmath.ui.quiz_fragment.StartQuizzesFragment"
+        android:name="com.example.discmath.ui.quizzes.StartQuizzesFragment"
         android:label="fragment_start_quizzes"
         tools:layout="@layout/fragment_start_quizzes">
         <action
             android:id="@+id/action_startQuizzesFragment_to_chooseTrainingTypeFragment"
-            app:destination="@id/chooseTrainingTypeFragment" />
+            app:destination="@id/chooseTrainingTypeFragment"
+            app:enterAnim="@anim/slide_from_top_to_center"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_to_top" />
     </fragment>
     <fragment
         android:id="@+id/chooseTrainingTypeFragment"
-        android:name="com.example.discmath.ui.quiz_fragment.choose_sections.ChooseTrainingTypeFragment"
+        android:name="com.example.discmath.ui.quizzes.choose_sections.ChooseTrainingTypeFragment"
         android:label="fragment_choose_training_type"
         tools:layout="@layout/fragment_choose_training_type">
         <action
@@ -64,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/chooseTimeTypeFragment"
-        android:name="com.example.discmath.ui.quiz_fragment.choose_time.ChooseTimeTypeFragment"
+        android:name="com.example.discmath.ui.quizzes.choose_time.ChooseTimeTypeFragment"
         android:label="fragment_choose_time_type"
         tools:layout="@layout/fragment_choose_time_type" >
         <action
@@ -96,7 +104,7 @@
         tools:layout="@layout/fragment_learning_pdf" />
     <fragment
         android:id="@+id/chooseMultipleSectionsFragment"
-        android:name="com.example.discmath.ui.quiz_fragment.choose_sections.ChooseMultipleSectionsFragment"
+        android:name="com.example.discmath.ui.quizzes.choose_sections.ChooseMultipleSectionsFragment"
         android:label="fragment_choose_multiple_sections"
         tools:layout="@layout/fragment_choose_multiple_sections" >
         <action
@@ -105,7 +113,7 @@
     </fragment>
     <fragment
         android:id="@+id/quizPreferencesSummaryFragment"
-        android:name="com.example.discmath.ui.quiz_fragment.QuizPreferencesSummaryFragment"
+        android:name="com.example.discmath.ui.quizzes.QuizPreferencesSummaryFragment"
         android:label="fragment_quiz_preferences_summary"
         tools:layout="@layout/fragment_quiz_preferences_summary" >
         <action
@@ -114,21 +122,29 @@
     </fragment>
     <fragment
         android:id="@+id/quizFragment"
-        android:name="com.example.discmath.ui.quiz_fragment.QuizFragment"
+        android:name="com.example.discmath.ui.quizzes.QuizFragment"
         android:label="fragment_quiz"
         tools:layout="@layout/fragment_quiz" >
         <action
-            android:id="@+id/action_quizFragment_to_quizResultsFragment"
-            app:destination="@id/quizResultsFragment" />
+            android:id="@+id/navigation_to_quiz_results"
+            app:destination="@id/quizResultsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@anim/slide_left"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/quizResultsFragment"
-        android:name="com.example.discmath.ui.quiz_fragment.QuizResultsFragment"
+        android:name="com.example.discmath.ui.quizzes.QuizResultsFragment"
         android:label="fragment_quiz_results"
         tools:layout="@layout/fragment_quiz_results" >
         <action
-            android:id="@+id/action_quizResultsFragment_to_startQuizzesFragment"
-            app:destination="@id/start_quizzes_fragment" />
+            android:id="@+id/navigate_from_results_to_quiz_fragment"
+            app:destination="@id/start_quizzes_fragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@anim/slide_left"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/learning_fragment"
@@ -137,7 +153,11 @@
         tools:layout="@layout/fragment_learning" >
         <action
             android:id="@+id/action_learningFragment_to_navigation_sections"
-            app:destination="@id/navigation_sections" />
+            app:destination="@id/navigation_sections"
+            app:enterAnim="@anim/slide_from_top_to_center"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_to_top" />
     </fragment>
     <fragment
         android:id="@+id/assistant_options_fragment"
@@ -146,10 +166,18 @@
         tools:layout="@layout/fragment_assistant_list" >
         <action
             android:id="@+id/action_assistant_options_fragment_to_assistant_logic"
-            app:destination="@id/assistant_logic" />
+            app:destination="@id/assistant_logic"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@anim/slide_left"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/assistant_graph_theory_navigation"
-            app:destination="@id/assistant_graph_theory" />
+            app:destination="@id/assistant_graph_theory"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@anim/slide_left"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/assistant_logic"

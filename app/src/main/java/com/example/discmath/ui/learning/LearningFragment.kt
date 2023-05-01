@@ -37,7 +37,7 @@ class LearningFragment : Fragment() {
         button = binding.button
         val navController = findNavController()
         button.setOnClickListener {
-            navController.navigate(R.id.navigation_sections)
+            navController.navigate(R.id.action_learningFragment_to_navigation_sections)
         }
     }
 

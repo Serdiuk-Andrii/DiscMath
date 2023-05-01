@@ -11,8 +11,9 @@
         android:id="@+id/assistant_options_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
         />
 
 </FrameLayout>
