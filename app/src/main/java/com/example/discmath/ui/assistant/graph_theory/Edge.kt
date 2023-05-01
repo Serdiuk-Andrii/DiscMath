@@ -25,7 +25,6 @@ class Edge(currentContext: Context, val firstVertex: Vertex, val secondVertex: V
         firstVertex.addEdge(this)
         secondVertex.addEdge(this)
         parent = ConstraintLayout(currentContext)
-        //parent.setBackgroundColor(currentContext.getColor(R.color.button_bright))
         parent.pivotX = 0F
         parent.pivotY = 0F
         parent.addView(this)
@@ -34,7 +33,6 @@ class Edge(currentContext: Context, val firstVertex: Vertex, val secondVertex: V
     }
 
     fun reposition() {
-        //val sign = sign(firstVertex.y - secondVertex.y)
         parent.x = firstVertex.x + firstVertex.width / 2
         parent.y = firstVertex.y + firstVertex.height / 2
         val distance = firstVertex.distance(secondVertex)

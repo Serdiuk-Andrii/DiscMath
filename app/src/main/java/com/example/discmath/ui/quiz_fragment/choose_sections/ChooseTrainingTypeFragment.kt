@@ -31,26 +31,16 @@ class ChooseTrainingTypeFragment : Fragment() {
         randomTypeCardView = binding.trainingRandomTypeOption
         val navController = findNavController()
         randomTypeCardView.setOnClickListener {
-            //randomTypeTrainingSelected()
             Toast.makeText(context, "This feature has not been implemented yet",
                 Toast.LENGTH_SHORT).show()
             //navController.navigate(R.id.chooseTimeTypeFragment)
         }
         chooseSectionsCardView = binding.trainingChooseSectionsOptions
         chooseSectionsCardView.setOnClickListener {
-            specificSectionsTrainingSelected()
             navController.navigate(R.id.move_from_training_type_to_section_selection)
         }
         // Inflate the layout for this fragment
         return root
-    }
-
-    private fun randomTypeTrainingSelected() {
-        Toast.makeText(context, "Random selected", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun specificSectionsTrainingSelected() {
-        Toast.makeText(context, "Specific sections selected", Toast.LENGTH_SHORT).show()
     }
 
 }

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -85,8 +84,6 @@ class QuizPreferencesSummaryFragment : Fragment() {
         val navController = findNavController()
         if (sections == null) {
             // Download all the quizzes
-            Toast.makeText(context, "This feature has not been implemented yet",
-                Toast.LENGTH_SHORT).show()
         } else {
             //TODO: Notice that this may be inefficient
             val tasks = sections.map { section ->

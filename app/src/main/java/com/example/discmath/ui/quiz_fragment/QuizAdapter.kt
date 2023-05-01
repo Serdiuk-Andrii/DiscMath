@@ -152,34 +152,6 @@ class QuizAdapter(
         init {
             problemImage = view.findViewById(R.id.text_answer_image_problem)
             editTextAnswer = view.findViewById(R.id.text_answer)
-            /*
-            editTextAnswer.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-                override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    val timeStart = System.currentTimeMillis()
-                    val currentSelectionStart = editTextAnswer.selectionStart
-                    editTextAnswer.removeTextChangedListener(this)
-                    val textString = text!!.toString()
-                    val textToSet =
-                        if (textString.length == 1 && textString.containsOnlyGivenCharacter('0')) {
-                            "0"
-                        } else {
-                            text
-                        }
-                    editTextAnswer.setText(textToSet)
-                    editTextAnswer.setSelection(textToSet.length.coerceAtMost(currentSelectionStart))
-                    editTextAnswer.addTextChangedListener(this)
-                    val timeEnd = System.currentTimeMillis()
-                    Toast.makeText(
-                        editTextAnswer.context,
-                        "${timeEnd - timeStart}", Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                override fun afterTextChanged(p0: Editable?) {}
-            })
-            */
             verifyButton = view.findViewById(R.id.text_answer_verify_button)
             buttonHasNotMoved = true
         }
@@ -273,6 +245,9 @@ class QuizAdapter(
                     }
                     if (index == quiz.correctAnswerIndex) {
                         imageView.setOnClickListener {
+                            imageViews.filter { view -> it != view  }.forEach {
+                                    view -> view.isEnabled = false
+                            }
                             if (!holder.hasAttempted) {
                                 correctAnswerCallback()
                             } else {
@@ -287,6 +262,8 @@ class QuizAdapter(
                         val dialog = BottomSheetDialog(imageView.context)
 
                         imageView.setOnClickListener {
+                            val toDisable = imageViews.filter { view -> it != view  }
+                            toDisable.forEach { view -> view.isEnabled = false }
                             dialog.setContentView(R.layout.incorrect_answer_dialog_layout)
                             val explanationTextView =
                                 dialog.findViewById<TextView>(R.id.explanation_text)
@@ -294,6 +271,7 @@ class QuizAdapter(
                             dialog.show()
                             imageView.isClickable = false
                             imageView.alpha = FADED_ANSWER_ALPHA
+                            toDisable.forEach { view -> view.isEnabled = true }
                         }
                     }
                 }
@@ -311,9 +289,11 @@ class QuizAdapter(
                     wrongAnswer = holder.yesOptionButton
                 }
                 correctAnswer.setOnClickListener {
+                    wrongAnswer.isEnabled = false
                     correctAnswerCallback()
                 }
                 wrongAnswer.setOnClickListener {
+                    correctAnswer.isEnabled = false
                     incorrectAnswerCallback()
                 }
             }

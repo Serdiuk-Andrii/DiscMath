@@ -39,10 +39,13 @@ class QuizFragment : Fragment() {
     // NavController
     private lateinit var navController: NavController
 
+
+    // State
     private var correctAnswers: Int = 0
     private var totalAnswers: Int = 0
 
     private lateinit var currentQuiz: Quiz
+    private var isVerifying = false
 
     private val resultsMap: MutableMap<String, Pair<Int, Int>> = mutableMapOf()
 
@@ -74,7 +77,9 @@ class QuizFragment : Fragment() {
 
     private fun initializeViews() {
         skipButton = binding.skipButton
-        skipButton.setOnClickListener {onIncorrectAnswer()}
+        skipButton.setOnClickListener {
+            onIncorrectAnswer()
+        }
         quizRecyclerView = binding.quizzesRecyclerView
         quizRecyclerView.layoutManager =
             object : LinearLayoutManager(context, HORIZONTAL, false)
@@ -103,13 +108,17 @@ class QuizFragment : Fragment() {
     }
 
     private fun onCorrectAnswer() {
-        playCorrectSound()
-        val quizSectionName: String = currentQuiz.learningSectionName
-        val currentPair = resultsMap.getOrPut(quizSectionName) {Pair(0, 0)}
-        resultsMap[quizSectionName] = Pair(currentPair.first + 1, currentPair.second + 1)
-        correctAnswers++
-        totalAnswers++
-        navigateFurther()
+        if (!isVerifying) {
+            isVerifying = true
+            playCorrectSound()
+            val quizSectionName: String = currentQuiz.learningSectionName
+            val currentPair = resultsMap.getOrPut(quizSectionName) { Pair(0, 0) }
+            resultsMap[quizSectionName] = Pair(currentPair.first + 1, currentPair.second + 1)
+            correctAnswers++
+            totalAnswers++
+            navigateFurther()
+            this.requireView().postDelayed({ isVerifying = false }, 1000)
+        }
     }
 
     private fun playCorrectSound() {
@@ -117,12 +126,16 @@ class QuizFragment : Fragment() {
     }
 
     private fun onIncorrectAnswer() {
-        playIncorrectSound()
-        val quizSectionName: String = currentQuiz.learningSectionName
-        val currentPair = resultsMap.getOrPut(quizSectionName) {Pair(0, 0)}
-        resultsMap[quizSectionName] = Pair(currentPair.first, currentPair.second + 1)
-        totalAnswers++
-        navigateFurther()
+        if (!isVerifying) {
+            isVerifying = true
+            playIncorrectSound()
+            val quizSectionName: String = currentQuiz.learningSectionName
+            val currentPair = resultsMap.getOrPut(quizSectionName) { Pair(0, 0) }
+            resultsMap[quizSectionName] = Pair(currentPair.first, currentPair.second + 1)
+            totalAnswers++
+            navigateFurther()
+            this.view?.postDelayed({ isVerifying = false }, 1000)
+        }
     }
 
     private fun playIncorrectSound() {
