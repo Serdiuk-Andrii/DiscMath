@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -68,7 +67,6 @@ class QuizFragment : Fragment() {
         override fun handleOnBackPressed() {
             showConfirmModal()
         }
-
     }
 
     // State
@@ -172,8 +170,6 @@ class QuizFragment : Fragment() {
             totalAnswers++
             navigateFurther()
             this.view?.postDelayed({ isVerifying = false }, BUTTON_DEBOUNCING_DELAY)
-        } else {
-            Toast.makeText(context, "Blocked", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -187,8 +183,6 @@ class QuizFragment : Fragment() {
             totalAnswers++
             navigateFurther()
             this.view?.postDelayed({ isVerifying = false }, BUTTON_DEBOUNCING_DELAY)
-        } else {
-            Toast.makeText(context, "Blocked", Toast.LENGTH_SHORT).show()
         }
     }
 

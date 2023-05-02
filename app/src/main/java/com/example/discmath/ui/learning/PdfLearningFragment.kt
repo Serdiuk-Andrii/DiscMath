@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.discmath.databinding.FragmentLearningPdfBinding
 import com.example.discmath.util.Downloader
 import com.example.discmath.util.FileDownloadManager
@@ -18,9 +22,26 @@ class PdfLearningFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    // Views
     private lateinit var name: String
     private lateinit var url: String
     private lateinit var pdfView: PDFView
+
+    // State
+    private var isDownloading: Boolean = true
+
+    // Navigation
+    private lateinit var navController: NavController
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (!isDownloading) {
+                this.isEnabled = false
+                navController.popBackStack()
+            } else {
+                Toast.makeText(context, "Будь ласка, зачекайте", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +50,7 @@ class PdfLearningFragment : Fragment() {
             name = it.getString(NAME_KEY)!!
             url = it.getString(URL_PDF_KEY)!!
         }
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onCreateView(
@@ -36,6 +58,7 @@ class PdfLearningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLearningPdfBinding.inflate(inflater, container, false)
+        navController = findNavController()
         pdfView = binding.pdfView
         return binding.root
     }
@@ -47,10 +70,13 @@ class PdfLearningFragment : Fragment() {
     }
 
     private fun loadPdfIntoView(fileInBytes: ByteArray) {
-        pdfView.fromBytes(fileInBytes)
-            .enableAntialiasing(true)
-            .pageFling(true)
-            .load()
+            pdfView.fromBytes(fileInBytes)
+                .enableAntialiasing(true)
+                .pageFling(true)
+                .load().also {
+                    isDownloading = false
+                }
+
     }
 
 }
