@@ -14,6 +14,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         android:text="@string/graph_actions_title_text"
         />
 
@@ -28,8 +31,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/graph_actions_title" />
 
+    
     <androidx.recyclerview.widget.RecyclerView
-        android:background="#FF9800"
         android:id="@+id/graph_history_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"

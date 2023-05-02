@@ -29,7 +29,7 @@
 
     <Button
         android:id="@+id/verify_button_image_multiple_choice"
-        android:layout_width="130dp"
+        android:layout_width="135dp"
         android:layout_height="60dp"
         android:text="@string/verify_button_text"
         android:layout_marginTop="30dp"

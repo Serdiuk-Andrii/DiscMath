@@ -282,12 +282,9 @@ class GraphTheoryFragment : Fragment() {
 
     fun createPng() {
         val bitmap = createGraphBitmap()
-        //val downloadFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val fileName = "mygraph.png"
+        // Files created in the cache directory are removed automatically when necessary
         val file = File(requireActivity().cacheDir, fileName)
-
-        // Create a file object with the desired directory and file name
-        //val file = File(downloadFolder, fileName)
         val outputStream = FileOutputStream(file)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         outputStream.flush()
@@ -353,7 +350,7 @@ class GraphTheoryFragment : Fragment() {
 
         vertices.forEach {
 
-            val drawable = vertexStillBackground//it.background.constantState!!.newDrawable().mutate()
+            val drawable = it.background.constantState!!.newDrawable().mutate()
             val left = it.x.toInt()
             val top = it.y.toInt()
             val right = left + vertexWidth
@@ -463,34 +460,6 @@ class GraphTheoryFragment : Fragment() {
         selectedEdge?.setBackgroundColor(requireContext().getColor(R.color.edge_selected_color))
     }
 
-    private class VertexTouchListener(val fragment: GraphTheoryFragment) : OnTouchListener {
-
-        var dx: Float = 0F
-        var dy: Float = 0F
-
-        override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-            if (view == null || event == null || view !is Vertex) {
-                return false
-            }
-            val action = event.action
-            if (action == MotionEvent.ACTION_DOWN) {
-                dx = view.x - event.rawX
-                dy = view.y - event.rawY
-                fragment.notifyVertexSelected(view)
-                view.performClick()
-            } else if (event.action == MotionEvent.ACTION_MOVE) {
-                view.animate()
-                    .x(event.rawX + dx)
-                    .y(event.rawY + dy)
-                    .setDuration(0)
-                    .start()
-                view.repositionEdges()
-            }
-            return true
-        }
-
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     private fun createVertex(x: Float, y: Float): Vertex {
         val vertex = Vertex(requireContext(), nextId)
@@ -501,6 +470,7 @@ class GraphTheoryFragment : Fragment() {
         vertex.setOnTouchListener(VertexTouchListener(this@GraphTheoryFragment))
         return vertex
     }
+
     fun resetVertices(newVertices: Collection<Vertex>) {
         vertices.clear()
         vertices.addAll(newVertices)
