@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -38,6 +39,8 @@ fun Int.parseIntoTime(): String {
    val seconds = (this % 60).getTimeSectionRepresentation()
    return "$minutes:$seconds"
 }
+
+const val BUTTON_DEBOUNCING_DELAY = 300L
 
 class QuizFragment : Fragment() {
 
@@ -168,7 +171,9 @@ class QuizFragment : Fragment() {
             correctAnswers++
             totalAnswers++
             navigateFurther()
-            this.view?.postDelayed({ isVerifying = false }, 1000)
+            this.view?.postDelayed({ isVerifying = false }, BUTTON_DEBOUNCING_DELAY)
+        } else {
+            Toast.makeText(context, "Blocked", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -181,7 +186,9 @@ class QuizFragment : Fragment() {
             resultsMap[quizSectionName] = Pair(currentPair.first, currentPair.second + 1)
             totalAnswers++
             navigateFurther()
-            this.view?.postDelayed({ isVerifying = false }, 1000)
+            this.view?.postDelayed({ isVerifying = false }, BUTTON_DEBOUNCING_DELAY)
+        } else {
+            Toast.makeText(context, "Blocked", Toast.LENGTH_SHORT).show()
         }
     }
 
