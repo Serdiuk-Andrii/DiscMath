@@ -47,9 +47,8 @@ class SectionsLearningFragment : Fragment() {
         return binding.root
     }
 
-    private fun initializeViews() {
-        sectionsViewPager = binding.learningSectionsPager
-        tabLayout = binding.learningSectionsTabLayout
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         db.collection(SECTIONS_COLLECTION_STORAGE_PATH).get().addOnSuccessListener {
                 querySnapshot ->
             val sections: List<LearningSection> = querySnapshot.documents.map {
@@ -64,9 +63,14 @@ class SectionsLearningFragment : Fragment() {
         }
     }
 
+    private fun initializeViews() {
+        sectionsViewPager = binding.learningSectionsPager
+        tabLayout = binding.learningSectionsTabLayout
+    }
+
     private fun navigateToLearningSection(view: View, learningSection: LearningSection) {
-        val emailCardDetailTransitionName = getString(R.string.email_card_detail_transition_name)
-        val extras = FragmentNavigatorExtras(view to emailCardDetailTransitionName)
+        val transitionName = getString(R.string.learning_section_transition_name)
+        val extras = FragmentNavigatorExtras(view to transitionName)
         val navController = findNavController()
         navController.navigate(
             R.id.specificLearningSectionFragment,

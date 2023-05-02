@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.learning.SpecificLearningSectionFragment"
     android:background="@color/background"
-    >
+    android:orientation="vertical"
+    tools:context=".ui.learning.SpecificLearningSectionFragment">
 
-    <TextView
-        android:id="@+id/section_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:textSize="17sp"
-        android:transitionName="@string/email_card_detail_transition_name"
-        android:layout_marginTop="30dp"
-        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:background="#c5c3c6"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/section_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:transitionName="@string/learning_section_transition_name" />
+
+    </FrameLayout>
+
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/black" />
+
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/learning_items_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/learning_items_recycler_view"
-        app:layoutManager="LinearLayoutManager"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"
-        />
+        android:layout_marginTop="15dp"
+        app:layoutManager="LinearLayoutManager" />
 
-</FrameLayout>
+</LinearLayout>

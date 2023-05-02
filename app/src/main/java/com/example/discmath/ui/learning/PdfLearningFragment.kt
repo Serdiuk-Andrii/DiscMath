@@ -5,16 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningPdfBinding
 import com.example.discmath.util.Downloader
 import com.example.discmath.util.FileDownloadManager
 import com.github.barteksc.pdfviewer.PDFView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class PdfLearningFragment : Fragment() {
 
     private var _binding: FragmentLearningPdfBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -22,7 +21,6 @@ class PdfLearningFragment : Fragment() {
     private lateinit var name: String
     private lateinit var url: String
     private lateinit var pdfView: PDFView
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,12 +36,14 @@ class PdfLearningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLearningPdfBinding.inflate(inflater, container, false)
-        val root: View = binding.root
         pdfView = binding.pdfView
-        activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility = View.GONE
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val downloader: Downloader = FileDownloadManager(::loadPdfIntoView)
         downloader.downloadFile(url)
-        return root
     }
 
     private fun loadPdfIntoView(fileInBytes: ByteArray) {

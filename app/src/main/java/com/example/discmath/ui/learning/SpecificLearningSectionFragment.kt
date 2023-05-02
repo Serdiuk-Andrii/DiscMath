@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
@@ -74,9 +75,7 @@ class SpecificLearningSectionFragment : Fragment() {
 
     private fun initializeViews() {
         recyclerView = binding.learningItemsRecyclerView
-        val adapter = LearningItemAdapter(arrayOf()) {
-            navigateToLearningItem(it)
-        }
+        val adapter = LearningItemAdapter(arrayOf(), ::navigateToLearningItem)
         recyclerView.adapter = adapter
         sectionNameTextView = binding.sectionName
     }
@@ -84,23 +83,27 @@ class SpecificLearningSectionFragment : Fragment() {
     private fun bindDataToViews() {
         sectionNameTextView.text = sectionName
         db.collection(collectionPath).get().addOnSuccessListener { querySnapshot ->
-            val learningItems: List<LearningItem> = querySnapshot.documents.
-                map { documentSnapshot -> LearningItem(documentSnapshot) }
-            recyclerView.adapter = LearningItemAdapter(learningItems.toTypedArray())
-                { navigateToLearningItem(it) }
+            val learningItems: List<LearningItem> =
+                querySnapshot.documents.map { documentSnapshot -> LearningItem(documentSnapshot) }
+            recyclerView.adapter = LearningItemAdapter(
+                learningItems.toTypedArray(),
+                ::navigateToLearningItem
+            )
         }
     }
 
-    private fun navigateToLearningItem(learningItem: LearningItem) {
+    private fun navigateToLearningItem(learningItemTextView: TextView, learningItem: LearningItem) {
         //learningItemViewModel.updateCurrentLearningItem(learningItem)
         val navController = findNavController()
         if (learningItem.urlVideo.isEmpty() && learningItem.urlPdf.isEmpty()) {
             Toast.makeText(context, "Both urls are absent!", Toast.LENGTH_SHORT).show()
         } else if (learningItem.urlPdf.isEmpty()) {
+            val lectureTitleTransitionName = getString(R.string.lecture_title_transition_name)
+            val extras = FragmentNavigatorExtras(learningItemTextView to lectureTitleTransitionName)
             navController.navigate(R.id.video_learning_fragment, Bundle().apply {
                 putString(NAME_KEY, learningItem.name)
                 putString(URL_VIDEO_KEY, learningItem.urlVideo)
-            })
+            }, null, extras)
         } else if (learningItem.urlVideo.isEmpty()) {
             // Navigate to pdf
             navController.navigate(R.id.pdfLearningFragment, Bundle().apply {

@@ -11,6 +11,7 @@ const val SECTION_QUIZZES_STORAGE_PATH = "quizzes"
 // Field keys
 const val TYPE_FIELD_KEY = "type"
 const val NAME_FIELD_KEY = "name"
+const val DESCRIPTION_FIELD_KEY = "description"
 const val VIDEO_URL_FIELD_KEY = "url_video"
 const val PDF_URL_FIELD_KEY = "url_pdf"
 const val BACKGROUND_IMAGE_URL_KEY = "image"

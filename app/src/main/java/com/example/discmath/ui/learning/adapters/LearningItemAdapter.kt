@@ -8,19 +8,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.entity.learning_item.LearningItem
+import com.example.discmath.ui.assistant.getFormattedText
 
 class LearningItemAdapter(private val dataSet: Array<LearningItem>,
-                          private val itemClickedCallback:  ((LearningItem) -> Unit)):
+                          private val itemClickedCallback:  ((TextView, LearningItem) -> Unit)):
     RecyclerView.Adapter<LearningItemAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val learningItemName: TextView
+        val learningItemDescription: TextView
         val pdfIcon: ImageView
         val videoIcon: ImageView
 
         init {
-            // Define click listener for the ViewHolder's View
-            learningItemName = view.findViewById(R.id.itemName)
+            learningItemName = view.findViewById(R.id.learning_item_name)
+            learningItemDescription = view.findViewById(R.id.learning_item_description)
             pdfIcon = view.findViewById(R.id.pdf)
             videoIcon = view.findViewById(R.id.video)
         }
@@ -36,6 +38,12 @@ class LearningItemAdapter(private val dataSet: Array<LearningItem>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val learningItem = dataSet[position]
         holder.learningItemName.text = learningItem.name
+        if (learningItem.description != null) {
+            holder.learningItemDescription.text = (learningItem.description.
+            filterIsInstance<String>().toTypedArray()).getFormattedText()
+        } else {
+            holder.learningItemDescription.visibility = View.GONE
+        }
         if (learningItem.urlPdf.isNotEmpty()) {
             holder.pdfIcon.setImageResource(R.drawable.pdf)
         } else {
@@ -46,7 +54,9 @@ class LearningItemAdapter(private val dataSet: Array<LearningItem>,
         } else {
             holder.videoIcon.visibility = View.GONE
         }
-        holder.itemView.setOnClickListener { itemClickedCallback(learningItem) }
+        holder.itemView.setOnClickListener {
+            itemClickedCallback(holder.learningItemName, learningItem)
+        }
     }
 
     override fun getItemCount(): Int  = dataSet.size

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+
     >
 
     <com.google.android.material.card.MaterialCardView
@@ -15,10 +16,9 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        app:cardBackgroundColor="#FFFFFF"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
-
         >
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:transitionName="@{@string/email_card_transition_name(email.id)}"
+                    android:transitionName="@{@string/learning_section_transition_name(section.id)}"
                     />
 
                 <ImageView

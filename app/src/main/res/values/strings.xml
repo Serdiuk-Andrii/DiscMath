@@ -85,6 +85,7 @@
     <string name="graph_image_description">Зображення графа</string>
     <string name="functions_title">Можливості:</string>
 
-    <string name="email_card_detail_transition_name">email_card_detail</string>
+    <string name="learning_section_transition_name">learning_section</string>
+    <string name="lecture_title_transition_name">lecture_title</string>
 
 </resources>

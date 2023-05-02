@@ -15,14 +15,13 @@ class LearningSectionViewPagerAdapter(fragment: Fragment,
 
     override fun createFragment(position: Int): Fragment {
         val section = dataset[position]
-        val fragment = LearningSectionObjectFragment(section, clickCallback)
         /*
         fragment.arguments = Bundle().apply {
             // Our object is just an integer :-P
             putString(SECTION_NAME_KEY, section.name)
         }
          */
-        return fragment
+        return LearningSectionObjectFragment(section, clickCallback)
     }
 
 }

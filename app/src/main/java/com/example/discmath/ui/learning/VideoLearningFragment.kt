@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -69,6 +70,8 @@ class VideoLearningFragment : Fragment() {
     private lateinit var videoTimestamps: RecyclerView
     private lateinit var fullScreenContainer: ViewGroup
     private lateinit var timestampsErrorText: TextView
+    private lateinit var videoTitle: TextView
+    private lateinit var videoTitleContainer: FrameLayout
 
     // View data
     private lateinit var timestampsAbsentString: String
@@ -119,6 +122,22 @@ class VideoLearningFragment : Fragment() {
     }
 
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val videoId: String? = Uri.parse(url).getQueryParameter("v")
+        if (videoId == null) {
+            Toast.makeText(context, "There is no video id in the url", Toast.LENGTH_SHORT).show()
+        } else {
+            videoView.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.loadVideo(videoId, 0F)
+                    this@VideoLearningFragment.youtubePlayer = youTubePlayer
+                    downloadTimestamps(videoId)
+                }
+            })
+        }
+    }
+
     private fun initializeViewData() {
         timestampsAbsentString = requireActivity().resources.getString(R.string.timestamps_absent_text)
         networkErrorString = requireActivity().resources.getString(R.string.timestamps_network_error)
@@ -130,6 +149,11 @@ class VideoLearningFragment : Fragment() {
         videoTimestamps = binding.videoTimestamps
         fullScreenContainer = binding.fullScreenContainer
         timestampsErrorText = binding.timestampsErrorTextView
+        videoTitleContainer = binding.lectureTitleContainer
+        viewsToHide.add(videoTitleContainer)
+        videoTitle = binding.lectureTitle
+        videoTitle.text = name
+        viewsToHide.add(videoTitleContainer)
 
         videoView.addFullscreenListener(object : FullscreenListener {
 
@@ -183,19 +207,6 @@ class VideoLearningFragment : Fragment() {
             override fun onReady(youTubePlayer: YouTubePlayer) {}
         }
         videoView.initialize(listener, options)
-
-        val videoId: String? = Uri.parse(url).getQueryParameter("v")
-        if (videoId == null) {
-            Toast.makeText(context, "There is no video id in the url", Toast.LENGTH_SHORT).show()
-        } else {
-            videoView.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
-                override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.loadVideo(videoId, 0F)
-                    this@VideoLearningFragment.youtubePlayer = youTubePlayer
-                    downloadTimestamps(videoId)
-                }
-            })
-        }
     }
 
     private fun downloadTimestamps(videoId: String) {
@@ -222,7 +233,7 @@ class VideoLearningFragment : Fragment() {
                         } else {
                             viewsToHide.add(videoTimestamps)
                             initializeTimestampsData(timestamps)
-                            this@VideoLearningFragment.requireActivity().runOnUiThread {
+                            this@VideoLearningFragment.activity?.runOnUiThread {
                                 videoTimestamps.adapter = VideoTimestampAdapter(
                                     timestamps,
                                     ::timestampClicked
