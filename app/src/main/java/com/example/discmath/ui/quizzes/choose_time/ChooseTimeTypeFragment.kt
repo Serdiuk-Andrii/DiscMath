@@ -13,7 +13,7 @@ import com.example.discmath.R
 import com.example.discmath.databinding.FragmentChooseTimeTypeBinding
 import com.example.discmath.ui.quizzes.view_models.QuizPreferencesViewModel
 
-val timeOptions: Array<Int> = arrayOf(3, 5, 10)
+val timeOptions: Array<String> = arrayOf("03:00", "05:00", "10:00")
 
 class ChooseTimeTypeFragment : Fragment() {
 
@@ -40,7 +40,7 @@ class ChooseTimeTypeFragment : Fragment() {
         return root
     }
 
-    private fun itemClicked(value: Int) {
+    private fun itemClicked(value: String) {
         quizPreferencesViewModel.setTime(value)
         navController.navigate(R.id.quizPreferencesSummaryFragment)
     }

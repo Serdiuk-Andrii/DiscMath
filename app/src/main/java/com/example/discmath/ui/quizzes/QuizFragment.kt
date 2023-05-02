@@ -2,10 +2,13 @@ package com.example.discmath.ui.quizzes
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -15,8 +18,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentQuizBinding
 import com.example.discmath.entity.quizzes.Quiz
+import com.example.discmath.ui.learning.parseTimestampToTimeInSeconds
+import com.example.discmath.ui.quizzes.view_models.QuizPreferencesViewModel
 import com.example.discmath.ui.quizzes.view_models.QuizResultsViewModel
 import com.example.discmath.ui.quizzes.view_models.QuizViewModel
+
+
+fun Int.getTimeSectionRepresentation(): String {
+    return if (this < 10) "0$this" else "$this"
+}
+
+fun Int.parseIntoTime(): String {
+   if (this > 3599) {
+       return ""
+   }
+   val minutes = (this / 60).getTimeSectionRepresentation()
+   val seconds = (this % 60).getTimeSectionRepresentation()
+   return "$minutes:$seconds"
+}
 
 class QuizFragment : Fragment() {
 
@@ -26,10 +45,12 @@ class QuizFragment : Fragment() {
     private val binding get() = _binding!!
 
     // View-models
+    private lateinit var quizPreferencesViewModel: QuizPreferencesViewModel
     private lateinit var quizzesViewModel: QuizViewModel
     private lateinit var quizzesResultsViewModel: QuizResultsViewModel
 
     // Views
+    private lateinit var timer: TextView
     private lateinit var skipButton: Button
     private lateinit var quizRecyclerView: RecyclerView
 
@@ -39,18 +60,22 @@ class QuizFragment : Fragment() {
     // NavController
     private lateinit var navController: NavController
 
-
     // State
     private var correctAnswers: Int = 0
     private var totalAnswers: Int = 0
+    private var timeLeftInSeconds: Int = -1
 
     private lateinit var currentQuiz: Quiz
     private var isVerifying = false
+
+    private lateinit var handler: Handler
+    private lateinit var timerRunnable: Runnable
 
     private val resultsMap: MutableMap<String, Pair<Int, Int>> = mutableMapOf()
 
     // Media
     private lateinit var correctMediaPlayer: MediaPlayer
+    private lateinit var timeIsUpMediaPlayer: MediaPlayer
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,11 +96,26 @@ class QuizFragment : Fragment() {
     }
 
     private fun initializeViewModels() {
+        quizPreferencesViewModel = ViewModelProvider(requireActivity())[QuizPreferencesViewModel::class.java]
         quizzesViewModel = ViewModelProvider(requireActivity())[QuizViewModel::class.java]
         quizzesResultsViewModel = ViewModelProvider(requireActivity())[QuizResultsViewModel::class.java]
     }
 
     private fun initializeViews() {
+        timer = binding.quizTimer
+        val quizTime = quizPreferencesViewModel.time.value.toString()
+        timer.text = quizTime
+        timeLeftInSeconds = quizTime.parseTimestampToTimeInSeconds()
+        handler = Handler(Looper.getMainLooper())
+        timerRunnable = Runnable {
+            timeLeftInSeconds--
+            timer.text = timeLeftInSeconds.parseIntoTime()
+            if (timeLeftInSeconds > 0) {
+                handler.postDelayed(timerRunnable, 1000)
+            } else {
+                playTimeIsUpSound()
+            }
+        }
         skipButton = binding.skipButton
         skipButton.setOnClickListener {
             onIncorrectAnswer()
@@ -88,10 +128,11 @@ class QuizFragment : Fragment() {
 
     private fun initializeMedia() {
         correctMediaPlayer = MediaPlayer.create(this.context, R.raw.correct)
+        timeIsUpMediaPlayer = MediaPlayer.create(this.context, R.raw.correct)
     }
 
     private fun navigateFurther() {
-        if (!adapter.isTheLastQuiz()) {
+        if (!adapter.isTheLastQuiz() && timeLeftInSeconds != 0) {
             currentQuiz = adapter.nextQuiz()
         } else {
             putDataIntoViewModel()
@@ -117,12 +158,8 @@ class QuizFragment : Fragment() {
             correctAnswers++
             totalAnswers++
             navigateFurther()
-            this.requireView().postDelayed({ isVerifying = false }, 1000)
+            this.view?.postDelayed({ isVerifying = false }, 1000)
         }
-    }
-
-    private fun playCorrectSound() {
-        correctMediaPlayer.start()
     }
 
     private fun onIncorrectAnswer() {
@@ -136,6 +173,26 @@ class QuizFragment : Fragment() {
             navigateFurther()
             this.view?.postDelayed({ isVerifying = false }, 1000)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(timerRunnable)
+    }
+
+
+
+    override fun onResume() {
+        super.onResume()
+        handler.postDelayed(timerRunnable, 1000)
+    }
+
+    private fun playCorrectSound() {
+        correctMediaPlayer.start()
+    }
+
+    private fun playTimeIsUpSound() {
+
     }
 
     private fun playIncorrectSound() {

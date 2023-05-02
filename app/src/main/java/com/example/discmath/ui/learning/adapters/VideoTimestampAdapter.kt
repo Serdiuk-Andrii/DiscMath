@@ -64,7 +64,7 @@ class VideoTimestampAdapter(private val dataset: Array<Pair<String, String>>,
         val timestamp = dataset[position]
         holder.timestampTime.text = timestamp.first
         holder.timestampTitle.text = timestamp.second
-        holder.timeInSeconds = parseTimestampToTimeInSeconds(timestamp.first)
+        holder.timeInSeconds = timestamp.first.parseTimestampToTimeInSeconds().toFloat()
         holder.itemView.setOnClickListener {
             switchCurrentTimestamp(holder)
             callback(holder.timeInSeconds, position)

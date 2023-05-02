@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 
-class TimeOptionAdapter(private val timesInMinutes: Array<Int>,
-                        private val itemClickedCallback: (Int) -> Unit):
+class TimeOptionAdapter(private val times: Array<String>,
+                        private val itemClickedCallback: (String) -> Unit):
         RecyclerView.Adapter<TimeOptionAdapter.ViewHolder>() {
 
 
@@ -27,10 +27,10 @@ class TimeOptionAdapter(private val timesInMinutes: Array<Int>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val timeInMinutes = timesInMinutes[position]
-        holder.timeTextView.text = timeInMinutes.toString()
+        val timeInMinutes = times[position]
+        holder.timeTextView.text = timeInMinutes
         holder.itemView.setOnClickListener { itemClickedCallback(timeInMinutes) }
     }
 
-    override fun getItemCount(): Int = timesInMinutes.size
+    override fun getItemCount(): Int = times.size
 }

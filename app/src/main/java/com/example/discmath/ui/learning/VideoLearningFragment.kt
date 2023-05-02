@@ -31,15 +31,15 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import okhttp3.*
 import java.io.IOException
 
-fun parseTimestampToTimeInSeconds(timestamp: String): Float {
-    val timeSections = timestamp.split(':').reversed()
-    var result = 0.0
-    var currentPower = 1F
+fun String.parseTimestampToTimeInSeconds(): Int {
+    val timeSections = this.split(':').reversed()
+    var result = 0
+    var currentPower = 1
     for (timeSection in timeSections) {
         result += timeSection.toInt() * currentPower
-        currentPower *= 60F
+        currentPower *= 60
     }
-    return result.toFloat()
+    return result
 }
 
 class VideoLearningFragment : Fragment() {
@@ -284,7 +284,8 @@ class VideoLearningFragment : Fragment() {
 
     private fun initializeTimestampsData(data: Array<Pair<String, String>>) {
         for ((index, timestamp) in data.withIndex()) {
-            videoTimestampsData.add(Pair(parseTimestampToTimeInSeconds(timestamp.first), index))
+            videoTimestampsData.add(Pair(timestamp.first.parseTimestampToTimeInSeconds()
+                .toFloat(), index))
         }
     }
 

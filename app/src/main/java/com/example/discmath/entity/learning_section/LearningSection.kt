@@ -27,9 +27,7 @@ data class LearningSection(val name: String, val description: String, val backgr
                 description = documentSnapshot[DESCRIPTION_KEY] as String,
                 backgroundImageUrl = documentSnapshot[BACKGROUND_IMAGE_URL_KEY] as String?,
                 order = documentSnapshot[ORDER_KEY] as Long,
-                collectionPath = documentSnapshot.reference.path) {
-
-    }
+                collectionPath = documentSnapshot.reference.path)
 
     fun getLearningElementsPath(): String = "${collectionPath}/${SECTION_ELEMENTS_STORAGE_PATH}"
     fun getQuizzesPath(): String = "${collectionPath}/${SECTION_QUIZZES_STORAGE_PATH}"
