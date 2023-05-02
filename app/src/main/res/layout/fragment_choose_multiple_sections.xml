@@ -12,14 +12,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
+        android:layout_marginTop="25dp"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         android:text="@string/learning_section_selection_title"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_choose_multiple_sections"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignTop="@id/sections_selection_text"
         android:layout_centerInParent="true"
+        android:layout_marginTop="60dp"
         android:layout_marginBottom="30dp"
         android:paddingBottom="30dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

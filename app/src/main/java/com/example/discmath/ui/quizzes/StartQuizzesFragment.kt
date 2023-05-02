@@ -37,7 +37,7 @@ class StartQuizzesFragment : Fragment() {
         // Navigation
         val navController = findNavController()
         startButton.setOnClickListener {
-            navController.navigate(R.id.chooseTrainingTypeFragment)
+            navController.navigate(R.id.action_startQuizzesFragment_to_chooseTrainingTypeFragment)
         }
         return root
     }

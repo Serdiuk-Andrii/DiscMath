@@ -318,8 +318,6 @@ class VideoLearningFragment : Fragment() {
         return timestamps.toTypedArray()
     }
 
-
-
     private fun toggleViewsVisibility(visibility: Int) {
         viewsToHide.forEach { it.visibility = visibility }
     }

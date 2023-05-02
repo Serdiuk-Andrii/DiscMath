@@ -13,7 +13,7 @@ import com.example.discmath.entity.learning_section.LearningSection
 
 const val SELECTED_BY_DEFAULT = false
 
-const val OPACITY_ITEM_SELECTED = 0.7F
+const val OPACITY_ITEM_SELECTED = 0.95F
 const val OPACITY_ITEM_NOT_SELECTED = 1F
 class LearningSectionTestOptionAdapter(private val sections: Array<LearningSection>,
                                         private val itemClickedCallback:

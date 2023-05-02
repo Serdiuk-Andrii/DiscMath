@@ -42,7 +42,7 @@ class ChooseTimeTypeFragment : Fragment() {
 
     private fun itemClicked(value: String) {
         quizPreferencesViewModel.setTime(value)
-        navController.navigate(R.id.quizPreferencesSummaryFragment)
+        navController.navigate(R.id.action_chooseTimeTypeFragment_to_quizPreferencesSummaryFragment)
     }
 
 }

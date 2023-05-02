@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 
 class QuizResultsViewModel: ViewModel() {
 
-    private val _correctAnswers = MutableLiveData<Int>()
+    private val _correctAnswers = MutableLiveData(0)
     val correctAnswers: LiveData<Int> = _correctAnswers
 
     fun setCorrectAnswers(value: Int) {
         _correctAnswers.value =  value
     }
 
-    private val _totalAnswers = MutableLiveData<Int>()
+    private val _totalAnswers = MutableLiveData(0)
     val totalAnswers: LiveData<Int> = _totalAnswers
 
     fun setTotalAnswers(value: Int) {

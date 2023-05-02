@@ -96,7 +96,7 @@ class QuizPreferencesSummaryFragment : Fragment() {
                     quizFactory.getQuizFromDocumentSnapshot(documentSnapshot, name)
                     })
                 }
-                navController.navigate(R.id.quizFragment)
+                navController.navigate(R.id.action_quizPreferencesSummaryFragment_to_quizFragment)
             }
         }
     }

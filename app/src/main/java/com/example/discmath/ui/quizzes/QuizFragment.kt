@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -22,6 +23,7 @@ import com.example.discmath.ui.learning.parseTimestampToTimeInSeconds
 import com.example.discmath.ui.quizzes.view_models.QuizPreferencesViewModel
 import com.example.discmath.ui.quizzes.view_models.QuizResultsViewModel
 import com.example.discmath.ui.quizzes.view_models.QuizViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 fun Int.getTimeSectionRepresentation(): String {
@@ -57,8 +59,14 @@ class QuizFragment : Fragment() {
     // Adapter
     private lateinit var adapter: QuizAdapter
 
-    // NavController
+    // Navigation
     private lateinit var navController: NavController
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            showConfirmModal()
+        }
+
+    }
 
     // State
     private var correctAnswers: Int = 0
@@ -82,6 +90,7 @@ class QuizFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
+        navController = findNavController()
         initializeViewModels()
         initializeViews()
         initializeMedia()
@@ -91,7 +100,7 @@ class QuizFragment : Fragment() {
             incorrectAnswerCallback = ::onIncorrectAnswer)
         currentQuiz = quizzesViewModel.quizzes.value!![0]
         quizRecyclerView.adapter = adapter
-        navController = findNavController()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
         return binding.root
     }
 
@@ -135,17 +144,18 @@ class QuizFragment : Fragment() {
         if (!adapter.isTheLastQuiz() && timeLeftInSeconds != 0) {
             currentQuiz = adapter.nextQuiz()
         } else {
-            putDataIntoViewModel()
-            navController.navigate(R.id.navigation_to_quiz_results)
+            putDataIntoViewModelAndNavigate()
         }
     }
 
-    private fun putDataIntoViewModel() {
+    private fun putDataIntoViewModelAndNavigate() {
+        this.onBackPressedCallback.isEnabled = false
         quizzesResultsViewModel.setCorrectAnswers(correctAnswers)
         quizzesResultsViewModel.setTotalAnswers(totalAnswers)
         val resultsBySection = resultsMap.map{entry ->  Triple(entry.key,
             entry.value.first, entry.value.second)}.toTypedArray()
         quizzesResultsViewModel.setResultsBySection(resultsBySection)
+        navController.navigate(R.id.navigation_to_quiz_results)
     }
 
     private fun onCorrectAnswer() {
@@ -180,8 +190,6 @@ class QuizFragment : Fragment() {
         handler.removeCallbacks(timerRunnable)
     }
 
-
-
     override fun onResume() {
         super.onResume()
         handler.postDelayed(timerRunnable, 1000)
@@ -197,6 +205,25 @@ class QuizFragment : Fragment() {
 
     private fun playIncorrectSound() {
 
+    }
+
+
+
+    private fun showConfirmModal() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.finish_quiz_dialog_title))
+            .setNegativeButton(R.string.finish_quiz_dialog_reject_text)
+            {
+                    _, _ ->
+
+            }
+            .setPositiveButton(R.string.finish_quiz_dialog_confirm_text)
+            {
+                _, _ ->
+                putDataIntoViewModelAndNavigate()
+            }
+            // Add customization options here
+            .show()
     }
 
 }

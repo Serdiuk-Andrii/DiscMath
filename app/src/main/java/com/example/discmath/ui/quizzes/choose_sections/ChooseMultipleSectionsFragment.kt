@@ -55,7 +55,7 @@ class ChooseMultipleSectionsFragment : Fragment() {
         }
         nextButton.setOnClickListener {
             quizPreferencesViewModel.setSectionRestrictions(chosenSections.toTypedArray())
-            navController.navigate(R.id.chooseTimeTypeFragment)
+            navController.navigate(R.id.action_chooseMultipleSectionsFragment_to_chooseTimeTypeFragment)
         }
         nextButton.isEnabled = SELECTED_BY_DEFAULT
         return root

@@ -41,7 +41,7 @@
     <string name="choose_time_type_title">Час тренування</string>
     <string name="theory_title">Теорія</string>
     <string name="lets_go">Уперед!</string>
-    <string name="learning_section_selection_title">Теми</string>
+    <string name="learning_section_selection_title">Виберіть теми:</string>
     <string name="assistant_title">Антитренажер</string>
     <string name="problem_answer">Відповідь</string>
 
@@ -87,5 +87,10 @@
 
     <string name="learning_section_transition_name">learning_section</string>
     <string name="lecture_title_transition_name">lecture_title</string>
+    <string name="switch_description">Перемикач</string>
+
+    <string name="finish_quiz_dialog_title">Закінчити тренування?</string>
+    <string name="finish_quiz_dialog_confirm_text">Закінчити</string>
+    <string name="finish_quiz_dialog_reject_text">Продовжити</string>
 
 </resources>
