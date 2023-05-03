@@ -57,7 +57,7 @@ class AssistantListFragment : Fragment() {
         val options: Array<AssistantFunctionElement> = arrayOf(
             AssistantFunctionElement(resources.getString(R.string.assistant_option_logic_title),
                 R.id.action_assistant_options_fragment_to_assistant_logic,
-                ResourcesCompat.getDrawable(resources, R.drawable.circle_background, null)!!,
+                ResourcesCompat.getDrawable(resources, R.drawable.zero_order_logic, null)!!,
                 arrayOf("Побудова КНФ та ДНФ", "Таблиця істинності")),
             AssistantFunctionElement(resources.getString(R.string.assistant_option_graph_theory_title),
                 R.id.assistant_graph_theory_navigation,

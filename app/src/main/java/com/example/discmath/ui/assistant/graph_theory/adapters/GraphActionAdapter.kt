@@ -3,6 +3,7 @@ package com.example.discmath.ui.assistant.graph_theory.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
@@ -15,9 +16,11 @@ class GraphActionAdapter(private val dataset: Array<NamedActionElement>):
     class ActionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val actionTitle: TextView
+        val actionImage: ImageView
 
         init {
             actionTitle = view.findViewById(R.id.graph_action_title)
+            actionImage = view.findViewById(R.id.graph_action_image)
         }
 
     }
@@ -32,6 +35,7 @@ class GraphActionAdapter(private val dataset: Array<NamedActionElement>):
     override fun onBindViewHolder(holder: ActionViewHolder, position: Int) {
         val actionElement = dataset[position]
         holder.actionTitle.text = actionElement.title
+        holder.actionImage.setImageDrawable(actionElement.actionImage)
         holder.itemView.setOnClickListener {
             actionElement.itemClickedCallback()
         }

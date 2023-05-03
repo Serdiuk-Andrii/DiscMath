@@ -2,6 +2,7 @@ package com.example.set_theory.logic;
 
 import static com.example.set_theory.RPN.LogicEvaluator.*;
 
+import com.example.set_theory.exceptions.MissingArgumentException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class CNF {
                 collect(Collectors.joining(CONJUNCTION_SEPARATOR));
     }
 
-    public static String buildCNFBasedOnExpression(final String expression) throws UnknownOperatorException {
+    public static String buildCNFBasedOnExpression(final String expression) throws UnknownOperatorException, MissingArgumentException {
         TruthTable table = TruthTable.buildTruthTable(expression);
         return buildCNFBasedOnTruthTable(table);
     }

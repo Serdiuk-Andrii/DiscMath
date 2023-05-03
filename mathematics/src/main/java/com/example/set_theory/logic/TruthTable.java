@@ -3,6 +3,7 @@ package com.example.set_theory.logic;
 import com.example.set_theory.RPN.LogicComparator;
 import com.example.set_theory.RPN.LogicEvaluator;
 import com.example.set_theory.RPN.RPN;
+import com.example.set_theory.exceptions.MissingArgumentException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class TruthTable {
         this.rows = rows;
     }
 
-    public static TruthTable buildTruthTable(final String expression) throws UnknownOperatorException {
+    public static TruthTable buildTruthTable(final String expression) throws UnknownOperatorException, MissingArgumentException {
         RPN<Boolean> postfixNotation = new RPN<>(expression, comparator);
         List<Character> operands = new ArrayList<>(postfixNotation.getOperandsNames());
         int n = operands.size();
@@ -45,7 +46,10 @@ public class TruthTable {
         return new TruthTable(operands, rows);
     }
 
-    private static List<List<Boolean>> getAllCombinations(final int n) {
+    private static List<List<Boolean>> getAllCombinations(final int n) throws MissingArgumentException {
+        if (n <= 0) {
+            throw new MissingArgumentException();
+        }
         if (n == 1) {
             List<Boolean> startTrue = new ArrayList<>(List.of(true));
             List<Boolean> startFalse = new ArrayList<>(List.of(false));

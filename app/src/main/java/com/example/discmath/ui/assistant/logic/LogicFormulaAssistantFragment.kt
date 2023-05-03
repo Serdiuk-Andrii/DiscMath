@@ -100,20 +100,21 @@ class LogicFormulaAssistantFragment : Fragment() {
 
         calculateButton.setOnClickListener {
             formulaEditText.clearFocus()
-
             val expression: String = formulaEditText.text.toString()
-            val truthTable: TruthTable = TruthTable.buildTruthTable(expression)
+            try {
+                val truthTable: TruthTable = TruthTable.buildTruthTable(expression)
+                var CNF: String = CNF.buildCNFBasedOnTruthTable(truthTable)
+                CNF = CNF.replace('!', '¬')
+                CNFText.text = CNF
 
-            calculationResults.visibility = View.VISIBLE
-
-            var CNF: String = CNF.buildCNFBasedOnTruthTable(truthTable)
-            CNF = CNF.replace('!', '¬')
-            CNFText.text = CNF
-
-            var DNF: String = DNF.buildDNFBasedOnTruthTable(truthTable)
-            DNF = DNF.replace('!', '¬')
-            DNFText.text = DNF
-            updateTruthTable(truthTable)
+                var DNF: String = DNF.buildDNFBasedOnTruthTable(truthTable)
+                DNF = DNF.replace('!', '¬')
+                DNFText.text = DNF
+                updateTruthTable(truthTable)
+                calculationResults.visibility = View.VISIBLE
+            } catch (error: java.lang.Exception) {
+                Toast.makeText(context, error.message ?: "Error", Toast.LENGTH_SHORT).show()
+            }
 
         }
     }

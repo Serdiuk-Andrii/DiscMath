@@ -54,7 +54,7 @@ public class Graph {
 
 
     public List<Integer> getCutVertices() {
-        List<Integer> result = new ArrayList<>(incidenceList.size() - 2);
+        List<Integer> result = new ArrayList<>(incidenceList.size());
         List<Set<Integer>> components = getConnectedComponents();
         for (Set<Integer> component: components) {
             if (component.size() <= 2) {

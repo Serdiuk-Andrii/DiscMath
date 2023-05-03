@@ -80,7 +80,7 @@
     <string name="graph_unary_operation_cut_vertices">Точки з\'єднання</string>
     <string name="graph_unary_operation_bridges">Мости</string>
 
-    <string name="graph_builder_export_to_png">Експортувати в PNG</string>
+    <string name="graph_builder_export_to_png">Зберегти</string>
     <string name="graph_builder_export_to_png_intent_title">Поділитися графом</string>
     <string name="graph_image_description">Зображення графа</string>
     <string name="functions_title">Можливості:</string>
@@ -92,5 +92,6 @@
     <string name="finish_quiz_dialog_title">Закінчити тренування?</string>
     <string name="finish_quiz_dialog_confirm_text">Закінчити</string>
     <string name="finish_quiz_dialog_reject_text">Продовжити</string>
+    <string name="graph_history_title">Історія</string>
 
 </resources>

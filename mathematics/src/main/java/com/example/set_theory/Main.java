@@ -3,6 +3,7 @@ package com.example.set_theory;
 import com.example.set_theory.RPN.LogicComparator;
 import com.example.set_theory.RPN.RPN;
 import com.example.set_theory.RPN.SetEvaluator;
+import com.example.set_theory.exceptions.MissingArgumentException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 import com.example.set_theory.logic.CNF;
 import com.example.set_theory.logic.DNF;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 public class Main {
 
-    public static void main(String[] args) throws UnknownOperatorException {
+    public static void main(String[] args) throws UnknownOperatorException, MissingArgumentException {
         long start = System.nanoTime();
         testTrustTableBuilder();
         long finish = System.nanoTime();
@@ -23,7 +24,7 @@ public class Main {
 
     }
 
-    private static void testTrustTableBuilder() throws UnknownOperatorException {
+    private static void testTrustTableBuilder() throws UnknownOperatorException, MissingArgumentException {
         String expression = "((p ∨ q) → !r) ∨ (!p ^ (q ∨ r))";
         TruthTable table = TruthTable.buildTruthTable(expression);
         String cnf = CNF.buildCNFBasedOnTruthTable(table);

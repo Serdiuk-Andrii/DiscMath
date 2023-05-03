@@ -32,7 +32,7 @@ class GraphHistoryAdapter(private val dataset: MutableList<GraphData> = mutableL
     override fun onBindViewHolder(holder: GraphViewHolder, position: Int) {
         val graph = dataset[position]
         holder.graphSnapshot.setImageBitmap(graph.snapshot)
-        holder.itemView.setOnClickListener { graphSelectedCallback(graph, position) }
+        holder.graphSnapshot.setOnClickListener { graphSelectedCallback(graph, position) }
     }
 
     override fun getItemCount(): Int {

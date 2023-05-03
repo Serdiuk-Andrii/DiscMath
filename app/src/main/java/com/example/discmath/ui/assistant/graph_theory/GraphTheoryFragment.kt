@@ -382,6 +382,7 @@ class GraphTheoryFragment : Fragment() {
                 it.background = componentDrawable
             }
         }
+
     }
 
     fun getGraphCutVertices(graph: Graph) {
