@@ -73,15 +73,30 @@
     <string name="graph_builder_finish_button_description">Продовжити</string>
     <string name="graph_actions_title_text">Що далі?</string>
 
+    <!--First level-->
     <string name="graph_action_unary_operations">Унарні операції</string>
-    <string name="graph_action_binary_operations">Побудувати інший граф</string>
+    <string name="graph_action_binary_operations">Бінарні операції</string>
+    <string name="graph_action_new_graph">Побудувати інший граф</string>
+    <string name="graph_builder_export_to_png">Зберегти</string>
 
+    <!--Unary operations-->
     <string name="graph_unary_operation_connected_components">Компоненти зв\'язності</string>
     <string name="graph_unary_operation_cut_vertices">Точки з\'єднання</string>
     <string name="graph_unary_operation_bridges">Мости</string>
 
-    <string name="graph_builder_export_to_png">Зберегти</string>
+    <!--Binary operations-->
+    <string name="graph_binary_operation_join">Сума графів</string>
+
+    <!--Intent-->
     <string name="graph_builder_export_to_png_intent_title">Поділитися графом</string>
+
+    <string name="graph_history_counter">%1$d / %2$d</string>
+    <string name="graph_history_selector_title">Обрано графів: %1$d</string>
+
+    <string name="graph_extreme_size_message">
+        Ви обрали занадто багато графів, оперативна пам\'ять Вашого телефона таке не витримає :)</string>
+    <string name="graph_extreme_size_confirm">Шкода</string>
+
     <string name="graph_image_description">Зображення графа</string>
     <string name="functions_title">Можливості:</string>
 
@@ -93,5 +108,7 @@
     <string name="finish_quiz_dialog_confirm_text">Закінчити</string>
     <string name="finish_quiz_dialog_reject_text">Продовжити</string>
     <string name="graph_history_title">Історія</string>
+    <string name="history_counter_default">Поки тут немає графів :)</string>
+    <string name="next">Далі</string>
 
 </resources>

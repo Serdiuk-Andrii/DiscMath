@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/graph_history_title_container"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#393939"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/graph_history_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/graph_history_title"
+            android:textColor="#EDEDED"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/graph_history_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="440dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+
+    <FrameLayout
+        android:id="@+id/history_counter_container"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#393939"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/history_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="@string/history_counter_default"
+            android:textColor="#EDEDED"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+
+    </FrameLayout>
+
+
+</LinearLayout>

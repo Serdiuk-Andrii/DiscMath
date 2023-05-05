@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#BDBDBD"
     android:orientation="vertical"
-    tools:context=".ui.assistant.graph_theory.GraphBuilderBottomSheet">
+    tools:context=".ui.assistant.graph_theory.bottom_sheets.GraphBuilderBottomSheet">
 
     <FrameLayout
         android:id="@+id/graph_actions_title_container"
@@ -40,47 +40,15 @@
         app:layout_constraintTop_toBottomOf="@+id/graph_actions_title_container" />
 
 
-    <!--
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:dividerThickness="1dp"
-        app:layout_constraintTop_toBottomOf="@id/graph_actions"
-        app:dividerColor="@color/black"/>-->
-
-    <FrameLayout
-        android:id="@+id/graph_history_title_container"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/open_graph_history_button"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_width="130dp"
         android:layout_height="60dp"
-        android:layout_marginTop="24dp"
-        android:background="#FFFFFF"
-        android:elevation="4dp"
-        app:layout_constraintTop_toBottomOf="@+id/graph_actions">
-
-        <TextView
-            android:id="@+id/graph_history_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/graph_history_title"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </FrameLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/graph_history_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/graph_history_title_container" />
-
+        android:text="@string/graph_history_title"
+        android:backgroundTint="@color/primary"
+        android:textColor="@color/white"
+        />
 
 </LinearLayout>

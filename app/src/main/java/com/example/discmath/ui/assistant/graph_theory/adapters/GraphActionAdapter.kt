@@ -12,7 +12,6 @@ import com.example.discmath.ui.assistant.NamedActionElement
 class GraphActionAdapter(private val dataset: Array<NamedActionElement>):
     RecyclerView.Adapter<GraphActionAdapter.ActionViewHolder>(){
 
-
     class ActionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val actionTitle: TextView

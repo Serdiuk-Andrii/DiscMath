@@ -13,8 +13,9 @@ import com.example.discmath.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.properties.Delegates
 
-fun View.toggleVisibility() {
+fun View.toggleVisibility(): Boolean {
     this.visibility = if(this.visibility == View.GONE) View.VISIBLE else View.GONE
+    return this.visibility == View.VISIBLE
 }
 
 class MainActivity : AppCompatActivity() {
@@ -62,7 +63,5 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
     }
-
-
 
 }

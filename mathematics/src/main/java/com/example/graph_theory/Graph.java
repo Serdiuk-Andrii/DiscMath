@@ -15,7 +15,6 @@ public class Graph {
     private final List<List<Integer>> incidenceList;
     private List<Set<Integer>> connectedComponents = null;
 
-
     public Graph() {
         incidenceList = new ArrayList<>();
     }
@@ -101,6 +100,39 @@ public class Graph {
         }
     }
 
+    public Graph join(Graph other) {
+        int size = this.incidenceList.size();
+        Graph union = this.union(other);
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < other.incidenceList.size(); j++) {
+                union.addEdge(i, size + j);
+            }
+        }
+        return union;
+    }
+
+    public Graph union(Graph other) {
+        int size = this.incidenceList.size();
+        int resultGraphSize = size + other.incidenceList.size();
+        List<List<Integer>> resultIncidenceList = new ArrayList<>(resultGraphSize);
+        for (int i = 0; i < resultGraphSize; i++) {
+            List<Integer> neighbours;
+            if (i < size) {
+                neighbours = new ArrayList<>(this.incidenceList.get(i));
+            } else {
+                neighbours = other.incidenceList.get(i - size).stream()
+                        .map(vertex -> vertex + size).collect(Collectors.toList());
+            }
+            resultIncidenceList.add(neighbours);
+        }
+        return new Graph(resultIncidenceList);
+    }
+
+    private void addEdge(int first, int second) {
+        incidenceList.get(first).add(second);
+        incidenceList.get(second).add(first);
+    }
+
     private List<Set<Integer>> calculateConnectedComponents() {
         List<Set<Integer>> components = new ArrayList<>(incidenceList.size());
         Set<Integer> vertices = new HashSet<>();
@@ -129,5 +161,16 @@ public class Graph {
         return component;
     }
 
+    public int getNumberOfVertices() {
+        return incidenceList.size();
+    }
+
+    public int getNumberOfEdges() {
+        return incidenceList.stream().map(List::size).reduce(Integer::sum).get() / 2;
+    }
+
+    public List<Integer> getNeighboursOf(int vertex) {
+        return incidenceList.get(vertex);
+    }
 
 }

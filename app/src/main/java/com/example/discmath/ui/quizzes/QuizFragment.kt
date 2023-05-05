@@ -208,8 +208,6 @@ class QuizFragment : Fragment() {
 
     }
 
-
-
     private fun showConfirmModal() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.finish_quiz_dialog_title))
@@ -223,7 +221,6 @@ class QuizFragment : Fragment() {
                 _, _ ->
                 putDataIntoViewModelAndNavigate()
             }
-            // Add customization options here
             .show()
     }
 
