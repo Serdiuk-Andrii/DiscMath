@@ -12,14 +12,17 @@ import android.view.inputmethod.InputConnection
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLogicFormulaAssistantBinding
 import com.example.discmath.ui.util.keyboard.LogicKeyboard
+import com.example.set_theory.lexical_analysis.Lexer
 import com.example.set_theory.logic.CNF
 import com.example.set_theory.logic.DNF
 import com.example.set_theory.logic.TruthTable
+import com.google.android.material.snackbar.Snackbar
 
 
 fun Boolean.toInteger(): Int {
@@ -100,22 +103,27 @@ class LogicFormulaAssistantFragment : Fragment() {
 
         calculateButton.setOnClickListener {
             formulaEditText.clearFocus()
-            val expression: String = formulaEditText.text.toString()
-            try {
-                val truthTable: TruthTable = TruthTable.buildTruthTable(expression)
-                var CNF: String = CNF.buildCNFBasedOnTruthTable(truthTable)
-                CNF = CNF.replace('!', '¬')
-                CNFText.text = CNF
+            // Remove two consecutive negations for simplicity
+            val expression: String = formulaEditText.text.toString().
+                replace("!!", "")
+            if (!Lexer.isCorrectLogicalExpression(expression)) {
+                showError("Синтаксична помилка в формулі")
+            } else {
+                try {
+                    val truthTable: TruthTable = TruthTable.buildTruthTable(expression)
+                    var CNF: String = CNF.buildCNFBasedOnTruthTable(truthTable)
+                    CNF = CNF.replace('!', '¬')
+                    CNFText.text = CNF
 
-                var DNF: String = DNF.buildDNFBasedOnTruthTable(truthTable)
-                DNF = DNF.replace('!', '¬')
-                DNFText.text = DNF
-                updateTruthTable(truthTable)
-                calculationResults.visibility = View.VISIBLE
-            } catch (error: java.lang.Exception) {
-                Toast.makeText(context, error.message ?: "Error", Toast.LENGTH_SHORT).show()
+                    var DNF: String = DNF.buildDNFBasedOnTruthTable(truthTable)
+                    DNF = DNF.replace('!', '¬')
+                    DNFText.text = DNF
+                    updateTruthTable(truthTable)
+                    calculationResults.visibility = View.VISIBLE
+                } catch (error: java.lang.Exception) {
+                    showError(error.message ?: "Помилка")
+                }
             }
-
         }
     }
 
@@ -167,6 +175,19 @@ class LogicFormulaAssistantFragment : Fragment() {
         } else {
             contradictionTextView.visibility = View.VISIBLE
         }
+    }
+
+    private fun showError(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(ResourcesCompat.getColor(
+                resources,
+                R.color.edge_selected_color,
+            null))
+            .setTextColor(ResourcesCompat.getColor(
+                resources,
+                R.color.white,
+                null))
+            .show()
     }
 
 }

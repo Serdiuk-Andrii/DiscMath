@@ -1,5 +1,6 @@
 package com.example.set_theory.RPN;
 
+import com.example.set_theory.exceptions.MissingArgumentException;
 import com.example.set_theory.exceptions.UnknownOperatorException;
 
 import org.jetbrains.annotations.NotNull;
@@ -83,7 +84,7 @@ public class RPN<T> {
     }
 
     public T evaluate(@NotNull Map<Character, Function<T>> evaluator,
-                                   @NotNull Map<Character, T> labeledSets) {
+                                   @NotNull Map<Character, T> labeledSets) throws MissingArgumentException {
         Stack<T> stack = new Stack<>();
         for (final char symbol: postfixExpression.toCharArray()) {
             if (isOperand(symbol)) {
@@ -108,6 +109,9 @@ public class RPN<T> {
                 second = binaryFunction.invoke(second, first);
                 stack.push(second);
             }
+        }
+        if (stack.size() != 1) {
+            throw new MissingArgumentException();
         }
         return stack.peek();
     }

@@ -34,7 +34,7 @@ public class Main {
         System.out.println(table);
     }
 
-    private static void testRPN() throws UnknownOperatorException {
+    private static void testRPN() throws Exception {
         /*
         String input = "((!A + !B))";
         Map<Character, Set<Character>> map = new HashMap<>();
