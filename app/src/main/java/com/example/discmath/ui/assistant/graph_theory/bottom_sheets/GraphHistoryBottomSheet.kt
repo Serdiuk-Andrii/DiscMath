@@ -42,6 +42,15 @@ class GraphHistoryBottomSheet(private val builder: GraphTheoryFragment): BottomS
     // Resources
     private lateinit var resources: Resources
 
+    override fun onStart() {
+        super.onStart()
+        val dialog = dialog
+        if (dialog != null) {
+            val bottomSheet: View = dialog.findViewById(com.google.android.material.
+            R.id.design_bottom_sheet)
+            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,16 +96,6 @@ class GraphHistoryBottomSheet(private val builder: GraphTheoryFragment): BottomS
         builder.clear()
         builder.resetVertices(graphData.vertices.toList(), index)
         dismiss()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val dialog = dialog
-        if (dialog != null) {
-            val bottomSheet: View = dialog.findViewById(com.google.android.material.
-            R.id.design_bottom_sheet)
-            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        }
     }
 
     companion object {

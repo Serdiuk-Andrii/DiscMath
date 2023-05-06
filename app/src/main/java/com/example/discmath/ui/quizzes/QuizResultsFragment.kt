@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -39,6 +41,9 @@ class QuizResultsFragment : Fragment() {
     private var totalAnswers: Int = -1
     private lateinit var resultsBySections: Array<Triple<String, Int, Int>>
 
+    // State
+    private var rotation: Float = 0F
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,6 +70,16 @@ class QuizResultsFragment : Fragment() {
         quizExpandResultsButton = binding.quizResultsExpandButton
         quizExpandResultsButton.setOnClickListener {
             quizResultsRecyclerView.toggleVisibility()
+            val from = rotation
+            val to = from + 180F
+            val animation: Animation = RotateAnimation(
+                from, to,
+                quizExpandResultsButton.pivotX, quizExpandResultsButton.pivotY
+            )
+            rotation = to % 360
+            animation.duration = 500
+            animation.fillAfter = true
+            quizExpandResultsButton.startAnimation(animation)
         }
     }
 

@@ -12,7 +12,11 @@
         android:digits="abcdefghijklmnopqrstuvwxyz"
         android:textIsSelectable="false"
         android:longClickable="false"
-        android:importantForAutofill="no" />
+        android:importantForAutofill="no"
+        android:backgroundTint="@color/black"
+        android:textColorHint="@color/edit_text_hint_color"
+        android:textColor="@color/black"
+        />
 
     <!--
 

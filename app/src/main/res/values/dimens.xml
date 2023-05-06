@@ -6,4 +6,5 @@
     <dimen name="graph_vertex_height">23dp</dimen>
     <dimen name="graph_toolbox_radius">20dp</dimen>
     <dimen name="graph_edge_height">3dp</dimen>
+    <dimen name="key_text_size">200sp</dimen>
 </resources>

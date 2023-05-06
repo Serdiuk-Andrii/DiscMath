@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
     >
 
     <androidx.cardview.widget.CardView
@@ -11,7 +10,7 @@
         android:layout_height="120dp"
         android:layout_gravity="center"
         app:cardBackgroundColor="#535252"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="4dp"
         app:cardElevation="4dp">
 
         <FrameLayout

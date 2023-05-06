@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
@@ -16,6 +16,8 @@
         android:textAllCaps="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:text="@string/quiz_results_title" />
 
     <androidx.cardview.widget.CardView
@@ -24,7 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         app:cardCornerRadius="5dp"
-        app:cardElevation="15dp">
+        app:cardElevation="15dp"
+        android:background="#B1ABAB"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:textStyle="italic"
                 android:layout_marginTop="10dp"
                 android:text="@string/quiz_results_summary_text"
                 android:textColor="@color/black" />
@@ -53,10 +58,11 @@
 
             <ImageButton
                 android:id="@+id/quiz_results_expand_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/expand_arrow_down"
+                android:src="@drawable/expand_down"
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/expand_arrow_down_description" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -66,9 +72,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layoutManager="LinearLayoutManager"
-                >
-
-            </androidx.recyclerview.widget.RecyclerView>
+                />
 
         </LinearLayout>
 
@@ -82,7 +86,7 @@
         android:text="@string/quiz_results_come_back_button_text"
         android:background="@color/button_soft"
         android:backgroundTint="@color/button_soft"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:elevation="2dp"
         />
 

@@ -14,6 +14,10 @@ class QuizViewModel: ViewModel() {
         _quizzes.value!!.addAll(valueToSet)
     }
 
+    fun shuffleQuizzes() {
+        _quizzes.value!!.shuffle()
+    }
+
     fun clearQuizzes() {
         _quizzes.value!!.clear()
     }
