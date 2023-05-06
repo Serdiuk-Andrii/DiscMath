@@ -31,6 +31,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import okhttp3.*
 import java.io.IOException
 
+const val FULLSCREEN_KEY = "fullscreen"
+
 fun String.parseTimestampToTimeInSeconds(): Int {
     val timeSections = this.split(':').reversed()
     var result = 0
@@ -91,11 +93,10 @@ class VideoLearningFragment : Fragment() {
             if (isFullscreen) {
                 youtubePlayer.toggleFullscreen()
             } else {
-                this.isEnabled = false
+                this.remove()
                 findNavController().popBackStack()
             }
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,6 +117,7 @@ class VideoLearningFragment : Fragment() {
         youtubeAPIKey = requireActivity().resources.getString(R.string.google_api_key)
         initializeViewData()
         initializeViews()
+        isFullscreen = savedInstanceState?.getBoolean(FULLSCREEN_KEY) ?: false
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
         lifecycle.addObserver(videoView)
         return binding.root
@@ -342,8 +344,14 @@ class VideoLearningFragment : Fragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(FULLSCREEN_KEY, isFullscreen)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        onBackPressedCallback.remove()
         videoView.release()
     }
 

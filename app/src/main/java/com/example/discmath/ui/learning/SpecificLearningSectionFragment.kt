@@ -15,6 +15,7 @@ import com.example.discmath.R
 import com.example.discmath.databinding.FragmentSpecificLearningSectionBinding
 import com.example.discmath.entity.learning_item.LearningItem
 import com.example.discmath.ui.learning.adapters.LearningItemAdapter
+import com.example.discmath.ui.learning.adapters.SECTION_NAME_KEY
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

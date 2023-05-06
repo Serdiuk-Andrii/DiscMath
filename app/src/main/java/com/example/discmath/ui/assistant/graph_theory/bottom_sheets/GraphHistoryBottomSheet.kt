@@ -18,6 +18,8 @@ import com.example.discmath.ui.assistant.graph_theory.adapters.GraphHistoryAdapt
 import com.example.discmath.ui.assistant.graph_theory.view_model.GraphBuilderViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
+
+// TODO: Change the constructor, so that this fragment can survive configuration changes
 class GraphHistoryBottomSheet(private val builder: GraphTheoryFragment): BottomSheetDialogFragment() {
 
     // Views
@@ -33,11 +35,13 @@ class GraphHistoryBottomSheet(private val builder: GraphTheoryFragment): BottomS
     // Navigation
     private lateinit var navController: NavController
 
+
     // ViewModels
     private lateinit var graphBuilderViewModel: GraphBuilderViewModel
 
     // Resources
     private lateinit var resources: Resources
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +64,8 @@ class GraphHistoryBottomSheet(private val builder: GraphTheoryFragment): BottomS
                     super.onPageSelected(position)
                     historyCounter.text = String.format(
                         resources.getString(R.string.graph_history_counter),
-                        position + 1, historyAdapter.itemCount)
+                        position + 1,
+                        historyAdapter.itemCount)
                 }
             }
         )

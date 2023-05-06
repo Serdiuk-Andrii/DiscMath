@@ -55,9 +55,11 @@
     <Button
         android:id="@+id/history_finish_selection_button"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:layout_width="130dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
+        android:backgroundTint="@color/primary"
         android:text="@string/next"/>
 
 

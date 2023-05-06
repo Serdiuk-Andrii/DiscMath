@@ -75,7 +75,7 @@
 
     <!--First level-->
     <string name="graph_action_unary_operations">Унарні операції</string>
-    <string name="graph_action_binary_operations">Бінарні операції</string>
+    <string name="graph_action_binary_operations">n-арні операції</string>
     <string name="graph_action_new_graph">Побудувати інший граф</string>
     <string name="graph_builder_export_to_png">Зберегти</string>
 
@@ -85,6 +85,7 @@
     <string name="graph_unary_operation_bridges">Мости</string>
 
     <!--Binary operations-->
+    <string name="graph_binary_operation_union">Об\'єднання графів</string>
     <string name="graph_binary_operation_join">Сума графів</string>
 
     <!--Intent-->
@@ -93,9 +94,13 @@
     <string name="graph_history_counter">%1$d / %2$d</string>
     <string name="graph_history_selector_title">Обрано графів: %1$d</string>
 
+    <!--Dialogs-->
     <string name="graph_extreme_size_message">
-        Ви обрали занадто багато графів, оперативна пам\'ять Вашого телефона таке не витримає :)</string>
-    <string name="graph_extreme_size_confirm">Шкода</string>
+        Ви обрали занадто багато графів або вони завеликі, оперативна пам\'ять Вашого телефона такого не витримає</string>
+    <string name="graph_binary_operations_require_at_least_two_graphs">
+        Для обчислення n-арних операцій потрібно принаймні 2 графи
+    </string>
+    <string name="graph_extreme_size_confirm">Зрозуміло</string>
 
     <string name="graph_image_description">Зображення графа</string>
     <string name="functions_title">Можливості:</string>
@@ -110,5 +115,6 @@
     <string name="graph_history_title">Історія</string>
     <string name="history_counter_default">Поки тут немає графів :)</string>
     <string name="next">Далі</string>
+    <string name="graph_selected_description">Обрано</string>
 
 </resources>

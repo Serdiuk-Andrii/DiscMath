@@ -14,22 +14,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.discmath.R
 import com.example.discmath.databinding.GraphHistorySelectorBinding
 import com.example.discmath.ui.assistant.graph_theory.GraphData
-import com.example.discmath.ui.assistant.graph_theory.GraphMapper
-import com.example.discmath.ui.assistant.graph_theory.GraphTheoryFragment
-import com.example.discmath.ui.assistant.graph_theory.Vertex
 import com.example.discmath.ui.assistant.graph_theory.adapters.GraphHistorySelectionAdapter
 import com.example.discmath.ui.assistant.graph_theory.adapters.RepresentCurrentRecyclerViewIndexPageCallback
 import com.example.discmath.ui.assistant.graph_theory.view_model.GraphBuilderViewModel
-import com.example.graph_theory.Graph
-import com.example.graph_theory.GraphUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-
-const val JOIN_THRESHOLD_EDGES = 1000
-
-class GraphHistorySelectionBottomSheet(private val builder: GraphTheoryFragment) :
-    BottomSheetDialogFragment() {
+// TODO: Save the callback function in the view model, so that it can survive configuration changes
+class GraphHistorySelectionBottomSheet(
+    private val callbackFunction: ((List<GraphData>) -> Unit)) : BottomSheetDialogFragment() {
 
     // Views
     private var _binding: GraphHistorySelectorBinding? = null
@@ -92,33 +84,7 @@ class GraphHistorySelectionBottomSheet(private val builder: GraphTheoryFragment)
         historySelectorCounter = binding.historyCounterSelector
         historyFinishSelectionButton = binding.historyFinishSelectionButton
         historyFinishSelectionButton.setOnClickListener {
-            // Calculate the result and display it
-            val resultSize =
-                selectedGraphs.map { it.vertices.size }.reduce { accumulator: Int, next: Int ->
-                    accumulator * next
-                }
-            if (resultSize > JOIN_THRESHOLD_EDGES) {
-                showExtremeGraphResultDialog()
-            } else {
-                val result: Graph =
-                    GraphUtil.calculateJoin(selectedGraphs.map { GraphMapper(it.vertices).graph })
-                builder.clear()
-                val resultVertices: MutableList<Vertex> = mutableListOf()
-                for (i in 0 until result.numberOfVertices) {
-                    resultVertices.add(builder.createVertex(0F, 0F))
-                }
-                for (i in 0 until result.numberOfVertices) {
-                    for (vertex in result.getNeighboursOf(i)) {
-                        if (vertex > i) {
-                            builder.createEdge(
-                                resultVertices[i],
-                                resultVertices[vertex]
-                            )
-                        }
-                    }
-                }
-                builder.resetVertices(resultVertices)
-            }
+            callbackFunction(selectedGraphs)
             dismiss()
         }
     }
@@ -154,15 +120,6 @@ class GraphHistorySelectionBottomSheet(private val builder: GraphTheoryFragment)
             )
             bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         }
-    }
-
-    private fun showExtremeGraphResultDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(resources.getString(R.string.graph_extreme_size_message))
-            .setPositiveButton(R.string.graph_extreme_size_confirm)
-            { _, _ ->
-            }
-            .show()
     }
 
     companion object {

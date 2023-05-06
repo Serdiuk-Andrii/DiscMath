@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningSectionsBinding
 import com.example.discmath.entity.learning_section.LearningSection
 import com.example.discmath.entity.learning_section.SECTIONS_COLLECTION_STORAGE_PATH
@@ -20,13 +17,11 @@ import com.google.firebase.ktx.Firebase
 
 // Keys for intents
 const val COLLECTION_PATH_KEY = "collection"
-const val SECTION_NAME_KEY = "name"
 
 class SectionsLearningFragment : Fragment() {
 
     // Firebase
     private var db = Firebase.firestore
-
 
     // Views
     private lateinit var sectionsViewPager :ViewPager2
@@ -56,7 +51,7 @@ class SectionsLearningFragment : Fragment() {
             }.sorted()
             sectionsViewPager.adapter = LearningSectionViewPagerAdapter(
                 this,
-                sections.toTypedArray(), ::navigateToLearningSection)
+                sections.toTypedArray())
             TabLayoutMediator(tabLayout, sectionsViewPager) { tab, position ->
                 tab.text = sections[position].name
             }.attach()
@@ -66,21 +61,6 @@ class SectionsLearningFragment : Fragment() {
     private fun initializeViews() {
         sectionsViewPager = binding.learningSectionsPager
         tabLayout = binding.learningSectionsTabLayout
-    }
-
-    private fun navigateToLearningSection(view: View, learningSection: LearningSection) {
-        val transitionName = getString(R.string.learning_section_transition_name)
-        val extras = FragmentNavigatorExtras(view to transitionName)
-        val navController = findNavController()
-        navController.navigate(
-            R.id.specificLearningSectionFragment,
-            Bundle().apply {
-                putString(SECTION_NAME_KEY, learningSection.name)
-                putString(COLLECTION_PATH_KEY, learningSection.getLearningElementsPath())
-            },
-            null,
-            extras
-        )
     }
 
     /*override fun onResume() {

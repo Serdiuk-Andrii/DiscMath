@@ -1,7 +1,9 @@
-package com.example.discmath.ui.assistant.graph_theory
+package com.example.discmath.ui.assistant.graph_theory.builder_listeners
 
 import android.view.MotionEvent
 import android.view.View
+import com.example.discmath.ui.assistant.graph_theory.GraphTheoryFragment
+import com.example.discmath.ui.assistant.graph_theory.Vertex
 
 class VertexTouchListener(val fragment: GraphTheoryFragment) : View.OnTouchListener {
 

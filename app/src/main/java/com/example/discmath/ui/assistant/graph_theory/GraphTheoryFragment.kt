@@ -28,8 +28,10 @@ import com.example.discmath.databinding.FragmentGraphTheoryBinding
 import com.example.discmath.ui.assistant.graph_theory.bottom_sheets.GraphBuilderBottomSheet
 import com.example.discmath.ui.assistant.graph_theory.bottom_sheets.GraphHistoryBottomSheet
 import com.example.discmath.ui.assistant.graph_theory.bottom_sheets.GraphHistorySelectionBottomSheet
+import com.example.discmath.ui.assistant.graph_theory.builder_listeners.VertexTouchListener
 import com.example.discmath.ui.assistant.graph_theory.view_model.GraphBuilderViewModel
 import com.example.discmath.ui.util.color.getColor
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
 import java.io.FileOutputStream
@@ -37,6 +39,8 @@ import java.lang.Math.PI
 import java.util.*
 import kotlin.properties.Delegates
 
+
+const val JOIN_THRESHOLD_EDGES = 10000
 
 fun Float.convertToDegrees(): Float {
     return (this / PI * 180).toFloat()
@@ -103,7 +107,6 @@ class GraphTheoryFragment : Fragment() {
         initializeViewData()
         initializeDrawables()
         initializeViews()
-        // Inflate the layout for this fragment
         return binding.root
     }
 
@@ -270,9 +273,10 @@ class GraphTheoryFragment : Fragment() {
 
     private fun finish() {
         saveCurrentGraph()
-        val bottomSheet = GraphBuilderBottomSheet(this)
-        bottomSheet.show(requireActivity().supportFragmentManager, GraphBuilderBottomSheet.TAG)
+        GraphBuilderBottomSheet(this).show(requireActivity().supportFragmentManager,
+            GraphBuilderBottomSheet.TAG)
     }
+
     fun createPng() {
         val bitmap = createGraphBitmap()
         val fileName = "mygraph.png"
@@ -293,7 +297,6 @@ class GraphTheoryFragment : Fragment() {
         requireContext().startActivity(Intent.createChooser(shareIntent,
                 resources.getString(R.string.graph_builder_export_to_png_intent_title)
             ))
-
     }
 
     private fun createGraphBitmap(): Bitmap {
@@ -342,7 +345,6 @@ class GraphTheoryFragment : Fragment() {
         // val translateX: Float = if(smallest < 0) -smallest else 0F
 
         vertices.forEach {
-
             val drawable = it.background.constantState!!.newDrawable().mutate()
             val left = it.x.toInt()
             val top = it.y.toInt()
@@ -360,8 +362,8 @@ class GraphTheoryFragment : Fragment() {
         vertices.getEdges().forEach { layout.removeView(it.parent) }
         vertices.forEach { layout.removeView(it) }
         vertices.clear()
-        selectedVertex = null
-        selectedEdge = null
+        disableFocusOnCurrentVertex()
+        disableFocusOnCurrentEdge()
         state = EditorState.MOVE
         updateToolboxOnCurrentOption(moveOption)
     }
@@ -399,7 +401,6 @@ class GraphTheoryFragment : Fragment() {
         removeButton.visibility = View.GONE
         updateToolboxOnCurrentOption(option)
     }
-
 
     fun notifyVertexSelected(vertex: Vertex) {
         if (state != EditorState.MODIFY && state != EditorState.EDGE) {
@@ -523,10 +524,31 @@ class GraphTheoryFragment : Fragment() {
             GraphHistoryBottomSheet.TAG)
     }
 
-    fun openHistorySelector() {
-        val historySelectionBottomSheet = GraphHistorySelectionBottomSheet(this)
+    fun openHistorySelector(function: ((Collection<GraphData>) -> Unit)) {
+        val historySelectionBottomSheet = GraphHistorySelectionBottomSheet()
+        { selectedGraphs ->
+            // Calculate the result and display it
+            val resultSize =
+                selectedGraphs.map { it.vertices.size }.reduce { accumulator: Int, next: Int ->
+                    accumulator * next
+                }
+            if (resultSize > JOIN_THRESHOLD_EDGES) {
+                showExtremeGraphResultDialog()
+            } else {
+                function(selectedGraphs)
+            }
+        }
         historySelectionBottomSheet.show(requireActivity().supportFragmentManager,
             GraphHistorySelectionBottomSheet.TAG)
+    }
+
+    private fun showExtremeGraphResultDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(resources.getString(R.string.graph_extreme_size_message))
+            .setPositiveButton(R.string.graph_extreme_size_confirm)
+            { _, _ ->
+            }
+            .show()
     }
 
 }

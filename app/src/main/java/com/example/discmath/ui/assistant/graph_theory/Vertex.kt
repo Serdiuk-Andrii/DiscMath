@@ -6,11 +6,13 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+const val VERTEX_ELEVATION = 15F
+
 class Vertex(currentContext: Context, val edges: CopyOnWriteArrayList<Edge> = CopyOnWriteArrayList()):
     AppCompatButton(currentContext) {
 
     init {
-        this.elevation = 15F
+        this.elevation = VERTEX_ELEVATION
     }
 
     constructor(currentContext: Context): this(currentContext, CopyOnWriteArrayList())
