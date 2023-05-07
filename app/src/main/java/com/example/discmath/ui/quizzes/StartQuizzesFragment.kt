@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentStartQuizzesBinding
-
-const val QUIZ_KEY = "quiz"
 
 class StartQuizzesFragment : Fragment() {
 
@@ -21,7 +18,6 @@ class StartQuizzesFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var image: ImageView
     private lateinit var encouragingText: TextView
     private lateinit var startButton: Button
 
@@ -37,7 +33,7 @@ class StartQuizzesFragment : Fragment() {
         // Navigation
         val navController = findNavController()
         startButton.setOnClickListener {
-            navController.navigate(R.id.action_startQuizzesFragment_to_chooseTrainingTypeFragment)
+            navController.navigate(R.id.action_start_quizzes_fragment_to_quizListFragment)
         }
         return root
     }

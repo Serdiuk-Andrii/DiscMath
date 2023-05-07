@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.entity.learning_item.LearningItem
-import com.example.discmath.ui.assistant.getFormattedText
+import com.example.discmath.ui.util.navigation.getFormattedText
 
 class LearningItemAdapter(private val dataSet: Array<LearningItem>,
                           private val itemClickedCallback:  ((TextView, LearningItem) -> Unit)):

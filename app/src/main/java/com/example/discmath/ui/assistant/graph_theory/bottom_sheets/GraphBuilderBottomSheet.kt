@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.discmath.R
 import com.example.discmath.databinding.GraphBuilderOptionsBinding
-import com.example.discmath.ui.assistant.NamedActionElement
+import com.example.discmath.ui.util.navigation.NamedActionElement
 import com.example.discmath.ui.assistant.graph_theory.GraphData
 import com.example.discmath.ui.assistant.graph_theory.GraphMapper
 import com.example.discmath.ui.assistant.graph_theory.GraphTheoryFragment

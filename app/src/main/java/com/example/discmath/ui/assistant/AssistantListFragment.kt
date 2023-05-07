@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentAssistantListBinding
 import com.example.discmath.ui.assistant.graph_theory.view_model.GraphBuilderViewModel
+import com.example.discmath.ui.util.navigation.FunctionElement
+import com.example.discmath.ui.util.navigation.FunctionElementAdapter
 
 
 class AssistantListFragment : Fragment() {
@@ -54,18 +56,18 @@ class AssistantListFragment : Fragment() {
 
     private fun initializeViews() {
         recyclerView = binding.assistantOptionsRecyclerView
-        val options: Array<AssistantFunctionElement> = arrayOf(
-            AssistantFunctionElement(resources.getString(R.string.assistant_option_logic_title),
+        val options: Array<FunctionElement> = arrayOf(
+            FunctionElement(resources.getString(R.string.assistant_option_logic_title),
                 R.id.action_assistant_options_fragment_to_assistant_logic,
                 ResourcesCompat.getDrawable(resources, R.drawable.zero_order_logic, null)!!,
                 arrayOf("Побудова КНФ та ДНФ", "Таблиця істинності")),
-            AssistantFunctionElement(resources.getString(R.string.assistant_option_graph_theory_title),
+            FunctionElement(resources.getString(R.string.assistant_option_graph_theory_title),
                 R.id.assistant_graph_theory_navigation,
                 ResourcesCompat.getDrawable(resources, R.drawable.ic_launcher_foreground, null)!!,
-                arrayOf("Побудова та експорт графа", "Унарні та бінарні операції")
+                arrayOf("Побудова графів", "Унарні та бінарні операції", "Експорт в PNG")
             )
         )
-        recyclerView.adapter = AssistantOptionsAdapter(options, ::navigateTo)
+        recyclerView.adapter = FunctionElementAdapter(options, ::navigateTo)
     }
 
     private fun navigateTo(destination: Int) {

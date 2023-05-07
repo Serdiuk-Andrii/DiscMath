@@ -1,4 +1,4 @@
-package com.example.discmath.ui.assistant
+package com.example.discmath.ui.util.navigation
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 
-class AssistantOptionsAdapter(private val dataset: Array<AssistantFunctionElement>,
-                              private val itemClickedCallback:  ((Int) -> Unit)):
-    RecyclerView.Adapter<AssistantOptionsAdapter.OptionViewHolder>() {
+class FunctionElementAdapter(private val dataset: Array<FunctionElement>,
+                             private val itemClickedCallback:  ((Int) -> Unit)):
+    RecyclerView.Adapter<FunctionElementAdapter.OptionViewHolder>() {
 
     class OptionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

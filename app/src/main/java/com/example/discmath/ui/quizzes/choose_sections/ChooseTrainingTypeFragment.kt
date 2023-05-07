@@ -1,4 +1,4 @@
-package com.example.discmath.ui.quizzes.choose_sections
+/*package com.example.discmath.ui.quizzes.choose_sections
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,4 +43,4 @@ class ChooseTrainingTypeFragment : Fragment() {
         return root
     }
 
-}
+}*/

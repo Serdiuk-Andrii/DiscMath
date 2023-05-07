@@ -1,17 +1,15 @@
 package com.example.discmath.ui.assistant.logic
 
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,7 +21,6 @@ import com.example.set_theory.logic.CNF
 import com.example.set_theory.logic.DNF
 import com.example.set_theory.logic.TruthTable
 import com.google.android.material.snackbar.Snackbar
-
 
 fun Boolean.toInteger(): Int {
     if (this) {
@@ -41,7 +38,7 @@ class LogicFormulaAssistantFragment : Fragment() {
     private lateinit var calculateButton: Button
     private lateinit var CNFText: TextView
     private lateinit var DNFText: TextView
-    private lateinit var truthTableLayout: TableLayout
+    private lateinit var truthTableLayout: TruthTableLayout
     private lateinit var calculationResults: View
     private lateinit var keyboard: LogicKeyboard
 
@@ -128,45 +125,14 @@ class LogicFormulaAssistantFragment : Fragment() {
     }
 
     private fun updateTruthTable(truthTable: TruthTable) {
-        val rowBackground = ContextCompat.getDrawable(requireContext(),
-            R.drawable.row_background)
-        val rowGravity = Gravity.CENTER
-        truthTableLayout.removeAllViews()
+        truthTableLayout.clear()
+
         tautologyTextView.visibility = View.GONE
         satisfiableTextView.visibility = View.GONE
         contradictionTextView.visibility = View.GONE
 
-        truthTable.symbols.add('F')
-        val titleRow = TableRow(context)
-        titleRow.background = rowBackground
-        for (value in truthTable.symbols) {
-            val characterTextView = TextView(context)
-            characterTextView.text = value.toString()
-            characterTextView.setTextColor(Color.BLACK)
-            characterTextView.setTypeface(null, Typeface.BOLD)
-            characterTextView.gravity = rowGravity
-            titleRow.addView(characterTextView)
-        }
-        truthTableLayout.addView(titleRow)
+        truthTableLayout.fillTable(truthTable,2)
 
-        for (row in truthTable.rows) {
-            val result = row.second
-            val currentViewRow = TableRow(context)
-            currentViewRow.background = rowBackground
-            for (value in row.first) {
-                val rowTextView = TextView(context)
-                rowTextView.text = value.toInteger().toString()
-                rowTextView.setTextColor(Color.BLACK)
-                rowTextView.gravity = rowGravity
-                currentViewRow.addView(rowTextView)
-            }
-            val resultTextView = TextView(context)
-            resultTextView.setTextColor(Color.BLACK)
-            resultTextView.gravity = rowGravity
-            resultTextView.text = result.toInteger().toString()
-            currentViewRow.addView(resultTextView)
-            truthTableLayout.addView(currentViewRow)
-        }
         if (truthTable.isSatisfiable) {
             satisfiableTextView.visibility = View.VISIBLE
             if (truthTable.isTautology) {

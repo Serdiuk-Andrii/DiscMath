@@ -70,6 +70,9 @@
     <string name="assistant_option_logic_title">Числення висловлювань</string>
     <string name="assistant_option_graph_theory_title">Теорія графів</string>
 
+    <string name="quiz_test_section_name">Тести за темами</string>
+    <string name="quiz_logic_game_section_name">Числення висловлювань</string>
+
     <string name="graph_builder_finish_button_description">Продовжити</string>
     <string name="graph_actions_title_text">Що далі?</string>
 
@@ -116,5 +119,7 @@
     <string name="history_counter_default">Поки тут немає графів :)</string>
     <string name="next">Далі</string>
     <string name="graph_selected_description">Обрано</string>
+    <string name="logic_formula_name">Вираз:</string>
+    <string name="confirm">Підтвердити</string>
 
 </resources>

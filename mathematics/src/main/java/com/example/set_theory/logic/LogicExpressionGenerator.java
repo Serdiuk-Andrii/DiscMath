@@ -9,18 +9,28 @@ import java.util.regex.Pattern;
 public class LogicExpressionGenerator {
 
     private static final Random random = new Random();
-    public static char[] operations = {AND, OR, IMPLICATION, XOR, EQUIVALENCE};
+    public static char[] operations = {AND, OR, IMPLICATION, XOR, EQUIVALENCE, AND, OR, IMPLICATION};
 
     public static char[] variables = "abcdefgh".toCharArray();
 
-    public static String generateExpression(int minNumberOfOperation, int maxNumberOfOperations) {
+    private final int negationProbability;
+
+    public LogicExpressionGenerator(int negationProbability) {
+        this.negationProbability = negationProbability;
+    }
+
+    public String generateExpression(int minNumberOfOperation, int maxNumberOfOperations) {
         int numberOfOperations = random.nextInt(maxNumberOfOperations - minNumberOfOperation)
                 + minNumberOfOperation;
         return generateExpression(numberOfOperations);
     }
 
-    public static String generateExpression(int numberOfOperations) {
+    public String generateExpression(int numberOfOperations) {
         if (numberOfOperations == 1) {
+            int probability = random.nextInt(100);
+            if (probability < negationProbability) {
+                return "!" + variables[random.nextInt(variables.length)];
+            }
             return String.valueOf(variables[random.nextInt(variables.length)]);
         }
         char operation = getRandomOperation();
@@ -34,25 +44,25 @@ public class LogicExpressionGenerator {
         return wrapExpressionLeft(leftSide) + operation + wrapExpressionRight(rightSide);
     }
 
-    private static String wrapExpressionLeft(String expression) {
-        if (expression.length() == 1) {
+    private String wrapExpressionLeft(String expression) {
+        if (expression.length() < 3) {
             return expression + ' ';
         }
         return "(" + expression + ") ";
     }
 
-    private static String wrapExpressionRight(String expression) {
-        if (expression.length() == 1) {
+    private String wrapExpressionRight(String expression) {
+        if (expression.length() < 3) {
             return ' ' + expression;
         }
         return " (" + expression + ")";
     }
 
-    private static char getRandomOperation() {
+    private char getRandomOperation() {
         return operations[random.nextInt(operations.length)];
     }
 
-    public static String removeRedundantBrackets(String expression) {
+    public String removeRedundantBrackets(String expression) {
         String pattern = "(\\([a-z]\\s*∧\\s*[a-z]\\)\\s*∧\\s*[a-z])";
 
         Pattern regex = Pattern.compile(pattern);
@@ -64,13 +74,5 @@ public class LogicExpressionGenerator {
 
         return expression;
     }
-
-    public static void main(String[] args) {
-        while (true) {
-            String result = generateExpression(2,7);
-            System.out.println(result);
-        }
-    }
-
-
+    
 }

@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
-import com.example.discmath.ui.assistant.NamedActionElement
+import com.example.discmath.ui.util.navigation.NamedActionElement
 
 class GraphActionAdapter(private val dataset: Array<NamedActionElement>):
     RecyclerView.Adapter<GraphActionAdapter.ActionViewHolder>(){

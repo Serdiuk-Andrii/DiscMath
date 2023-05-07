@@ -188,7 +188,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logic_calculation_results">
 
-        <TableLayout
+        <com.example.discmath.ui.assistant.logic.TruthTableLayout
             android:id="@+id/logic_truth_table"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

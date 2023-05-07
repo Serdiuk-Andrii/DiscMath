@@ -1,4 +1,4 @@
-package com.example.discmath.ui.assistant
+package com.example.discmath.ui.util.navigation
 
 import android.graphics.drawable.Drawable
 
