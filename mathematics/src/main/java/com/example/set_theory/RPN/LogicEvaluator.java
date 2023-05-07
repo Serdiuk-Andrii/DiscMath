@@ -12,6 +12,7 @@ public class LogicEvaluator extends HashMap<Character, Function<Boolean>> {
     public static final char AND = '∧';
     public static final char OR = '∨';
     public static final char IMPLICATION = '→';
+    public static final char EQUIVALENCE = '↔';
     public static final char NOT = '!';
     public static final char XOR = '⊕';
 
@@ -30,12 +31,15 @@ public class LogicEvaluator extends HashMap<Character, Function<Boolean>> {
                 (first, second) -> !first || second;
         Function<Boolean> xor = (Function2<Boolean, Boolean, Boolean>)
                 (first, second) -> first ^ second;
+        Function<Boolean> equivalence = (Function2<Boolean, Boolean, Boolean>)
+                (first, second) -> first == second;
         Function<Boolean> not = (Function1<Boolean, Boolean>) (element) -> !element;
         put(AND, and);
         put(OR, or);
         put(IMPLICATION, implication);
         put(NOT, not);
         put(XOR, xor);
+        put(EQUIVALENCE, equivalence);
     }
 
 }

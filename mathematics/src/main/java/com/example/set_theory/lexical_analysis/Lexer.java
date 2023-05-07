@@ -5,8 +5,8 @@ import java.util.regex.Pattern;
 
 public class Lexer {
 
-    public static Pattern expression = Pattern.compile("((!)?[a-z])([∧∨→⊕](!)?[a-z])*");
-    public static Pattern subexpression = Pattern.compile("\\(((!)?[a-z])([∧∨→⊕](!)?[a-z])*\\)");
+    public static Pattern expression = Pattern.compile("((!)?[a-z])([↔∧∨→⊕](!)?[a-z])*");
+    public static Pattern subexpression = Pattern.compile("\\(((!)?[a-z])([↔∧∨→⊕](!)?[a-z])*\\)");
 
     public static boolean isCorrectLogicalExpression(String input) {
         Matcher matcher;
