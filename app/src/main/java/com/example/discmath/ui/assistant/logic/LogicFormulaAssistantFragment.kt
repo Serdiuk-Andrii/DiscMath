@@ -131,7 +131,7 @@ class LogicFormulaAssistantFragment : Fragment() {
         satisfiableTextView.visibility = View.GONE
         contradictionTextView.visibility = View.GONE
 
-        truthTableLayout.fillTable(truthTable,2)
+        truthTableLayout.fillTable(truthTable,20)
 
         if (truthTable.isSatisfiable) {
             satisfiableTextView.visibility = View.VISIBLE

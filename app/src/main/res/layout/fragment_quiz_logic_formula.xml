@@ -6,54 +6,73 @@
     android:layout_height="match_parent"
     tools:context=".ui.quizzes.QuizLogicFormulaFragment">
 
-    <TextView
-        android:id="@+id/logic_formula_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:text="@string/logic_formula_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <HorizontalScrollView
+    <LinearLayout
         android:id="@+id/logic_formula_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logic_formula_title">
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical"
+        android:elevation="4dp"
+        android:background="#DDDDDD"
+        >
 
         <TextView
-            android:id="@+id/logic_formula"
+            android:id="@+id/logic_formula_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:textAlignment="center"
+            android:layout_marginTop="8dp"
+            android:text="@string/logic_formula_name"
             android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:layout_gravity="center"
-            android:textSize="20sp" />
+            />
 
-    </HorizontalScrollView>
+        <HorizontalScrollView
+            android:id="@+id/logic_formula_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/logic_formula"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+        </HorizontalScrollView>
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerThickness="0.5dp"
+            app:dividerColor="@color/black"/>
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/truth_table_scroll_container"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
         android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logic_formula_container">
+        app:layout_constraintTop_toBottomOf="@+id/logic_formula_container"
+        app:layout_constraintVertical_bias="0.20">
 
         <com.example.discmath.ui.assistant.logic.TruthTableLayout
             android:id="@+id/logic_truth_table"
@@ -71,9 +90,31 @@
         android:layout_width="150dp"
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
+        android:text="@string/truth_table_is_correct_button_confirm_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/truth_table_scroll_container" />
+
+    <Button
+        android:id="@+id/clear_button"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/confirm"
+        android:text="@string/clear"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_button" />
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/next"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/truth_table_scroll_container" />

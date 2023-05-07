@@ -121,5 +121,9 @@
     <string name="graph_selected_description">Обрано</string>
     <string name="logic_formula_name">Вираз:</string>
     <string name="confirm">Підтвердити</string>
+    <string name="clear">Очистити</string>
+
+    <string name="truth_table_is_correct_button_confirm_text">Усе правильно</string>
+    <string name="truth_table_is_correct_error_message">Таблиця істинності правильна</string>
 
 </resources>
