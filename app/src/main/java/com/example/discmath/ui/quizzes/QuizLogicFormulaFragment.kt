@@ -125,7 +125,7 @@ class QuizLogicFormulaFragment : Fragment() {
                         ResourcesCompat.getColor(resources, R.color.incorrect_answer_color,
                             null))
                 } else {
-                    Snackbar.make(binding.root, truthTableIsCorrectMessage, Snackbar.LENGTH_SHORT)
+                    Snackbar.make(binding.logicTruthTable, truthTableIsCorrectMessage, Snackbar.LENGTH_SHORT)
                         .setAnchorView(truthTableLayout)
                         .setBackgroundTint(ResourcesCompat.getColor(
                             resources,

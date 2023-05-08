@@ -9,7 +9,7 @@ import kotlin.math.sqrt
 const val VERTEX_ELEVATION = 15F
 
 class Vertex(currentContext: Context, val edges: CopyOnWriteArrayList<Edge> = CopyOnWriteArrayList()):
-    AppCompatButton(currentContext) {
+    AppCompatButton(currentContext), java.io.Serializable {
 
     init {
         this.elevation = VERTEX_ELEVATION

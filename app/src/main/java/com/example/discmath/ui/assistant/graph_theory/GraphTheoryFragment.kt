@@ -1,8 +1,10 @@
 package com.example.discmath.ui.assistant.graph_theory
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -14,6 +16,7 @@ import android.view.View.OnTouchListener
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
@@ -33,8 +36,7 @@ import com.example.discmath.ui.assistant.graph_theory.view_model.GraphBuilderVie
 import com.example.discmath.ui.util.color.getColor
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
 import java.lang.Math.PI
 import java.util.*
 import kotlin.properties.Delegates
@@ -47,6 +49,8 @@ fun Float.convertToDegrees(): Float {
 }
 
 fun Collection<Vertex>.getEdges(): Set<Edge> = this.map { it.edges }.flatMap { it.toSet() }.toSet()
+
+
 
 class GraphTheoryFragment : Fragment() {
 
@@ -83,6 +87,8 @@ class GraphTheoryFragment : Fragment() {
     private var selectedVertex: Vertex? = null
     private var selectedEdge: Edge? = null
     val vertices: MutableList<Vertex> = mutableListOf()
+
+    private var hasDeserialized: Boolean = false
 
     private var state: EditorState = EditorState.MODIFY
     private var currentGraphIndex: Int? = null
@@ -278,7 +284,11 @@ class GraphTheoryFragment : Fragment() {
     }
 
     fun createPng() {
-        val bitmap = createGraphBitmap()
+        createPng(vertices)
+    }
+
+    private fun createPng(vertices: List<Vertex>) {
+        val bitmap = createGraphBitmap(vertices)
         val fileName = "mygraph.png"
         // Files created in the cache directory are removed automatically when necessary
         val file = File(requireActivity().cacheDir, fileName)
@@ -299,7 +309,7 @@ class GraphTheoryFragment : Fragment() {
             ))
     }
 
-    private fun createGraphBitmap(): Bitmap {
+    private fun createGraphBitmap(vertices: List<Vertex>): Bitmap {
         /*
         vertices.sortWith { first, second ->
             when {
@@ -321,8 +331,9 @@ class GraphTheoryFragment : Fragment() {
          */
 
         // Get the dimensions of the layout
-        val width = layout.width //(largest - smallest).toInt() + 50
-        val height = layout.height
+
+        val width = Resources.getSystem().displayMetrics.widthPixels //layout.width //(largest - smallest).toInt() + 50
+        val height = Resources.getSystem().displayMetrics.heightPixels//layout.height
 
         // Create a bitmap to draw the graph onto
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -494,8 +505,20 @@ class GraphTheoryFragment : Fragment() {
     }
 
     private fun getCurrentGraph(): GraphData {
-        val bitmap = createGraphBitmap()
-        return GraphData(vertices.toList(), bitmap)
+        return getCurrentGraph(vertices.toList())
+    }
+
+    private fun getCurrentGraph(vertices: List<Vertex>): GraphData {
+        val bitmap = createGraphBitmap(vertices)
+        val currentIndex = currentGraphIndex
+        val filename = if (currentIndex == null) null else
+            graphBuilderViewModel.graphs.value!![currentIndex].filename
+        return GraphData(vertices, bitmap, filename)
+    }
+
+    private fun getCurrentGraph(vertices: List<Vertex>, filename: String): GraphData {
+        val bitmap = createGraphBitmap(vertices)
+        return GraphData(vertices, bitmap, filename)
     }
 
     private fun saveCurrentGraph(): GraphData {
@@ -519,6 +542,9 @@ class GraphTheoryFragment : Fragment() {
     }
 
     fun openHistory() {
+        if (!hasDeserialized) {
+            deserializeGraphs()
+        }
         val historyBottomSheet = GraphHistoryBottomSheet(this)
         historyBottomSheet.show(requireActivity().supportFragmentManager,
             GraphHistoryBottomSheet.TAG)
@@ -549,6 +575,89 @@ class GraphTheoryFragment : Fragment() {
             { _, _ ->
             }
             .show()
+    }
+
+    private fun Collection<Vertex>.serialize(filename: String) {
+        val fos: FileOutputStream = requireContext().openFileOutput(filename, Context.MODE_PRIVATE)
+        val objectOutputStream = ObjectOutputStream(fos)
+        val map: MutableMap<Vertex, Int> = mutableMapOf()
+        objectOutputStream.writeInt(this.size)
+        this.forEachIndexed { index, vertex ->
+            objectOutputStream.writeFloat(vertex.x + vertexWidth / 2F)
+            objectOutputStream.writeFloat(vertex.y + vertexHeight / 2F)
+            map[vertex] = index
+        }
+        this.getEdges().forEach {
+            val firstIndex = map[it.firstVertex]
+            val secondIndex = map[it.secondVertex]
+            if (firstIndex == null || secondIndex == null) {
+                Toast.makeText(context,
+                    "Cталася помилка під час збереження графа", Toast.LENGTH_SHORT).show()
+            } else {
+                objectOutputStream.writeInt(firstIndex)
+                objectOutputStream.writeInt(secondIndex)
+            }
+        }
+        objectOutputStream.close()
+        fos.close()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        graphBuilderViewModel.graphs.value!!.forEach {
+            val filename = it.filename ?: "${System.nanoTime()}.graph"
+            it.vertices.serialize(filename)
+        }
+    }
+
+    private fun deserializeGraphs() {
+        val directory: File = requireContext().filesDir
+        val graphs = directory.listFiles(FileFilter {
+            it.extension == "graph"
+        })
+        for (graph in graphs!!) {
+            val result = deserialize(graph)
+            graphBuilderViewModel.appendGraph(result)
+        }
+        hasDeserialized = true
+    }
+
+    private fun deserialize(filename: File): GraphData {
+        val vertices: MutableList<Vertex> = mutableListOf()
+        try {
+            val fis: FileInputStream = filename.inputStream()
+            val inputStream = ObjectInputStream(fis)
+            try {
+                val verticesNumber = inputStream.readInt()
+                for (i in 0 until verticesNumber) {
+                    val x = inputStream.readFloat()
+                    val y = inputStream.readFloat()
+                    val vertex = createVertex(x, y)
+                    vertices.add(vertex)
+                }
+                while (true) {
+                    val firstVertexIndex = inputStream.readInt()
+                    val secondVertexIndex = inputStream.readInt()
+                    createEdge(vertices[secondVertexIndex], vertices[firstVertexIndex])
+                }
+            } catch (_: EOFException) {
+
+            } catch (error: Exception) {
+                Toast.makeText(
+                    context, "Помилка: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } finally {
+                inputStream.close()
+                fis.close()
+            }
+        } catch (error: Exception) {
+            Toast.makeText(
+                context, "Помилка під час читання кількості вершин в графі",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        return getCurrentGraph(vertices, filename.name)
     }
 
 }

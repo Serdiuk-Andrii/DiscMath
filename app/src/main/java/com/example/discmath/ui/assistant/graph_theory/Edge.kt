@@ -33,8 +33,12 @@ class Edge(currentContext: Context, val firstVertex: Vertex, val secondVertex: V
     }
 
     fun reposition() {
-        parent.x = firstVertex.x + firstVertex.width / 2
-        parent.y = firstVertex.y + firstVertex.height / 2
+        val vertexWidth: Int = (if (firstVertex.width == 0)
+            resources.getDimension(R.dimen.graph_vertex_width).toInt() else firstVertex.width)
+        val vertexHeight: Int = (if (firstVertex.height == 0)
+            resources.getDimension(R.dimen.graph_vertex_height).toInt() else firstVertex.height)
+        parent.x = firstVertex.x + vertexWidth / 2
+        parent.y = firstVertex.y + vertexHeight / 2
         val distance = firstVertex.distance(secondVertex)
         parent.layoutParams = ConstraintLayout.LayoutParams(distance.toInt(),
            10 * edgeHeight)
