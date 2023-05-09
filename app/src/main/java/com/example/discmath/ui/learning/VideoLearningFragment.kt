@@ -275,8 +275,10 @@ class VideoLearningFragment : Fragment() {
 
     private fun updateTimestamp() {
         val currentHolder = videoTimestamps.findViewHolderForLayoutPosition(currentTimestampIndex)
-                as VideoTimestampAdapter.TimestampHolder
-        (videoTimestamps.adapter as VideoTimestampAdapter).switchCurrentTimestamp(currentHolder)
+                as VideoTimestampAdapter.TimestampHolder?
+        if (currentHolder != null) {
+            (videoTimestamps.adapter as VideoTimestampAdapter).switchCurrentTimestamp(currentHolder)
+        }
     }
 
     private fun timestampClicked(time: Float, position: Int) {
