@@ -16,12 +16,8 @@ import java.util.Set;
 
 public class Main {
 
-    public static void main(String[] args) throws UnknownOperatorException, MissingArgumentException {
-        long start = System.nanoTime();
-        testTrustTableBuilder();
-        long finish = System.nanoTime();
-        System.out.println("Time in milliseconds: " + (finish - start) / 1_000_000);
-
+    public static void main(String[] args) throws Exception {
+        testRPN();
     }
 
     private static void testTrustTableBuilder() throws UnknownOperatorException, MissingArgumentException {
@@ -46,12 +42,15 @@ public class Main {
         evaluator.put(COMPLEMENT, complement);
         Set<Character> result = converter.evaluate(evaluator, map);
          */
-        String input = "A\\B";
+
+        String input = "!A\\B + (C △ A)";
         Map<Character, Set<Character>> map = new HashMap<>();
         map.put('A', new HashSet<>(Set.of('a', 'b', 'c')));
         map.put('B', new HashSet<>(Set.of('b', 'c')));
         RPN<Set<Character>> converter = new RPN<>(input, new LogicComparator());
         Set<Character> result = converter.evaluate(new SetEvaluator(), map);
+        System.out.println(converter.getExpression());
+
     }
 
 }

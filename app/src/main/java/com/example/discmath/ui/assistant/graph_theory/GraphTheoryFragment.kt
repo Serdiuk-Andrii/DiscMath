@@ -118,8 +118,8 @@ class GraphTheoryFragment : Fragment() {
 
     private fun initializeViewModels() {
         graphBuilderViewModel = ViewModelProvider(requireActivity())[GraphBuilderViewModel::class.java]
+        hasDeserialized = graphBuilderViewModel.hasDeserialized.value!!
     }
-
 
     private fun initializeViewData() {
         vertexWidth = resources.getDimension(R.dimen.graph_vertex_width).toInt()
@@ -183,6 +183,9 @@ class GraphTheoryFragment : Fragment() {
         initializeToolbox()
         val scaleDetector = ScaleGestureDetector(requireContext(), scaleListener)
         removeButton.setOnClickListener {
+            vertices.forEach {
+                it.background = vertexStillBackground
+            }
             when(state) {
                 EditorState.MODIFY -> {
                     vertices.remove(selectedVertex)
@@ -383,7 +386,7 @@ class GraphTheoryFragment : Fragment() {
         val mapper = GraphMapper(vertices)
         val connectedComponents = mapper.graph.connectedComponents
         for ((index, component) in connectedComponents.withIndex()) {
-            val componentDrawable = vertexStillBackground.constantState!!.newDrawable()
+            val componentDrawable = vertexStillBackground.constantState!!.newDrawable().mutate()
             val colorList = ColorStateList.valueOf(getColor(index).toColorInt())
             componentDrawable.setTintList(colorList)
             mapper.getCorrespondingVertices(component).forEach {
@@ -395,8 +398,11 @@ class GraphTheoryFragment : Fragment() {
     fun getGraphCutVertices() {
         val mapper = GraphMapper(vertices)
         val cutVertices = mapper.getCorrespondingVertices(mapper.graph.cutVertices)
+        val colorList = ColorStateList.valueOf(Color.RED)
+        val componentDrawable = vertexStillBackground.constantState!!.newDrawable()
+        componentDrawable.setTintList(colorList)
         cutVertices.forEach {
-            it.alpha = 0.75F
+            it.background = componentDrawable
         }
     }
 
@@ -544,6 +550,7 @@ class GraphTheoryFragment : Fragment() {
     fun openHistory() {
         if (!hasDeserialized) {
             deserializeGraphs()
+            graphBuilderViewModel.setDeserializationSuccessful()
         }
         val historyBottomSheet = GraphHistoryBottomSheet(this)
         historyBottomSheet.show(requireActivity().supportFragmentManager,
@@ -571,7 +578,7 @@ class GraphTheoryFragment : Fragment() {
     private fun showExtremeGraphResultDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.graph_extreme_size_message))
-            .setPositiveButton(R.string.graph_extreme_size_confirm)
+            .setPositiveButton(R.string.understand_button_text)
             { _, _ ->
             }
             .show()
@@ -607,6 +614,7 @@ class GraphTheoryFragment : Fragment() {
         graphBuilderViewModel.graphs.value!!.forEach {
             val filename = it.filename ?: "${System.nanoTime()}.graph"
             it.vertices.serialize(filename)
+            it.filename = filename
         }
     }
 

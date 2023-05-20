@@ -5,7 +5,7 @@ import com.example.graph_theory.Graph
 class GraphMapper(vertices: List<Vertex>) {
 
     val map: MutableMap<Int, Vertex> = mutableMapOf()
-    val reverseMap: MutableMap<Vertex, Int>
+    private val reverseMap: MutableMap<Vertex, Int>
     val graph: Graph
 
     init {

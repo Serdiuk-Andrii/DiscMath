@@ -12,6 +12,13 @@ class GraphBuilderViewModel: ViewModel() {
     val graphs: LiveData<MutableList<GraphData>> = _graphs
 
 
+    private var _hasDeserialized = MutableLiveData(false)
+    val hasDeserialized: LiveData<Boolean> = _hasDeserialized
+
+    fun setDeserializationSuccessful() {
+        _hasDeserialized.value = true
+    }
+
     fun appendGraph(graphData: GraphData) {
         _graphs.value!!.add(graphData)
     }

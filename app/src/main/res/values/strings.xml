@@ -103,7 +103,7 @@
     <string name="graph_binary_operations_require_at_least_two_graphs">
         Для обчислення n-арних операцій потрібно принаймні 2 графи
     </string>
-    <string name="graph_extreme_size_confirm">Зрозуміло</string>
+    <string name="understand_button_text">Зрозуміло</string>
 
     <string name="graph_image_description">Зображення графа</string>
     <string name="functions_title">Можливості:</string>
@@ -125,5 +125,8 @@
 
     <string name="truth_table_is_correct_button_confirm_text">Усе правильно</string>
     <string name="truth_table_is_correct_error_message">Таблиця істинності правильна</string>
+
+    <string name="pdf_failure_dialog_title">Помилка під час завантаження</string>
+    <string name="pdf_failure_dialog_description">Трапилась помилка під час завантаження pdf</string>
 
 </resources>

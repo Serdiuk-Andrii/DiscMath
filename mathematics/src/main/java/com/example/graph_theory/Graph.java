@@ -3,7 +3,6 @@ package com.example.graph_theory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,7 +29,7 @@ public class Graph {
             if (component.size() == 1) {
                 continue;
             }
-            for(Integer vertex: component) {
+            for (Integer vertex: component) {
                 List<Integer> neighbours = new ArrayList<>(incidenceList.get(vertex));
                 for (Integer neighbour : neighbours) {
                     if (result.contains(new Pair<>(neighbour, vertex))) {

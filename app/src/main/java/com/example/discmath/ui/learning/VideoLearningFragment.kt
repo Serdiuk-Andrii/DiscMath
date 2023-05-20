@@ -236,6 +236,8 @@ class VideoLearningFragment : Fragment() {
                             viewsToHide.add(videoTimestamps)
                             initializeTimestampsData(timestamps)
                             this@VideoLearningFragment.activity?.runOnUiThread {
+                                videoTimestamps.visibility = if (!isFullscreen)
+                                    View.VISIBLE else View.GONE
                                 videoTimestamps.adapter = VideoTimestampAdapter(
                                     timestamps,
                                     ::timestampClicked
@@ -294,7 +296,7 @@ class VideoLearningFragment : Fragment() {
     }
 
     private fun notifyVideoInformationRequestHasFailed(text: String) {
-        timestampsErrorText.visibility = View.VISIBLE
+        timestampsErrorText.visibility = if (!isFullscreen) View.VISIBLE else View.GONE
         timestampsErrorText.text = text
         videoTimestamps.visibility = View.GONE
         viewsToHide.add(timestampsErrorText)

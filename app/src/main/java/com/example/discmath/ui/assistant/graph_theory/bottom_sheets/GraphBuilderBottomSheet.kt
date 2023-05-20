@@ -195,7 +195,7 @@ class GraphBuilderBottomSheet(private val builder: GraphTheoryFragment) :
     private fun showBinaryOperationRequiresTwoGraphs() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(resources.getString(R.string.graph_binary_operations_require_at_least_two_graphs))
-            .setPositiveButton(R.string.graph_extreme_size_confirm)
+            .setPositiveButton(R.string.understand_button_text)
             { _, _ ->
             }
             .show()

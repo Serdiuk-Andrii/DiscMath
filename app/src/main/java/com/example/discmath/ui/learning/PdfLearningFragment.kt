@@ -10,11 +10,14 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLearningPdfBinding
 import com.example.discmath.util.Downloader
 import com.example.discmath.util.FileDownloadManager
 import com.github.barteksc.pdfviewer.PDFView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.FileNotFoundException
+import java.lang.IllegalArgumentException
 
 
 fun String.getUrlLastComponent(): String = this.substringAfterLast('/')
@@ -77,9 +80,25 @@ class PdfLearningFragment : Fragment() {
         } catch (error: FileNotFoundException) {
             isDownloading = true
             val downloader: Downloader = FileDownloadManager(::savePdfAndLoad)
-            downloader.downloadFile(url)
-            isDownloading = false
+            try {
+                downloader.downloadFile(url)
+            } catch (e: IllegalArgumentException) {
+                openFailureDialog()
+            } finally {
+                isDownloading = false
+            }
         }
+    }
+
+    private fun openFailureDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.pdf_failure_dialog_title)
+            .setMessage(R.string.pdf_failure_dialog_description)
+            .setPositiveButton(R.string.understand_button_text)
+            { _, _ ->
+                navController.popBackStack()
+            }
+            .show()
     }
 
     private fun openPdf(filename: String): ByteArray {
