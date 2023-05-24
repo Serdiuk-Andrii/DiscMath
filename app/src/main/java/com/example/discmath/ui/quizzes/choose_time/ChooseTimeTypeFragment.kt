@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -12,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentChooseTimeTypeBinding
 import com.example.discmath.ui.quizzes.view_models.QuizPreferencesViewModel
-
-val timeOptions: Array<String> = arrayOf("03:00", "05:00", "10:00")
 
 class ChooseTimeTypeFragment : Fragment() {
 
@@ -35,7 +34,12 @@ class ChooseTimeTypeFragment : Fragment() {
         val root: View = binding.root
         // Recycler view
         val timeOptionsRecyclerView: RecyclerView = binding.timeOptionsRecyclerView
-        timeOptionsRecyclerView.adapter = TimeOptionAdapter(timeOptions, ::itemClicked)
+        val timeOptionsWithDrawables = arrayOf(
+            Pair("03:00", ResourcesCompat.getDrawable(resources, R.drawable.thunder, null)!!),
+            Pair("05:00", ResourcesCompat.getDrawable(resources, R.drawable.running, null)!!),
+            Pair("10:00", ResourcesCompat.getDrawable(resources, R.drawable.snail, null)!!)
+        )
+        timeOptionsRecyclerView.adapter = TimeOptionAdapter(timeOptionsWithDrawables, ::itemClicked)
         // Inflate the layout for this fragment
         return root
     }

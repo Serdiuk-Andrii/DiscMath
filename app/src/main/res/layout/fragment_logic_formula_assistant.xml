@@ -44,160 +44,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logic_formula_edit_text" />
 
-    <LinearLayout
-        android:id="@+id/logic_calculation_results"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/logic_view_results_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        android:padding="5dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/logic_view_pager_results"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logic_calculate_button"
         android:visibility="gone"
-        >
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabMode="fixed"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/logic_CNF_title"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            />
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            >
-
-            <TextView
-                android:id="@+id/CNF_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                />
-
-        </HorizontalScrollView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/logic_DNF_title"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="50dp"
-            />
-
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            >
-
-            <TextView
-                android:id="@+id/DNF_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                />
-
-        </HorizontalScrollView>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="2dp"/>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="#616161"
-            android:layout_gravity="center"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/logic_formula_property_title"
-                    android:textColor="@color/white"
-                    />
-
-                <TextView
-                    android:id="@+id/tautology_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    android:text="@string/logic_tautology_formula"
-                    android:textColor="@color/white"
-                    />
-
-                <TextView
-                    android:id="@+id/satisfiable_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    android:text="@string/logic_satisfiable_formula"
-                    android:textColor="@color/white"
-                    />
-
-                <TextView
-                    android:id="@+id/contradiction_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    android:text="@string/logic_contradiction_formula"
-                    android:textColor="@color/white"
-                    />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-
-    </LinearLayout>
-
-    <ScrollView
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/logic_view_pager_results"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toStartOf="@id/test_keyboard"
+        android:layout_height="400dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logic_calculation_results">
-
-        <com.example.discmath.ui.assistant.logic.TruthTableLayout
-            android:id="@+id/logic_truth_table"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:background="@color/primary"
-            android:elevation="4dp"
-            android:stretchColumns="*" />
-
-    </ScrollView>
+        android:background="#DCDCDC"
+        />
 
 
     <com.example.discmath.ui.util.keyboard.LogicKeyboard

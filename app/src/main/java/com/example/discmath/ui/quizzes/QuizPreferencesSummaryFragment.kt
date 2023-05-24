@@ -31,6 +31,7 @@ class QuizPreferencesSummaryFragment : Fragment() {
     private lateinit var quizFactory: QuizFactory
 
     private var _binding: FragmentQuizPreferencesSummaryBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -57,8 +58,12 @@ class QuizPreferencesSummaryFragment : Fragment() {
             res.getString(R.string.quiz_summary_sections_number_text),
             quizPreferencesViewModel.sectionRestrictions.value!!.size
         )
+        val selectedTimeText: String = String.format(
+            res.getString(R.string.quiz_summary_sections_time),
+            quizPreferencesViewModel.time.value!!
+        )
         sectionsNumberTextView.text = text
-        timeChosenTextView.text = quizPreferencesViewModel.time.value!!.toString()
+        timeChosenTextView.text = selectedTimeText
         quizFactory = BasicQuizFactory()
         return binding.root
     }
@@ -79,27 +84,24 @@ class QuizPreferencesSummaryFragment : Fragment() {
     }
 
     private fun downloadQuizzes() {
-        val sections: Array<LearningSection>? = quizPreferencesViewModel.sectionRestrictions.value
+        val sections: Array<LearningSection> = quizPreferencesViewModel.sectionRestrictions.value!!
         quizzesViewModel.clearQuizzes()
         val navController = findNavController()
-        if (sections == null) {
-            // Download all the quizzes
-        } else {
-            //TODO: Notice that this may be inefficient
-            val tasks = sections.map { section ->
-                db.collection(section.getQuizzesPath()).get()}
-            Tasks.whenAllSuccess<QuerySnapshot>(tasks).addOnSuccessListener { querySnapshots ->
-                querySnapshots.forEach { snapshot ->  quizzesViewModel.addQuizzes(snapshot.documents.map {
-                        documentSnapshot ->
+        val tasks = sections.map { section ->
+            db.collection(section.getQuizzesPath()).get()
+        }
+        Tasks.whenAllSuccess<QuerySnapshot>(tasks).addOnSuccessListener { querySnapshots ->
+            querySnapshots.forEach { snapshot ->
+                quizzesViewModel.addQuizzes(snapshot.documents.map { documentSnapshot ->
                     val path = documentSnapshot.reference.path
                     val name = sections.first { path.contains(it.collectionPath) }.name
                     quizFactory.getQuizFromDocumentSnapshot(documentSnapshot, name)
-                    })
-                }
-                quizzesViewModel.shuffleQuizzes()
-                navController.navigate(R.id.action_quizPreferencesSummaryFragment_to_quizFragment)
+                })
             }
+            quizzesViewModel.shuffleQuizzes()
+            navController.navigate(R.id.action_quizPreferencesSummaryFragment_to_quizFragment)
         }
+
     }
 
 }

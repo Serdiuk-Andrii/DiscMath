@@ -20,8 +20,12 @@
     <string name="quiz_preferences_summary_text">Налаштування тесту</string>
     <string name="start_quiz_button_text">Розпочати</string>
     <string name="quiz_summary_sections_number_text">
-        Обрано %1$d тем
+        Обрано тем: %1$d
     </string>
+    <string name="quiz_summary_sections_time">
+        Час тестування: %1$s
+    </string>
+
     <string name="yes_button_text">Так</string>
     <string name="no_button_text">Ні</string>
     <string name="problem_image_description">Задача</string>
@@ -128,5 +132,7 @@
 
     <string name="pdf_failure_dialog_title">Помилка під час завантаження</string>
     <string name="pdf_failure_dialog_description">Трапилась помилка під час завантаження pdf</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

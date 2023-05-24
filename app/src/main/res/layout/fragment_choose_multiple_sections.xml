@@ -46,15 +46,13 @@
 
     <Button
         android:id="@+id/sections_chosen_confirm_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/recycler_view_choose_multiple_sections"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/primary"
+        android:background="@color/primary"
+        android:textColor="@color/white"
         android:text="@string/choose_sections_continue_button" />
-
 
 </RelativeLayout>

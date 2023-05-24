@@ -28,7 +28,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/sections_chosen_summary_card"
         android:layout_width="340dp"
-        android:layout_height="140dp"
+        android:layout_height="240dp"
         android:background="@color/primary"
         app:cardCornerRadius="4dp"
         app:cardElevation="4dp"
@@ -42,44 +42,83 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="wrap_content"
+                android:paddingStart="30dp"
+                android:paddingEnd="10dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/knowledge"
+                    android:layout_gravity="center"
+                    />
 
                 <TextView
                     android:id="@+id/sections_chosen_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
                     android:text="@string/quiz_summary_sections_number_text" />
 
-            </FrameLayout>
+            </LinearLayout>
 
-            <FrameLayout
+            <!--
+            <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="wrap_content"
+                app:dividerThickness="0.1dp"
+                app:dividerColor="@color/black"/>-->
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="30dp"
+                android:paddingEnd="10dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/clock"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    />
 
                 <TextView
                     android:id="@+id/time_chosen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-            </FrameLayout>
+                    android:layout_gravity="center"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:text="@string/quiz_summary_sections_time"
+                    />
+
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/start_quiz_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="@string/start_quiz_button_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sections_chosen_summary_card"
-        android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
         android:background="@color/button_soft"
-        />
+        android:text="@string/start_quiz_button_text"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

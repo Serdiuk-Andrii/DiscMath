@@ -1,6 +1,7 @@
 package com.example.discmath.ui.learning.adapters
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.example.discmath.entity.learning_section.LearningSection
 import com.example.discmath.entity.learning_section.SECTIONS_COLLECTION_STORAGE_PATH
 import com.example.discmath.entity.quizzes.loadImageIntoViewFrom
 import com.example.discmath.ui.learning.COLLECTION_PATH_KEY
+
 
 const val SECTION_NAME_KEY = "name"
 const val SECTION_DESCRIPTION_KEY = "description"
@@ -54,6 +56,8 @@ class LearningSectionObjectFragment : Fragment() {
         }
         val section = LearningSection(sectionNameText, sectionDescriptionText,
             imageUrl, -1, sectionCollectionPath)
+        // Set the click listener
+        sectionDescription.movementMethod = ScrollingMovementMethod()
         card.setOnClickListener { navigateToLearningSection(sectionName, section) }
     }
 

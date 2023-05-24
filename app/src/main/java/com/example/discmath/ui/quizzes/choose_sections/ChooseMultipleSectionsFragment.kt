@@ -1,5 +1,6 @@
 package com.example.discmath.ui.quizzes.choose_sections
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,6 +59,8 @@ class ChooseMultipleSectionsFragment : Fragment() {
             navController.navigate(R.id.action_chooseMultipleSectionsFragment_to_chooseTimeTypeFragment)
         }
         nextButton.isEnabled = SELECTED_BY_DEFAULT
+        val textColor = if (nextButton.isEnabled) Color.WHITE else Color.GRAY
+        nextButton.setTextColor(textColor)
         return root
     }
 
@@ -68,6 +71,8 @@ class ChooseMultipleSectionsFragment : Fragment() {
             chosenSections.remove(section)
         }
         nextButton.isEnabled = chosenSections.isNotEmpty()
+        val textColor = if (nextButton.isEnabled) Color.WHITE else Color.GRAY
+        nextButton.setTextColor(textColor)
     }
 
 }

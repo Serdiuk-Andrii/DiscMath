@@ -1,22 +1,26 @@
 package com.example.discmath.ui.quizzes.choose_time
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.discmath.R
 
-class TimeOptionAdapter(private val times: Array<String>,
+class TimeOptionAdapter(private val times: Array<Pair<String, Drawable>>,
                         private val itemClickedCallback: (String) -> Unit):
         RecyclerView.Adapter<TimeOptionAdapter.ViewHolder>() {
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val timeTextView: TextView
+        val imageView: ImageView
 
         init {
             timeTextView = view.findViewById(R.id.timeOptionText)
+            imageView = view.findViewById(R.id.time_option_image)
         }
     }
 
@@ -27,9 +31,10 @@ class TimeOptionAdapter(private val times: Array<String>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val timeInMinutes = times[position]
-        holder.timeTextView.text = timeInMinutes
-        holder.itemView.setOnClickListener { itemClickedCallback(timeInMinutes) }
+        val timeOption = times[position]
+        holder.timeTextView.text = timeOption.first
+        holder.imageView.setImageDrawable(timeOption.second)
+        holder.itemView.setOnClickListener { itemClickedCallback(timeOption.first) }
     }
 
     override fun getItemCount(): Int = times.size

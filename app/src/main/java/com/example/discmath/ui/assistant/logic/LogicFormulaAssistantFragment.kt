@@ -8,11 +8,12 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLogicFormulaAssistantBinding
 import com.example.discmath.ui.util.keyboard.LogicKeyboard
@@ -21,13 +22,17 @@ import com.example.set_theory.logic.CNF
 import com.example.set_theory.logic.DNF
 import com.example.set_theory.logic.TruthTable
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 fun Boolean.toInteger(): Int {
-    if (this) {
-        return 1
-    }
-    return 0
+    return if (this) 1 else 0
 }
+
+val tabs = arrayOf(
+    "Загальне",
+    "Таблиця істинності"
+)
 
 class LogicFormulaAssistantFragment : Fragment() {
 
@@ -36,19 +41,17 @@ class LogicFormulaAssistantFragment : Fragment() {
 
     private lateinit var formulaEditText: EditText
     private lateinit var calculateButton: Button
-    private lateinit var CNFText: TextView
-    private lateinit var DNFText: TextView
-    private lateinit var truthTableLayout: TruthTableLayout
-    private lateinit var calculationResults: View
     private lateinit var keyboard: LogicKeyboard
 
-    private lateinit var tautologyTextView: TextView
-    private lateinit var satisfiableTextView: TextView
-    private lateinit var contradictionTextView: TextView
+    private lateinit var tabLayout: TabLayout
+    private lateinit var resultsViewPager: ViewPager2
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    // ViewModels
+    private lateinit var logicFormulaViewModel: LogicFormulaViewModel
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -68,23 +71,23 @@ class LogicFormulaAssistantFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLogicFormulaAssistantBinding.inflate(inflater, container, false)
+        initializeViewModels()
         initializeViews()
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
         return binding.root
     }
 
+    private fun initializeViewModels() {
+        logicFormulaViewModel =
+            ViewModelProvider(requireActivity())[LogicFormulaViewModel::class.java]
+    }
+
     private fun initializeViews() {
         formulaEditText = binding.logicFormulaEditText
         calculateButton = binding.logicCalculateButton
-        CNFText = binding.CNFText
-        DNFText = binding.DNFText
-        truthTableLayout = binding.logicTruthTable
-        calculationResults = binding.logicCalculationResults
+        resultsViewPager = binding.logicViewPagerResults
+        tabLayout = binding.logicViewResultsTabLayout
         keyboard = binding.testKeyboard
-
-        tautologyTextView = binding.tautologyText
-        satisfiableTextView = binding.satisfiableText
-        contradictionTextView = binding.contradictionText
 
         formulaEditText.showSoftInputOnFocus = false
         val ic: InputConnection = formulaEditText.onCreateInputConnection(EditorInfo())
@@ -110,36 +113,23 @@ class LogicFormulaAssistantFragment : Fragment() {
                     val truthTable: TruthTable = TruthTable.buildTruthTable(expression)
                     var CNF: String = CNF.buildCNFBasedOnTruthTable(truthTable)
                     CNF = CNF.replace('!', '¬')
-                    CNFText.text = CNF
 
                     var DNF: String = DNF.buildDNFBasedOnTruthTable(truthTable)
                     DNF = DNF.replace('!', '¬')
-                    DNFText.text = DNF
-                    updateTruthTable(truthTable)
-                    calculationResults.visibility = View.VISIBLE
+
+                    logicFormulaViewModel.setTruthTable(truthTable)
+                    resultsViewPager.adapter = LogicFormulaResultsAdapter(this,
+                        CNF, DNF
+                    )
+                    TabLayoutMediator(tabLayout, resultsViewPager) { tab, position ->
+                        tab.text = tabs[position]
+                    }.attach()
+                    resultsViewPager.visibility = View.VISIBLE
+                    tabLayout.visibility = View.VISIBLE
                 } catch (error: java.lang.Exception) {
                     showError(error.message ?: "Помилка")
                 }
             }
-        }
-    }
-
-    private fun updateTruthTable(truthTable: TruthTable) {
-        truthTableLayout.clear()
-
-        tautologyTextView.visibility = View.GONE
-        satisfiableTextView.visibility = View.GONE
-        contradictionTextView.visibility = View.GONE
-
-        truthTableLayout.fillTable(truthTable,20)
-
-        if (truthTable.isSatisfiable) {
-            satisfiableTextView.visibility = View.VISIBLE
-            if (truthTable.isTautology) {
-                tautologyTextView.visibility = View.VISIBLE
-            }
-        } else {
-            contradictionTextView.visibility = View.VISIBLE
         }
     }
 
