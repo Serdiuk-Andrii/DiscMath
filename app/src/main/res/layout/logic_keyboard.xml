@@ -26,9 +26,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="q"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -37,9 +38,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="w"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -48,9 +50,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="e"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -59,9 +62,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="r"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -70,9 +74,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="t"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -80,9 +85,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="y"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -90,9 +96,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="u"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -100,9 +107,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="i"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -110,9 +118,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="o"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -120,9 +129,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="p"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
         </LinearLayout>
@@ -141,9 +151,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="a"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -152,9 +163,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="s"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -163,9 +175,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="d"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -174,9 +187,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="f"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -185,9 +199,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="g"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -195,9 +210,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="h"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -205,9 +221,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="j"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -215,9 +232,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="k"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -225,9 +243,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="l"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
         </LinearLayout>
@@ -246,9 +265,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="("
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -257,9 +277,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="z"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -268,9 +289,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="x"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -279,9 +301,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="c"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -290,9 +313,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="v"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -301,9 +325,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="b"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -311,9 +336,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="n"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
             <Button
                  android:layout_width="34dp"
@@ -321,9 +347,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="m"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
             <Button
@@ -332,9 +359,10 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text=")"
+                android:textSize="17sp"
                 style="?android:attr/buttonBarButtonStyle" />
 
 
@@ -353,8 +381,8 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="@string/logic_negation"
                 style="?android:attr/buttonBarButtonStyle"
                 android:textSize="22sp"
@@ -366,8 +394,8 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="@string/logic_conjunction"
                 android:textSize="22sp"
                 style="?android:attr/buttonBarButtonStyle" />
@@ -378,8 +406,8 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="@string/logic_disjunction"
                 android:textSize="22sp"
                 style="?android:attr/buttonBarButtonStyle" />
@@ -390,8 +418,8 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="@string/logic_implication"
                 android:textSize="22sp"
                 style="?android:attr/buttonBarButtonStyle" />
@@ -402,8 +430,8 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="@string/logic_equivalence"
                 android:textSize="22sp"
                 style="?android:attr/buttonBarButtonStyle" />
@@ -414,8 +442,8 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="@string/logic_xor"
                 android:textSize="22sp"
                 style="?android:attr/buttonBarButtonStyle" />
@@ -427,8 +455,8 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="3dp"
                 android:padding="0dp"
-                android:backgroundTint="#EAEAEA"
-                android:textColor="#1E1E1E"
+                android:backgroundTint="#2F312C"
+                android:textColor="#E2E2DA"
                 android:text="Delete"
                 style="?android:attr/buttonBarButtonStyle"
                 />

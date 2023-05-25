@@ -23,7 +23,7 @@
         Обрано тем: %1$d
     </string>
     <string name="quiz_summary_sections_time">
-        Час тестування: %1$s
+        Час тренування: %1$s
     </string>
 
     <string name="yes_button_text">Так</string>
@@ -42,7 +42,7 @@
     <string name="expand_arrow_down_description">Розгорнути</string>
     <string name="quiz_section_result_correct_answers_title">Правильні відповіді:</string>
     <string name="quiz_section_correct_answers">%1$d з %2$d</string>
-    <string name="choose_time_type_title">Час тренування</string>
+    <string name="choose_time_type_title">Оберіть час тренування</string>
     <string name="theory_title">Теорія</string>
     <string name="lets_go">Уперед!</string>
     <string name="learning_section_selection_title">Виберіть теми:</string>

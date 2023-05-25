@@ -50,8 +50,6 @@ fun Float.convertToDegrees(): Float {
 
 fun Collection<Vertex>.getEdges(): Set<Edge> = this.map { it.edges }.flatMap { it.toSet() }.toSet()
 
-
-
 class GraphTheoryFragment : Fragment() {
 
     enum class EditorState {
@@ -145,6 +143,7 @@ class GraphTheoryFragment : Fragment() {
     private fun initializeViews() {
         layout = binding.graphBuilderLayout
         fixedViews.add(layout)
+        /*
         val scaleListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
             private val minScale = 0.5F
@@ -179,9 +178,11 @@ class GraphTheoryFragment : Fragment() {
                 }
                 return true
             }
-        }
+        }*/
+        // val scaleDetector = ScaleGestureDetector(requireContext(), scaleListener)
+
         initializeToolbox()
-        val scaleDetector = ScaleGestureDetector(requireContext(), scaleListener)
+
         removeButton.setOnClickListener {
             vertices.forEach {
                 it.background = vertexStillBackground
@@ -244,7 +245,7 @@ class GraphTheoryFragment : Fragment() {
                     lastX = event.rawX
                     lastY = event.rawY
                 }
-                scaleDetector.onTouchEvent(event)
+                // scaleDetector.onTouchEvent(event)
                 return true
             }
         })
@@ -498,7 +499,6 @@ class GraphTheoryFragment : Fragment() {
         vertices.clear()
         vertices.addAll(newVertices)
         val edges = newVertices.getEdges()
-        // TODO: Understand why this is necessary
         val newBackground = ResourcesCompat.getDrawable(
             resources,
             R.drawable.circle_background, null
