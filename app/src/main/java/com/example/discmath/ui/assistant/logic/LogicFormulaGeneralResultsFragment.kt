@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.discmath.R
 import com.example.discmath.databinding.FragmentLogicFormulaGeneralResultsBinding
+import kotlin.properties.Delegates
 
 
 class LogicFormulaGeneralResultsFragment: Fragment() {
@@ -14,15 +16,14 @@ class LogicFormulaGeneralResultsFragment: Fragment() {
     // Data
     private lateinit var CNF: String
     private lateinit var DNF: String
+    private var formulaClassStringResourceId by Delegates.notNull<Int>()
 
     // Views
     private var _binding: FragmentLogicFormulaGeneralResultsBinding? = null
     private lateinit var CNFTextView: TextView
     private lateinit var DNFTextView: TextView
 
-    private lateinit var tautologyTextView: TextView
-    private lateinit var satisfiableTextView: TextView
-    private lateinit var contradictionTextView: TextView
+    private lateinit var logicFormulaClassTextView: TextView
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -31,8 +32,10 @@ class LogicFormulaGeneralResultsFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            CNF = it.getString(CNFBundleKey)!!
-            DNF = it.getString(DNFBundleKey)!!
+            CNF = it.getString(CNF_BUNDLE_KEY)!!
+            DNF = it.getString(DNF_BUNDLE_KEY)!!
+            formulaClassStringResourceId = it.
+                getInt(LOGIC_FORMULA_CLASS_STRING_RESOURCE_ID_BUNDLE_KEY)
         }
     }
 
@@ -46,14 +49,16 @@ class LogicFormulaGeneralResultsFragment: Fragment() {
     }
 
     private fun initializeViews() {
+        logicFormulaClassTextView = binding.logicFormulaClass
         CNFTextView = binding.CNFText
         DNFTextView = binding.DNFText
+        logicFormulaClassTextView.text = String.format(
+            resources.getString(R.string.logic_formula_property_title),
+            resources.getString(formulaClassStringResourceId))
         CNFTextView.text = CNF
         DNFTextView.text = DNF
 
-        tautologyTextView = binding.tautologyText
-        satisfiableTextView = binding.satisfiableText
-        contradictionTextView = binding.contradictionText
+
     }
 
 }

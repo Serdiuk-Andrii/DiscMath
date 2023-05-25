@@ -57,6 +57,7 @@
         android:visibility="gone"
         app:tabIndicatorAnimationMode="elastic"
         app:tabMode="fixed"
+        android:elevation="4dp"
         />
 
     <androidx.viewpager2.widget.ViewPager2

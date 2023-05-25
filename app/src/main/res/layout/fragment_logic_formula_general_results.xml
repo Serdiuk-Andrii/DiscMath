@@ -9,6 +9,31 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/logic_calculate_button">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#F3F3F3"
+        android:elevation="2dp"
+        >
+
+        <TextView
+            android:id="@+id/logic_formula_class"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:text="@string/logic_formula_property_title"
+            android:textColor="@color/black" />
+
+    </FrameLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerThickness="0.2dp"
+        app:dividerColor="@color/black"
+        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +49,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingRight="20dp"
+        android:fillViewport="true"
+        >
 
         <TextView
             android:id="@+id/CNF_text"
@@ -33,7 +60,9 @@
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textAlignment="center"
+            />
 
     </HorizontalScrollView>
 
@@ -53,7 +82,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingRight="20dp"
+        android:fillViewport="true"
+        >
 
         <TextView
             android:id="@+id/DNF_text"
@@ -62,49 +93,10 @@
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textAlignment="center"
+            />
 
     </HorizontalScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/logic_formula_property_title"
-            android:textColor="@color/white" />
-
-        <TextView
-            android:id="@+id/tautology_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/logic_tautology_formula"
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/satisfiable_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/logic_satisfiable_formula"
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/contradiction_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/logic_contradiction_formula"
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
-    </LinearLayout>
 
 </LinearLayout>

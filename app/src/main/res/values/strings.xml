@@ -51,8 +51,8 @@
 
     <string name="logic_calculate_button">Обрахувати</string>
     <string name="logic_title">Вкажіть вираз F:</string>
-    <string name="logic_CNF_title">КНФ</string>
-    <string name="logic_DNF_title">ДНФ</string>
+    <string name="logic_CNF_title">Кон\'юктивна нормальна форма</string>
+    <string name="logic_DNF_title">Диз\'юнктивна нормальна форма</string>
     <string name="graph_theory_modify_option_description">Режим редагування</string>
     <string name="graph_theory_move_option_description">Режим переміщення</string>
     <string name="graph_theory_edge_option_description">Режим додавання ребер</string>
@@ -69,7 +69,7 @@
     <string name="logic_tautology_formula">тавтологією</string>
     <string name="logic_satisfiable_formula">виконливою</string>
     <string name="logic_contradiction_formula">суперечністю</string>
-    <string name="logic_formula_property_title">Ця формула є:</string>
+    <string name="logic_formula_property_title">Ця формула є %1$s</string>
 
     <string name="assistant_option_logic_title">Числення висловлювань</string>
     <string name="assistant_option_graph_theory_title">Теорія графів</string>

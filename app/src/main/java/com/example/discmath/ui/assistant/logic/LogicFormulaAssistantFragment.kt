@@ -89,6 +89,8 @@ class LogicFormulaAssistantFragment : Fragment() {
         tabLayout = binding.logicViewResultsTabLayout
         keyboard = binding.testKeyboard
 
+        resultsViewPager.isUserInputEnabled = false
+
         formulaEditText.showSoftInputOnFocus = false
         val ic: InputConnection = formulaEditText.onCreateInputConnection(EditorInfo())
         keyboard.setInputConnection(ic)
@@ -104,8 +106,7 @@ class LogicFormulaAssistantFragment : Fragment() {
         calculateButton.setOnClickListener {
             formulaEditText.clearFocus()
             // Remove two consecutive negations for simplicity
-            val expression: String = formulaEditText.text.toString().
-                replace("!!", "")
+            val expression: String = formulaEditText.text.toString().replace("!!", "")
             if (!Lexer.isCorrectLogicalExpression(expression)) {
                 showError("Синтаксична помилка в формулі")
             } else {
@@ -117,10 +118,18 @@ class LogicFormulaAssistantFragment : Fragment() {
                     var DNF: String = DNF.buildDNFBasedOnTruthTable(truthTable)
                     DNF = DNF.replace('!', '¬')
 
+                    val formulaClassResourceId =
+                        if (truthTable.isTautology) {
+                            R.string.logic_tautology_formula
+                        } else if (truthTable.isSatisfiable) {
+                            R.string.logic_satisfiable_formula
+                        } else {
+                            R.string.logic_contradiction_formula
+                        }
+
                     logicFormulaViewModel.setTruthTable(truthTable)
-                    resultsViewPager.adapter = LogicFormulaResultsAdapter(this,
-                        CNF, DNF
-                    )
+                    resultsViewPager.adapter = LogicFormulaResultsAdapter(
+                        this, CNF, DNF, formulaClassResourceId)
                     TabLayoutMediator(tabLayout, resultsViewPager) { tab, position ->
                         tab.text = tabs[position]
                     }.attach()
@@ -135,14 +144,20 @@ class LogicFormulaAssistantFragment : Fragment() {
 
     private fun showError(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
-            .setBackgroundTint(ResourcesCompat.getColor(
-                resources,
-                R.color.edge_selected_color,
-            null))
-            .setTextColor(ResourcesCompat.getColor(
-                resources,
-                R.color.white,
-                null))
+            .setBackgroundTint(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.edge_selected_color,
+                    null
+                )
+            )
+            .setTextColor(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.white,
+                    null
+                )
+            )
             .show()
     }
 
