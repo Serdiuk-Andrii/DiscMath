@@ -43,7 +43,6 @@ class SpecificLearningSectionFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var sectionNameTextView: TextView
 
-    // TODO: This viewModel should probably be used for caching the data
     private lateinit var learningItemViewModel: LearningItemViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +84,9 @@ class SpecificLearningSectionFragment : Fragment() {
         sectionNameTextView.text = sectionName
         db.collection(collectionPath).get().addOnSuccessListener { querySnapshot ->
             val learningItems: List<LearningItem> =
-                querySnapshot.documents.map { documentSnapshot -> LearningItem(documentSnapshot) }
+                querySnapshot.documents.map { 
+                        documentSnapshot -> LearningItem(documentSnapshot)
+                }.sortedBy {  it.order  }
             recyclerView.adapter = LearningItemAdapter(
                 learningItems.toTypedArray(),
                 ::navigateToLearningItem
